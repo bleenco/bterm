@@ -1,0 +1,23 @@
+{
+  "externalPackages": {
+    "@angular/core": "_angular_core",
+    "@angular/common": "_angular_common",
+    "@angular/platform-browser-dynamic": "_angular_platform_browser_dynamic",
+    "@angular/platform-browser": "_angular_platform_browser",
+    "@angular/forms": "_angular_forms",
+    "@angular/http": "_angular_http",
+    "@angular/router": "_angular_router",
+    "reflect-metadata": "reflect-metadata",
+    "rxjs": "rxjs",
+    "fs": "fs",
+    "path": "path",
+    "os": "os",
+    "child_process": "child_process",
+    "events": "events",
+    "net": "net",
+    "hterm": "hterm"
+  },
+  "styles": [
+    "css/app.css"
+  ]
+}

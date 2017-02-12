@@ -1,0 +1,21 @@
+.window-terminal
+  display: flex
+  flex: 1
+  flex-wrap: wrap
+  overflow: hidden
+  background: transparent
+  color: $color
+  padding: 20px 30px
+
+  .window-terminal-container
+    position: relative
+    flex: 1
+
+    .terminal-instance
+      position: absolute
+      width: 100%
+      height: 100%
+      display: none
+
+      &.active
+        display: block
