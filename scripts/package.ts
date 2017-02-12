@@ -18,7 +18,20 @@ export function makePackages(): Promise<null> {
         output: path.resolve(__dirname, '../build'),
       },
       compression: 'store',
-      extraResources: Object.keys(pkgJson.dependencies).map(key => `node_modules/${key}`)
+      extraResources: Object.keys(pkgJson.dependencies).map(key => `node_modules/${key}`),
+      mac: {
+        icon: path.resolve(__dirname, '../dist/assets/icon.icns')
+      },
+      dmg: {
+        icon: path.resolve(__dirname, '../dist/assets/icon.icns')
+      },
+      nsis: {
+        installerIcon: path.resolve(__dirname, '../dist/assets/icon.ico'),
+        installerHeaderIcon: path.resolve(__dirname, '../dist/assets/icon.ico')
+      },
+      win: {
+        icon: path.resolve(__dirname, '../dist/assets/icon.ico'),
+      }
     }
   }).then(() => {
     let time = new Date().getTime() - start.getTime();

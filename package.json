@@ -1,18 +1,18 @@
 {
-  "name": "angular-electron-starter",
-  "version": "0.0.1",
-  "description": "Angular Electron Starter",
+  "name": "speedterm",
+  "version": "0.1.0",
+  "description": "SpeedTerm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
     "start": "node ./scripts/index.js dev",
     "build": "node ./scripts/index.js build",
     "postinstall": "electron-rebuild && install-app-deps",
-    "app": "node ./scripts/index.js app",
+    "dist": "node ./scripts/index.js app",
     "clean": "rimraf dist/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jkuri/angular-electron-starter.git"
+    "url": "git+https://github.com/speedterm/speedterm.git"
   },
   "keywords": [
     "Angular",
@@ -24,9 +24,9 @@
   "author": "Jan Kuri <jkuri88@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jkuri/angular-electron-starter/issues"
+    "url": "https://github.com/speedterm/speedterm/issues"
   },
-  "homepage": "https://github.com/jkuri/angular-electron-starter#readme",
+  "homepage": "https://github.com/speedterm/speedterm#readme",
   "dependencies": {
     "@angular/common": "2.4.7",
     "@angular/compiler": "2.4.7",

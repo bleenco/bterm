@@ -1,34 +1,26 @@
-# Angular Electron Starter
+# speedterm
 
-Electron, Angular & TypeScript Starter for building awesome desktop applications.
+Cross-Platform Terminal Emulator
 
-### Start
+### Preview
+
+<p align="center">
+  <img src="https://cloud.githubusercontent.com/assets/1796022/22859387/890572ce-f0d9-11e6-9a84-a95e54143eca.png">
+</p>
+
+### Development
 
 ```sh
-git clone https://github.com/jkuri/angular-electron-starter.git --depth 1
+git clone https://github.com/speedterm/speedterm.git
 npm install
-```
-
-### Development Mode
-
-This enables livereload.
-
-```sh
 npm start
 ```
 
-### Production Build
+To make a production build run
 
 ```sh
-npm run build
+npm run dist
 ```
-
-### Wrap as Application
-
-```sh
-npm run app
-```
-
 
 ### LICENCE
 

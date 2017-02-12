@@ -5,9 +5,11 @@
     <span class="icon maximize" (click)="maximize()"></span>
   </div>
   <div class="window-top-container__center">
-    <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.active]="tab.active" (click)="switchTab(i)">
-      <span class="icon">&#8984;</span>
-      <span class="num">{{ i + 1 }}</span>
+    <div *ngIf="tabs.length > 1">
+      <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.active]="tab.active" (click)="switchTab(i)">
+        <span class="icon">&#8984;</span>
+        <span class="num">{{ i + 1 }}</span>
+      </div>
     </div>
   </div>
   <div class="window-top-container__right">
