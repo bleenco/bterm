@@ -59,7 +59,7 @@ export class ConfigService {
         let text = tab.querySelector('.num') as HTMLElement;
 
         text.style.fontSize = this.config.settings.font_size;
-        icon.style.fontSize = `${parseInt(this.config.settings.font_size, 10) + 6}px`;
+        icon.style.fontSize = this.config.settings.font_size;
 
         if (tab.classList.contains('active')) {
           icon.style.color = this.config.style.top_bar_tab_active_color;
