@@ -109,44 +109,6 @@ export class HtermService {
       }
     });
     terminal.output.subscribe((str: string) => terminal.ps.input.emit(str));
-
-    setTimeout(() => {
-      let nodes = [...Array(terminal.term.getRowCount()).keys()].map(i => terminal.term.getRowNode(i));
-      nodes = nodes.map((node: Node) => {
-        let matches = node.firstChild.textContent.match(/jan/ig);
-        if (!matches) {
-          return node;
-        }
-
-        matches.forEach(match => {
-          let elHtml = `<span class="found" style="background: #FFFF00; color: #111111; border-radius: 1px;">${match}</span>`
-          node.firstChild.parentElement.innerHTML = node.firstChild.textContent.replace(match, elHtml);
-        });
-
-        return node;
-      });
-
-      let t = terminal.term;
-      t.scrollbackRows_ = nodes.splice(0, t.scrollbackRows_.length);
-      t.screen_.rowsArray = nodes;
-      t.scrollPort_.invalidate();
-      // t.scrollPort_.scrollRowToTop(0);
-
-      setTimeout(() => {
-        nodes = [...Array(terminal.term.getRowCount()).keys()].map(i => terminal.term.getRowNode(i));
-        nodes = nodes.map((node: Node) => {
-          node.textContent = node.textContent.replace(/<span class="found"(.*)">(.*)<\/span>/ig, '$2');
-          return node;
-        });
-
-        t.scrollbackRows_ = nodes.splice(0, t.scrollbackRows_.length);
-        t.screen_.rowsArray = nodes;
-        t.scrollPort_.invalidate();
-
-        console.log('done.');
-      }, 2000);
-
-    }, 3000);
   }
 
   switchTab(index: number): void {
