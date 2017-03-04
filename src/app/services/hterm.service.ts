@@ -25,6 +25,7 @@ export class HtermService {
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
     hterm.hterm.Terminal.prototype.overlaySize = () => {};
+    this.fixKeyboard();
   }
 
   create(): void {
@@ -70,7 +71,6 @@ export class HtermService {
 
   initializeInstance(terminal: Terminal, el: HTMLElement): void {
     let io = terminal.term.io.push();
-
     terminal.term.keyboard.installKeyboard(el.querySelector('iframe').contentDocument);
 
     io.sendString = (str: string) => {
@@ -86,7 +86,7 @@ export class HtermService {
     }
 
     terminal.input.subscribe((str: string) => {
-      requestAnimationFrame(() => terminal.term.io.writeUTF8(str.toString()));
+      requestAnimationFrame(() => this.write(str, terminal));
     });
   }
 
@@ -109,6 +109,40 @@ export class HtermService {
       }
     });
     terminal.output.subscribe((str: string) => terminal.ps.input.emit(str));
+  }
+
+  write(str: string, terminal: Terminal): void {
+    if (terminal.term.vt.characterEncoding !== 'raw') {
+      terminal.term.vt.characterEncoding = 'raw';
+    }
+
+    terminal.term.io.writeUTF8(str.toString());
+  }
+
+  fixKeyboard(): void {
+    let that = this;
+    let oldKeyDown = hterm.hterm.Keyboard.prototype.onKeyDown_;
+
+    hterm.hterm.Keyboard.prototype.onKeyDown_ = function(e: KeyboardEvent) {
+      if (e.key === 'Dead') {
+        let idx = that.terminals.findIndex((term: Terminal) => !!term.active);
+        let terminal = that.terminals[idx];
+
+        switch (e.code) {
+          case 'KeyN':
+            terminal.output.emit('~');
+            break;
+          case 'IntlBackslash':
+            terminal.output.emit('`');
+            break;
+          case 'Backslash':
+            terminal.output.emit('`');
+            break;
+        }
+      }
+
+      return oldKeyDown.call(this, e);
+    }
   }
 
   switchTab(index: number): void {
