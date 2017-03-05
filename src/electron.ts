@@ -21,7 +21,11 @@ function createWindow(): void {
   });
 
   registerShortcuts(win);
-  win.on('focus', () => registerShortcuts(win));
+  win.on('focus', () => {
+    if (win) {
+      registerShortcuts(win);
+    }
+  });
   win.on('blur', () => unregisterShortcuts());
   win.on('move', () => win.webContents.send('focusCurrent', true));
 
