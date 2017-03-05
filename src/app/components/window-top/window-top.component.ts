@@ -2,7 +2,9 @@ import { Component, Inject, NgZone } from '@angular/core';
 import { HtermService } from '../../services/hterm.service';
 import { ConfigService } from '../../services/config.service';
 let electron = require('electron');
+let remote = require('electron').remote;
 let { ipcRenderer } = electron;
+let { dialog } = remote;
 
 export interface Tab {
   active: boolean,
@@ -52,8 +54,26 @@ export class WindowTopComponent {
     this.config.setConfig();
   }
 
-  close(): void { ipcRenderer.send('close'); }
+  close(): void {
+    if (this.tabs.length === 1) {
+      ipcRenderer.send('close');
+    } else {
+      let choice = dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          title: 'Confirm',
+          message: 'Are you sure you want to quit and close all tabs?'
+        }
+      );
+
+      if (choice === 0) {
+        ipcRenderer.send('close');
+      }
+    }
+  }
+
   minimize(): void { ipcRenderer.send('minimize'); }
   maximize(): void { ipcRenderer.send('maximize'); }
-
 }

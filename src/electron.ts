@@ -49,12 +49,10 @@ app.on('ready', () => {
   });
 
   ipcMain.on('close', () => {
-    unregisterShortcuts();
     current.close();
   });
 
   ipcMain.on('closeApp', () => {
-    unregisterShortcuts();
     current.close();
   });
 });
