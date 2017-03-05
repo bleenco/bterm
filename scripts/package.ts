@@ -9,7 +9,6 @@ export function makePackages(): Promise<null> {
   let start: Date = new Date();
   let pkgJson: any = fs.readJsonSync(path.resolve(__dirname, '../package.json'));
   return builder.build({
-    targets: platform.MAC.createTarget(),
     config: {
       appId: pkgJson.name,
       directories: {
