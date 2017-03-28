@@ -58,8 +58,8 @@ export class ConfigService {
         let icon = tab.querySelector('.icon') as HTMLElement;
         let text = tab.querySelector('.num') as HTMLElement;
 
-        text.style.fontSize = this.config.settings.font_size;
-        icon.style.fontSize = this.config.settings.font_size;
+        text.style.fontSize = '14px';
+        icon.style.fontSize = '13px';
 
         if (tab.classList.contains('active')) {
           icon.style.color = this.config.style.top_bar_tab_active_color;
@@ -90,24 +90,35 @@ export class ConfigService {
         'font_size': '12',
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
-        'windowPadding': '0 10px',
-        'clipboard_notice': false
+        'windowPadding': '20px 35px',
+        'clipboard_notice': false,
+
       },
       'style': {
-        'background': '#111111',
-        'color': '#c5c8c6',
-        'cursor': '#c5c8c6',
-        'top_bar_background': '#111111',
-        'top_bar_tab_color': '#4A4F5B',
-        'top_bar_tab_active_color': '#62C655',
-        'bottom_bar_background': '#111111',
+        'background': '#090300',
+        'color': '#a5a2a2',
+        'cursor': '#a5a2a2',
+        'top_bar_background': '#090300',
+        'top_bar_tab_color': '#666666',
+        'top_bar_tab_active_color': '#FFFFFF',
+        'bottom_bar_background': '#090300',
         'colors': [
-          '#282a2e', '#a54242', '#8c9440',
-          '#de935f', '#5f819d', '#85678f',
-          '#5e8d87', '#707880', '#373b41',
-          '#cc6666', '#b5bd68', '#f0c674',
-          '#81a2be', '#b294bb', '#8abeb7',
-          '#c5c8c6'
+          '#090300',
+          '#db2d20',
+          '#01a252',
+          '#fded02',
+          '#01a0e4',
+          '#a16a94',
+          '#b5e4f4',
+          '#a5a2a2',
+          '#5c5855',
+          '#db2d20',
+          '#01a252',
+          '#fded02',
+          '#01a0e4',
+          '#a16a94',
+          '#b5e4f4',
+          '#f7f7f7'
         ]
       }
     };
