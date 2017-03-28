@@ -87,7 +87,7 @@ export class ConfigService {
     let defaultConfig = {
       'settings': {
         'font': 'monaco, Menlo, \'DejaVu Sans Mono\', \'Lucida Console\', monospace',
-        'font_size': '12',
+        'font_size': '13',
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
         'windowPadding': '20px 35px',
