@@ -1,15 +1,15 @@
-# speedterm
+# bterm
 
 Cross-Platform Terminal Emulator
 
 ### Download
 
-https://speedterm.co
+https://bterm.bleenco.io
 
 ### Development
 
 ```sh
-git clone https://github.com/speedterm/speedterm.git
+git clone https://github.com/bleenco/bterm.git
 npm install
 npm start
 ```

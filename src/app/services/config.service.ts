@@ -12,7 +12,7 @@ export class ConfigService {
 
   constructor(@Inject(HtermService) private hterm: HtermService) {
     this.homeDir = os.homedir();
-    this.configPath = `${this.homeDir}/.speedterm.json`;
+    this.configPath = `${this.homeDir}/.bterm.json`;
 
     if (!fs.existsSync(this.configPath)) {
       this.recovery();
@@ -99,8 +99,8 @@ export class ConfigService {
         'color': '#a5a2a2',
         'cursor': '#a5a2a2',
         'top_bar_background': '#090300',
-        'top_bar_tab_color': '#666666',
-        'top_bar_tab_active_color': '#FFFFFF',
+        'top_bar_tab_color': '#4C4B4B',
+        'top_bar_tab_active_color': '#a5a2a2',
         'bottom_bar_background': '#090300',
         'colors': [
           '#090300',

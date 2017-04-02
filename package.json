@@ -1,6 +1,6 @@
 {
   "name": "bterm",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "bterm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/speedterm/speedterm.git"
+    "url": "git+https://github.com/bleenco/bterm.git"
   },
   "keywords": [
     "Angular",
@@ -24,9 +24,9 @@
   "author": "Jan Kuri <jkuri88@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/speedterm/speedterm/issues"
+    "url": "https://github.com/bleenco/bterm/issues"
   },
-  "homepage": "https://github.com/speedterm/speedterm#readme",
+  "homepage": "https://github.com/bleenco/bterm#readme",
   "dependencies": {
     "@angular/common": "4.0.0",
     "@angular/compiler": "4.0.0",
@@ -38,7 +38,7 @@
     "@angular/platform-server": "4.0.0",
     "@angular/router": "4.0.0",
     "bulma": "^0.4.0",
-    "hterm": "github:speedterm/hterm-cjs",
+    "hterm": "0.0.1",
     "node-pty": "^0.6.3",
     "reflect-metadata": "0.1.10",
     "rxjs": "5.2.0",
