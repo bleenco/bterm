@@ -55,6 +55,6 @@ let template = [
 ];
 
 export default function() {
-  let menu = Menu.buildFromTemplate(template);
+  let menu = Menu.buildFromTemplate(template as any);
   Menu.setApplicationMenu(menu);
 }

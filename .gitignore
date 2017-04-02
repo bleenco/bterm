@@ -3,3 +3,5 @@ dist/
 .DS_Store
 npm-debug.log
 build/
+lib/
+src/ngfactory

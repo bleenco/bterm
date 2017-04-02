@@ -11,7 +11,7 @@ export class SearchService {
     this.reset();
     this.query = query;
     let term: any = this.hterm.terminals[this.hterm.currentIndex].term;
-    let nodes = [...Array(term.getRowCount()).keys()].map(i => {
+    let nodes = [...Array(term.getRowCount())].map(i => {
       let node: Node = term.getRowNode(i);
       let regexp = new RegExp(this.query, 'ig');
       let matches = node.firstChild.textContent.match(regexp);
@@ -33,7 +33,7 @@ export class SearchService {
 
   reset() {
     let term: any = this.hterm.terminals[this.hterm.currentIndex].term;
-    let nodes = [...Array(term.getRowCount()).keys()].map(i => term.getRowNode(i));
+    let nodes = [...Array(term.getRowCount())].map(i => term.getRowNode(i));
     nodes = nodes.map((node: Node) => {
       node.textContent = node.textContent.replace(/<span class="found"(.*)">(.*)<\/span>/ig, '$2');
       return node;

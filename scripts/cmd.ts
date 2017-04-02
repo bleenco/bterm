@@ -81,24 +81,19 @@ function build(): Promise<null> {
     .then(() => generatePackageJson())
     .then(() => copyAssets())
     .then(() => b.run('electron.ts', 'electron.js', false))
-    .then(() => b.run('main.ts', 'main.js', true))
-    .then(() => {
-      console.log(`${chalk.green('✔')} Project successfully generated.`);
-    })
     .catch(err => {
       throw new Error(err);
     });
 }
 
 function makeApp(): Promise<null> {
-  return build()
-    .then(() => makePackages())
-    .then(() => {
-      console.log(`${chalk.green('✔')} Done.`)
-    })
-    .catch(err => {
-      throw new Error(err);
-    });
+    return makePackages()
+      .then(() => {
+        console.log(`${chalk.green('✔')} Done.`)
+      })
+      .catch(err => {
+        throw new Error(err);
+      });
 }
 
 let arg = process.argv.slice(2)[0];
