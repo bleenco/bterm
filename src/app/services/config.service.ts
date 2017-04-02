@@ -17,6 +17,7 @@ export class ConfigService {
     if (!fs.existsSync(this.configPath)) {
       this.recovery();
     }
+
     this.readConfig();
     this.setWatcher();
   }
@@ -58,8 +59,8 @@ export class ConfigService {
         let icon = tab.querySelector('.icon') as HTMLElement;
         let text = tab.querySelector('.num') as HTMLElement;
 
-        text.style.fontSize = '14px';
-        icon.style.fontSize = '13px';
+        text.style.fontSize = '10px';
+        icon.style.fontSize = '10px';
 
         if (tab.classList.contains('active')) {
           icon.style.color = this.config.style.top_bar_tab_active_color;
@@ -91,8 +92,7 @@ export class ConfigService {
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
         'windowPadding': '20px 35px',
-        'clipboard_notice': false,
-
+        'clipboard_notice': false
       },
       'style': {
         'background': '#090300',

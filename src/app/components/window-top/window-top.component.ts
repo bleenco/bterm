@@ -29,19 +29,19 @@ export class WindowTopComponent {
         this.tabs.forEach((tab: Tab) => tab.active = false);
         this.zone.run(() => {
           this.tabs.push({ active: true, title: 'node' });
-          this.config.setConfig();
+          setTimeout(() => this.config.setConfig());
         });
       } else if (event.action === 'closed') {
         this.zone.run(() => {
           this.tabs.splice(event.data, 1);
           this.tabs[event.data].active = true;
-          this.config.setConfig();
+          setTimeout(() => this.config.setConfig());
         });
       } else if (event.action === 'switch') {
         this.zone.run(() => {
           this.tabs.forEach((tab: Tab) => tab.active = false);
           this.tabs[event.data].active = true;
-          this.config.setConfig();
+          setTimeout(() => this.config.setConfig());
         });
       }
     });

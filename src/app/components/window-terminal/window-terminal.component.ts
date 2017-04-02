@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, HostBinding, Inject } from '@angular/core';
+import { Component, OnInit, HostBinding, Inject } from '@angular/core';
 let electron = require('electron');
 let { ipcRenderer } = electron;
 import { HtermService } from '../../services/hterm.service';
@@ -8,7 +8,7 @@ import { ConfigService } from '../../services/config.service';
   selector: 'window-terminal',
   templateUrl: 'window-terminal.component.html'
 })
-export class WindowTerminalComponent implements AfterViewInit {
+export class WindowTerminalComponent implements OnInit {
   @HostBinding('class') class = 'window-terminal';
 
   constructor(
@@ -16,9 +16,9 @@ export class WindowTerminalComponent implements AfterViewInit {
     @Inject(ConfigService) private config: ConfigService
   ) { }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.hterm.create();
-    this.config.setConfig();
+    setTimeout(() => this.config.setConfig());
 
     ipcRenderer.on('newTab', () => this.hterm.create());
     ipcRenderer.on('switchTab', (ev, data) => this.hterm.switchTab(data));

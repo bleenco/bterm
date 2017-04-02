@@ -1,4 +1,4 @@
-import { Injectable, Provider, EventEmitter, Inject } from '@angular/core';
+import { Injectable, Provider, EventEmitter, Inject, NgZone } from '@angular/core';
 import { PTYService, Process } from './pty.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
@@ -12,17 +12,21 @@ export interface Terminal {
   output: EventEmitter<string>,
   active: boolean,
   ps?: Process,
+  title: string,
+  dir: string
 };
 
 @Injectable()
 export class HtermService {
   terminals: Terminal[];
   outputEvents: EventEmitter<{ action: string, data: number | null }>;
+  titleEvents: EventEmitter<{ index: number, title: string }>;
   currentIndex: number;
 
-  constructor(@Inject(PTYService) private pty: PTYService) {
+  constructor(@Inject(PTYService) private pty: PTYService, @Inject(NgZone) private zone: NgZone) {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
+    this.titleEvents = new EventEmitter<{ index: number, title: string }>();
     hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
     hterm.hterm.Terminal.prototype.overlaySize = () => {};
     this.fixKeyboard();
@@ -43,7 +47,9 @@ export class HtermService {
       term: new hterm.hterm.Terminal(),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
-      active: true
+      active: true,
+      title: '',
+      dir: ''
     };
 
     terminal.term.decorate(el);
@@ -109,6 +115,19 @@ export class HtermService {
       }
     });
     terminal.output.subscribe((str: string) => terminal.ps.input.emit(str));
+
+    terminal.term.setWindowTitle = (title: string) => {
+      title = title.trim();
+      try {
+        let splitted = title.split(':');
+        terminal.title = splitted[0].trim();
+        terminal.dir = splitted[1].trim();
+      } catch (e) {
+        terminal.title = title;
+      }
+
+      this.titleEvents.emit({ index: this.currentIndex, title: title });
+    }
   }
 
   write(str: string, terminal: Terminal): void {
@@ -149,9 +168,11 @@ export class HtermService {
     if (index > this.terminals.length - 1) { return; }
     this.terminals.forEach((term: Terminal) => term.active = false);
     this.terminals[index].active = true;
-    this.terminals[index].el.focus();
     this.outputEvents.emit({ action: 'switch', data: index });
     this.currentIndex = index;
+    this.focusCurrent();
+    this.titleEvents.emit({ index: this.currentIndex,
+      title: this.terminals[this.currentIndex].title + ':' + this.terminals[this.currentIndex].dir });
   }
 
   switchPrev(): void {
