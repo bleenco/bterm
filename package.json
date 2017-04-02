@@ -1,7 +1,7 @@
 {
-  "name": "speedterm",
+  "name": "bterm",
   "version": "0.3.0",
-  "description": "SpeedTerm - Cross-Platform Terminal",
+  "description": "bterm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
     "start": "node ./scripts/index.js dev",
