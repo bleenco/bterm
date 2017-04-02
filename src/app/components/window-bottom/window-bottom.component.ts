@@ -1,6 +1,7 @@
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
 import { HtermService } from '../../services/hterm.service';
 import { SearchService } from '../../services/search.service';
+import { platform } from 'os';
 
 export class ISearchForm {
   query: string
@@ -31,6 +32,10 @@ export class WindowBottomComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = new SearchForm();
+
+    if (platform() === 'win32') {
+      return;
+    }
 
     this.hterm.titleEvents.subscribe(event => {
       this.zone.run(() => {
