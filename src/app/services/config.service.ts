@@ -97,7 +97,7 @@ export class ConfigService {
       'style': {
         'background': '#090300',
         'color': '#a5a2a2',
-        'cursor': '#a5a2a2',
+        'cursor': '#F6C859',
         'top_bar_background': '#090300',
         'top_bar_tab_color': '#4C4B4B',
         'top_bar_tab_active_color': '#a5a2a2',
