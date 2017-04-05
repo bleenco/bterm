@@ -1,10 +1,12 @@
 # bterm
 
-Cross-Platform Terminal Emulator
+Fully customisable cross-platform terminal.
+
+Runs everywhere. MacOS, Linux or Windows.
 
 ### Download
 
-https://bterm.bleenco.io
+[http://bterm.bleenco.io](http://bterm.bleenco.io)
 
 ### Development
 
@@ -20,24 +22,24 @@ To make a production build run
 npm run dist
 ```
 
-### Preview
+### Quick Preview
 
-#### macOS
+- MacOS
 
 <p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/22859387/890572ce-f0d9-11e6-9a84-a95e54143eca.png" width="570">
+  <img src="https://cloud.githubusercontent.com/assets/1796022/24708240/95c00ffe-1a16-11e7-9a4b-b499b25aa2e4.png">
 </p>
 
-#### Windows 10
+- Windows
 
 <p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/23584697/5be44658-0169-11e7-88c8-c92d391d7235.png" width="500">
+  <img src="https://cloud.githubusercontent.com/assets/1796022/24708260/9f40a5d4-1a16-11e7-87da-5529b0d73416.PNG">
 </p>
 
-#### Linux
+- Linux
 
 <p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/23584752/0ef92fb4-016b-11e7-89af-d9151639bab7.png" width="500">
+  <img src="https://cloud.githubusercontent.com/assets/1796022/24708258/9f23a538-1a16-11e7-8eb3-42cba33ceac7.png">
 </p>
 
 ### LICENCE
