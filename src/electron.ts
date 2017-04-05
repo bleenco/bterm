@@ -64,6 +64,7 @@ app.on('activate', () => {
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
   globalShortcut.register('CommandOrControl+T', () => win.webContents.send('newTab', true));
+  globalShortcut.register('CommandOrControl+N', () => createWindow());
   globalShortcut.register('CommandOrControl+Shift+Left', () => win.webContents.send('tabLeft', true));
   globalShortcut.register('CommandOrControl+Shift+Right', () => win.webContents.send('tabRight', true));
   globalShortcut.register('CommandOrControl+1', () => win.webContents.send('switchTab', 0));
