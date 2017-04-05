@@ -7,9 +7,9 @@ let template = [
   submenu: [
     { label: 'About SpeedTerm', click() {
       dialog.showMessageBox({
-        title: 'SpeedTerm',
-        message: 'Terminal on amphetamines',
-        detail: 'Author: Jan Kuri <jkuri88@gmail.com>',
+        title: 'bterm',
+        message: 'Cross-Platform Terminal',
+        detail: 'Author: Jan Kuri <jan@bleenco.com>',
         buttons: []
       });
     }},

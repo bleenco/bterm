@@ -128,6 +128,8 @@ export class HtermService {
 
       this.titleEvents.emit({ index: this.currentIndex, title: title });
     }
+
+    this.focusCurrent();
   }
 
   write(str: string, terminal: Terminal): void {

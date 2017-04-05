@@ -4,45 +4,25 @@ import menu from './app/menu';
 
 let current: Electron.BrowserWindow = null;
 
-function createWindow(): void {
+function createWindow(): Electron.BrowserWindow {
   let win: Electron.BrowserWindow = new BrowserWindow({
     width: 600,
     height: 480,
     frame: false,
     transparent: true
   });
-
   win.setMenu(null);
-
   win.loadURL(`file://${__dirname}/index.html`);
 
-  win.on('closed', () => {
-    win = null;
-  });
-
-  registerShortcuts(win);
-  win.on('focus', () => {
-    if (win) {
-      registerShortcuts(win);
-    }
-  });
-  win.on('blur', () => unregisterShortcuts());
-  win.on('move', () => win.webContents.send('focusCurrent', true));
-
-  current = win;
+  return win;
 }
 
 app.on('ready', () => {
   menu();
   createWindow();
 
-  globalShortcut.register('CommandOrControl+N', () => {
-    createWindow();
-  });
-
   ipcMain.on('minimize', () => {
-    let isMinimized = current.isMinimized();
-    if (!isMinimized) {
+    if (!current.isMinimized()) {
       current.minimize();
     }
   });
@@ -53,21 +33,32 @@ app.on('ready', () => {
   });
 
   ipcMain.on('close', () => {
-    current.close();
+    if (current) {
+      current.close();
+    }
   });
 
   ipcMain.on('closeApp', () => {
-    current.close();
+    if (current) {
+      current.close();
+    }
   });
 });
 
-app.on('window-all-closed', () => {
-  app.quit();
+app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
+  current = win;
+  current.on('blur', () => unregisterShortcuts());
+  current.on('focus', () => registerShortcuts(current));
+  current.on('move', () => current.webContents.send('focusCurrent', true));
+});
+
+app.on('browser-window-focus', (e: Event, win: Electron.BrowserWindow) => {
+  current = win;
 });
 
 app.on('activate', () => {
   if (current === null) {
-    createWindow();
+    current = createWindow();
   }
 });
 
@@ -89,6 +80,7 @@ function registerShortcuts(win: Electron.BrowserWindow): void {
 
 function unregisterShortcuts(): void {
   globalShortcut.unregister('CommandOrControl+T');
+  globalShortcut.unregister('CommandOrControl+N');
   globalShortcut.unregister('CommandOrControl+Shift+Left');
   globalShortcut.unregister('CommandOrControl+Shift+Right');
   globalShortcut.unregister('CommandOrControl+1');

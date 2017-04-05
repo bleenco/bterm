@@ -43,7 +43,7 @@ export class PTYService {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
-        cwd: process.env.HOME,
+        cwd: os.homedir(),
         env: process.env
       }),
       input: new EventEmitter<string>(),
