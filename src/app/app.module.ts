@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { HtermServiceProvider } from './services/hterm.service';
 import { PTYServiceProvider } from './services/pty.service';
@@ -11,18 +10,19 @@ import { AppComponent } from './app.component';
 import { WindowTopComponent } from './components/window-top';
 import { WindowTerminalComponent } from './components/window-terminal';
 import { WindowBottomComponent } from './components/window-bottom';
+import { WindowSearchComponent } from './components/window-search';
 
 @NgModule({
   declarations: [
     AppComponent,
     WindowTopComponent,
     WindowTerminalComponent,
-    WindowBottomComponent
+    WindowBottomComponent,
+    WindowSearchComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
-    HttpModule,
     FormsModule
   ],
   providers: [
