@@ -35,12 +35,14 @@ app.on('ready', () => {
   ipcMain.on('close', () => {
     if (current) {
       current.close();
+      current = null;
     }
   });
 
   ipcMain.on('closeApp', () => {
     if (current) {
       current.close();
+      current = null
     }
   });
 });
