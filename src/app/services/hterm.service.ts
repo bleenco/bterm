@@ -126,7 +126,8 @@ export class HtermService {
         terminal.title = title;
       }
 
-      this.titleEvents.emit({ index: this.currentIndex, title: title });
+      let index = this.terminals.findIndex(t => t.term === terminal.term);
+      this.titleEvents.emit({ index: index, title: title });
     }
 
     this.focusCurrent();

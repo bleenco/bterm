@@ -50,7 +50,7 @@ export class WindowTopComponent implements OnInit {
   ngOnInit() {
     this.hterm.titleEvents.subscribe(data => {
       if (typeof this.tabs[data.index] !== 'undefined') {
-        this.tabs[data.index].title = data.title;
+        this.tabs[data.index].title = this.parseTitle(data.title);
       }
     });
   }
@@ -60,6 +60,14 @@ export class WindowTopComponent implements OnInit {
     this.tabs.forEach((tab: Tab) => tab.active = false);
     this.tabs[index].active = true;
     this.config.setConfig();
+  }
+
+  parseTitle(title: string): string {
+    if (title.indexOf(':') !== -1 && title.indexOf('~') !== -1) {
+      return title.split(':').slice(0, -1).join(':').trim();
+    } else {
+      return title;
+    }
   }
 
   close(): void {
