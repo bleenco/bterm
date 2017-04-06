@@ -55,21 +55,6 @@ export class ConfigService {
 
     setTimeout(() => {
       topBar.style.font = this.config.style.font;
-      [].forEach.call(topBar.querySelectorAll('.tab'), (tab: HTMLElement) => {
-        let icon = tab.querySelector('.icon') as HTMLElement;
-        let text = tab.querySelector('.num') as HTMLElement;
-
-        text.style.fontSize = '10px';
-        icon.style.fontSize = '10px';
-
-        if (tab.classList.contains('active')) {
-          icon.style.color = this.config.style.top_bar_tab_active_color;
-          text.style.color = this.config.style.top_bar_tab_active_color;
-        } else {
-          icon.style.color = this.config.style.top_bar_tab_color;
-          text.style.color = this.config.style.top_bar_tab_color;
-        }
-      });
     });
   }
 
@@ -91,7 +76,7 @@ export class ConfigService {
         'font_size': '13',
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
-        'windowPadding': '20px 35px',
+        'windowPadding': '20px 35px 10px 35px',
         'clipboard_notice': false
       },
       'style': {

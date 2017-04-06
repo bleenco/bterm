@@ -1,4 +1,4 @@
-import { Component, Inject, NgZone } from '@angular/core';
+import { Component, Inject, NgZone, OnInit } from '@angular/core';
 import { HtermService } from '../../services/hterm.service';
 import { ConfigService } from '../../services/config.service';
 let electron = require('electron');
@@ -15,7 +15,7 @@ export interface Tab {
   selector: 'window-top',
   templateUrl: 'window-top.component.html'
 })
-export class WindowTopComponent {
+export class WindowTopComponent implements OnInit {
   tabs: Tab[];
 
   constructor(
@@ -28,7 +28,7 @@ export class WindowTopComponent {
       if (event.action === 'created') {
         this.tabs.forEach((tab: Tab) => tab.active = false);
         this.zone.run(() => {
-          this.tabs.push({ active: true, title: 'node' });
+          this.tabs.push({ active: true, title: '' });
           setTimeout(() => this.config.setConfig());
         });
       } else if (event.action === 'closed') {
@@ -43,6 +43,14 @@ export class WindowTopComponent {
           this.tabs[event.data].active = true;
           setTimeout(() => this.config.setConfig());
         });
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.hterm.titleEvents.subscribe(data => {
+      if (typeof this.tabs[data.index] !== 'undefined') {
+        this.tabs[data.index].title = data.title;
       }
     });
   }
