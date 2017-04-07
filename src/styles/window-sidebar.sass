@@ -15,10 +15,10 @@
     width: 220px
     border-color: $vdark
 
-  .arrow-open
+  .menu-open
     position: absolute
-    top: 40px
-    left: -22px
+    bottom: 5px
+    left: -25px
     display: flex
     justify-content: center
     align-content: center
@@ -33,20 +33,20 @@
 
   .close-icon
     position: absolute
-    top: 10px
-    right: 10px
-    width: 15px
-    height: 15px
+    bottom: 8px
+    right: 8px
+    width: 12px
+    height: 12px
     display: block
     cursor: pointer
     svg
       display: block
-      width: 15px
-      height: 15px
+      width: 12px
+      height: 12px
       cursor: pointer
 
   .sidebar-container
-    padding: 10px
+    padding: 20px 10px
     width: 220px
     height: 100%
     overflow: hidden
@@ -58,24 +58,29 @@
       font-size: 12px
       color: $dark
       margin-bottom: 10px
+      text-align: center
+      font-weight: bold
 
     p
       margin: 5px 0
       display: block
       font-size: 10px
 
+    .slimscroll-wrapper
+      height: auto !important
+
     .theme-browser
       width: 200px
-      height: 350px
-      display: inline-block
+      height: calc(100% - 30px)
 
       span
         display: block
         width: 100%
         padding: 10px
+        border-radius: 3px
         cursor: pointer
         text-align: center
         font-size: 10px
 
-        &:hover
+        &:hover, &.is-active
           background: $vdark
