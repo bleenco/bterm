@@ -1,7 +1,10 @@
 @charset 'utf8'
 
 $background: #1d1f21
-$color: #c5c8c6
+$color: #f8f8f2
+$dark: #666666
+$vdark: #333333
+$white: #FFFFFF
 
 html, body
   width: 100%
@@ -10,10 +13,11 @@ html, body
 body
   border: 1px solid #333
   position: relative
+  font-family: Menlo, monaco, \'DejaVu Sans Mono\', \'Lucida Console\', monospace
 
 @import '../../node_modules/bulma/sass/base/minireset'
 @import 'app-root'
 @import 'window-top'
 @import 'window-terminal'
 @import 'window-bottom'
-@import 'window-search'
+@import 'window-sidebar'

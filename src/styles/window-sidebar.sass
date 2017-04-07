@@ -1,0 +1,81 @@
+.sidebar
+  position: fixed
+  top: 0
+  bottom: 0
+  right: 0
+  width: 0
+  height: 100%
+  border-top: 1px solid transparent
+  border-left: 1px solid transparent
+  border-bottom: 1px solid transparent
+  background: #1e1f29
+  transition: width 500ms ease-in
+
+  &.is-active
+    width: 220px
+    border-color: $vdark
+
+  .arrow-open
+    position: absolute
+    top: 40px
+    left: -22px
+    display: flex
+    justify-content: center
+    align-content: center
+    width: 22px
+    height: 22px
+    cursor: pointer
+    svg
+      display: block
+      width: 15px
+      height: 20px
+      cursor: pointer
+
+  .close-icon
+    position: absolute
+    top: 10px
+    right: 10px
+    width: 15px
+    height: 15px
+    display: block
+    cursor: pointer
+    svg
+      display: block
+      width: 15px
+      height: 15px
+      cursor: pointer
+
+  .sidebar-container
+    padding: 10px
+    width: 220px
+    height: 100%
+    overflow: hidden
+    display: inline-block
+    color: $dark
+
+    h1
+      display: block
+      font-size: 12px
+      color: $dark
+      margin-bottom: 10px
+
+    p
+      margin: 5px 0
+      display: block
+      font-size: 10px
+
+    .theme-browser
+      width: 200px
+      height: 350px
+      display: inline-block
+
+      span
+        display: block
+        width: 100%
+        padding: 10px
+        cursor: pointer
+        text-align: center
+        font-size: 10px
+
+        &:hover
+          background: $vdark

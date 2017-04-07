@@ -27,6 +27,7 @@ export class ConfigService {
     let terminal: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
+    let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
     this.hterm.terminals.forEach((term: Terminal) => {
       term.term.prefs_.set('font-family', this.config.settings.font);
@@ -52,10 +53,13 @@ export class ConfigService {
     terminal.style.background = this.config.style.background;
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
+    sidebar.style.background = this.config.style.background;
 
     setTimeout(() => {
       topBar.style.font = this.config.style.font;
     });
+
+    this.writeConfig();
   }
 
   setWatcher(): void {
@@ -69,7 +73,7 @@ export class ConfigService {
     this.config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
   }
 
-  recovery(): void {
+  getDefaultConfig(): any {
     let defaultConfig = {
       'settings': {
         'font': 'monaco, Menlo, \'DejaVu Sans Mono\', \'Lucida Console\', monospace',
@@ -108,7 +112,22 @@ export class ConfigService {
       }
     };
 
+    return defaultConfig;
+  }
+
+  recovery(): void {
+    let defaultConfig = this.getDefaultConfig();
     fs.writeFileSync(this.configPath, JSON.stringify(defaultConfig, null, 2), { encoding: 'utf8' });
+  }
+
+  previewTheme(styles: any): void {
+    let config = Object.assign({}, this.getDefaultConfig(), styles);
+    this.config = config;
+    this.setConfig();
+  }
+
+  writeConfig(): void {
+    fs.writeFileSync(this.configPath, JSON.stringify(this.config, null, 2), 'utf8');
   }
 }
 

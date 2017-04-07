@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SlimScrollModule } from 'ng2-slimscroll';
 import { HtermServiceProvider } from './services/hterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
@@ -10,7 +11,7 @@ import { AppComponent } from './app.component';
 import { WindowTopComponent } from './components/window-top';
 import { WindowTerminalComponent } from './components/window-terminal';
 import { WindowBottomComponent } from './components/window-bottom';
-import { WindowSearchComponent } from './components/window-search';
+import { WindowSidebarComponent } from './components/window-sidebar';
 
 @NgModule({
   declarations: [
@@ -18,12 +19,13 @@ import { WindowSearchComponent } from './components/window-search';
     WindowTopComponent,
     WindowTerminalComponent,
     WindowBottomComponent,
-    WindowSearchComponent
+    WindowSidebarComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    SlimScrollModule
   ],
   providers: [
     HtermServiceProvider,
