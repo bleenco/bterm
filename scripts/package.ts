@@ -30,6 +30,9 @@ export function makePackages(): Promise<null> {
       },
       win: {
         icon: path.resolve(__dirname, '../dist/assets/icon.ico'),
+      },
+      linux: {
+        target: ['deb', 'rpm']
       }
     }
   }).then(() => {
