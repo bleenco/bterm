@@ -55,17 +55,78 @@ export class ConfigService {
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;
 
-    setTimeout(() => {
-      topBar.style.font = this.config.style.font;
+    topBar.style.font = this.config.style.font;
+    [].forEach.call(topBar.querySelectorAll('.title'), title => {
+      title.style.color = this.config.style.color;
     });
+
+    setTimeout(() => {
+      let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;
+      let folderText = bottomBar.querySelector('.current-folder-text') as HTMLElement;
+
+      if (folderIcon) {
+        folderIcon.style.fill = this.config.style.color;
+        folderIcon.style.stroke = this.config.style.color;
+        folderIcon.style.strokeWidth = '1';
+      }
+
+      if (folderText) {
+        folderText.style.color = this.config.style.color;
+      }
+
+      // sidebar
+      this.setSidebarConfig();
+    }, 1000);
 
     this.writeConfig();
   }
 
+  setSidebarConfig(): void {
+    setTimeout(() => {
+      let doc: HTMLElement = document.documentElement;
+      let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
+
+      [].forEach.call(sidebar.querySelectorAll('.menu-open path'), dot => dot.style.fill = this.config.style.color);
+      let closeIcon = sidebar.querySelector('.close-icon > svg > path') as SVGPathElement;
+      let sideBarHeading = sidebar.querySelector('.sidebar-container > h1') as HTMLElement;
+
+      if (closeIcon) {
+        closeIcon.style.fill = this.config.style.color;
+      }
+
+      if (sideBarHeading) {
+        sideBarHeading.style.color = this.config.style.color;
+      }
+
+      setTimeout(() => {
+        let themeBrowser = sidebar.querySelector('.theme-browser') as HTMLElement;
+        if (themeBrowser) {
+          let slimscrollGrid = sidebar.querySelector('.slimscroll-grid') as HTMLElement;
+          let slimscrollBar = sidebar.querySelector('.slimscroll-bar') as HTMLElement;
+          let themeSpans = sidebar.querySelectorAll('span');
+          if (slimscrollGrid && slimscrollBar) {
+            slimscrollGrid.style.background = this.config.style.color;
+            slimscrollBar.style.background = this.config.style.color;
+            [].forEach.call(themeSpans, span => {
+              span.style.color = this.config.style.color;
+            });
+          }
+        }
+      });
+    });
+  }
+
   setWatcher(): void {
+    this.readConfig();
+    let config = JSON.stringify(this.config);
+
     this.watcher = fs.watchFile(this.configPath, () => {
       this.readConfig();
-      this.setConfig();
+      let updatedConfig = JSON.stringify(this.config);
+      if (config !== updatedConfig) {
+        this.setConfig();
+        config = updatedConfig;
+      }
     });
   }
 

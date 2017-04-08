@@ -33,9 +33,11 @@ export class WindowSidebarComponent implements OnInit {
 
   openSidebar(): void {
     this.opened = true;
+    this.config.setSidebarConfig();
   }
 
   closeSidebar(): void {
     this.opened = false;
+    this.config.setSidebarConfig();
   }
 }

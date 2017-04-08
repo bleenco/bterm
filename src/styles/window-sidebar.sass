@@ -18,7 +18,7 @@
   .menu-open
     position: absolute
     bottom: 5px
-    left: -25px
+    left: -30px
     display: flex
     justify-content: center
     align-content: center
@@ -46,7 +46,7 @@
       cursor: pointer
 
   .sidebar-container
-    padding: 20px 10px
+    padding: 10px 10px 20px 10px
     width: 220px
     height: 100%
     overflow: hidden
@@ -55,11 +55,13 @@
 
     h1
       display: block
-      font-size: 12px
+      font-size: 10px
       color: $dark
-      margin-bottom: 10px
+      padding-bottom: 5px
+      margin-bottom: 5px
       text-align: center
       font-weight: bold
+      border-bottom: 1px solid $vdark
 
     p
       margin: 5px 0
@@ -84,3 +86,4 @@
 
         &:hover, &.is-active
           background: $vdark
+          color: $white !important
