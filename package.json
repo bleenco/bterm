@@ -16,10 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/bleenco/bterm.git"
   },
-  "authors": [
-    "Jan Kuri <jan@bleenco.com>",
-    "Irman Abdic <irman@bleenco.com>"
-  ],
+  "author": "Bleenco OSS Team <oss@bleenco.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bleenco/bterm/issues"
