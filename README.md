@@ -8,7 +8,12 @@ Runs everywhere. MacOS, Linux or Windows.
 
 [http://bterm.bleenco.io](http://bterm.bleenco.io)
 
-### Development
+### Configuration
+
+On initial run `~/.bterm.json` configuration file is created. If you need fix your font for example,
+check this file and update your configuration to fit your needs.
+
+### Hacking on bterm
 
 ```sh
 git clone https://github.com/bleenco/bterm.git
@@ -22,24 +27,10 @@ To make a production build run
 npm run dist
 ```
 
-### Quick Preview
-
-- MacOS
+### Preview
 
 <p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/24708240/95c00ffe-1a16-11e7-9a4b-b499b25aa2e4.png">
-</p>
-
-- Windows
-
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/24708260/9f40a5d4-1a16-11e7-87da-5529b0d73416.PNG">
-</p>
-
-- Linux
-
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/24708258/9f23a538-1a16-11e7-8eb3-42cba33ceac7.png">
+  <img src="https://cloud.githubusercontent.com/assets/1796022/24828975/69b690f4-1c69-11e7-9ba2-814a5742e86b.png">
 </p>
 
 ### LICENCE
