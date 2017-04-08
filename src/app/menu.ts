@@ -3,9 +3,9 @@ let { Menu, dialog } = electron;
 
 let template = [
   {
-  label: 'SpeedTerm',
+  label: 'bterm',
   submenu: [
-    { label: 'About SpeedTerm', click() {
+    { label: 'About bterm', click() {
       dialog.showMessageBox({
         title: 'bterm',
         message: 'Cross-Platform Terminal',
