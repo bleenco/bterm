@@ -1,6 +1,6 @@
 {
   "name": "bterm",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "bterm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
@@ -16,14 +16,10 @@
     "type": "git",
     "url": "git+https://github.com/bleenco/bterm.git"
   },
-  "keywords": [
-    "Angular",
-    "Angular2",
-    "Electron",
-    "Starter",
-    "Seed"
+  "authors": [
+    "Jan Kuri <jan@bleenco.com>",
+    "Irman Abdic <irman@bleenco.com>"
   ],
-  "author": "Jan Kuri <jkuri88@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bleenco/bterm/issues"
