@@ -40,6 +40,7 @@ app.on('ready', () => {
   });
 
   ipcMain.on('closeApp', () => {
+    unregisterShortcuts();
     if (current) {
       current.close();
       current = null
