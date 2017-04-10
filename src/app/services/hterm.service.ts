@@ -21,12 +21,14 @@ export class HtermService {
   terminals: Terminal[];
   outputEvents: EventEmitter<{ action: string, data: number | null }>;
   titleEvents: EventEmitter<{ index: number, title: string }>;
+  resizeEvents: EventEmitter<{ cols: number, rows: number }>;
   currentIndex: number;
 
   constructor(@Inject(PTYService) private pty: PTYService, @Inject(NgZone) private zone: NgZone) {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
+    this.resizeEvents = new EventEmitter<{ cols: number, rows: number }>();
     hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
     hterm.hterm.Terminal.prototype.overlaySize = () => {};
     this.fixKeyboard();
@@ -89,6 +91,7 @@ export class HtermService {
 
     io.onTerminalResize = (col: number, row: number) => {
       terminal.ps.resize.emit({ col: col, row: row });
+      this.resizeEvents.emit({ cols: col, rows: row });
     }
 
     terminal.input.subscribe((str: string) => {

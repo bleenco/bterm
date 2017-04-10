@@ -12,6 +12,7 @@ import { WindowTopComponent } from './components/window-top';
 import { WindowTerminalComponent } from './components/window-terminal';
 import { WindowBottomComponent } from './components/window-bottom';
 import { WindowSidebarComponent } from './components/window-sidebar';
+import { WindowNotificationComponent } from './components/window-notification';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { WindowSidebarComponent } from './components/window-sidebar';
     WindowTopComponent,
     WindowTerminalComponent,
     WindowBottomComponent,
-    WindowSidebarComponent
+    WindowSidebarComponent,
+    WindowNotificationComponent
   ],
   imports: [
     BrowserModule,

@@ -74,7 +74,6 @@ export class ConfigService {
         folderText.style.color = this.config.style.color;
       }
 
-      // sidebar
       this.setSidebarConfig();
     }, 1000);
 
