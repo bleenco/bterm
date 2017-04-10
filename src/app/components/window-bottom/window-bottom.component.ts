@@ -38,6 +38,11 @@ export class WindowBottomComponent implements OnInit {
     }
 
     this.hterm.titleEvents.subscribe(event => {
+      if (event.title === ':') {
+        this.currentDir = null;
+        return;
+      }
+
       this.zone.run(() => {
         if (this.hterm.terminals[event.index] && event.index === this.hterm.currentIndex) {
           this.currentProcess = this.hterm.terminals[event.index].title;
