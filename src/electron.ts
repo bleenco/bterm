@@ -37,6 +37,7 @@ app.on('ready', () => {
     if (current) {
       unregisterShortcuts();
       current.close();
+      current = null;
     }
   });
 
@@ -44,6 +45,7 @@ app.on('ready', () => {
     unregisterShortcuts();
     if (current) {
       current.close();
+      current = null;
     }
   });
 });
