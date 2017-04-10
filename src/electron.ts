@@ -45,6 +45,10 @@ app.on('ready', () => {
       current.close();
     }
   });
+
+  ipcMain.on('setFullscreen', (win) => {
+    console.log(win);
+  });
 });
 
 app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {

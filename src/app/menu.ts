@@ -1,57 +1,66 @@
 let electron = require('electron');
-let { Menu, dialog } = electron;
+let { Menu, dialog, ipcMain, app } = electron;
 
 let template = [
   {
-  label: 'bterm',
-  submenu: [
-    { label: 'About bterm', click() {
-      dialog.showMessageBox({
-        title: 'bterm',
-        message: 'Cross-Platform Terminal',
-        detail: 'Author: Jan Kuri <jan@bleenco.com>',
-        buttons: []
-      });
-    }},
-    { role: 'quit' }
-  ]},
+    label: app.getName(),
+    submenu: [
+      {role: 'about'},
+      {type: 'separator'},
+      {role: 'services', submenu: []},
+      {type: 'separator'},
+      {role: 'hide'},
+      {role: 'hideothers'},
+      {role: 'unhide'},
+      {type: 'separator'},
+      {role: 'quit'}
+    ]
+  },
   {
-  role: 'window',
-  submenu: [
-    { role: 'minimize' },
-    { role: 'close' }
-  ]},
+    label: 'Edit',
+    submenu: [
+      {role: 'undo'},
+      {role: 'redo'},
+      {type: 'separator'},
+      {role: 'cut'},
+      {role: 'copy'},
+      {role: 'paste'},
+      {role: 'pasteandmatchstyle'},
+      {role: 'delete'},
+      {role: 'selectall'}
+    ]
+  },
   {
-  label: 'Edit',
-  submenu: [
-    { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-    { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
-    { type: 'separator' },
-    { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-    { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-    { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' },
-    { type: 'separator' },
-    { label: 'Tab Left', accelerator: 'CommandOrControl+Shift+Left', selector: 'Left' },
-    { label: 'Tab Right', accelerator: 'CommandOrControl+Shift+Right', selector: 'Right' }
-  ]},
+    label: 'View',
+    submenu: [
+      {role: 'togglefullscreen'},
+      {type: 'separator'},
+      {role: 'toggledevtools'},
+      {type: 'separator'},
+      {role: 'resetzoom'},
+      {role: 'zoomin'},
+      {role: 'zoomout'},
+      {type: 'separator'},
+      { label: 'Tab Left', accelerator: 'CommandOrControl+Shift+Left', selector: 'Left' },
+      { label: 'Tab Right', accelerator: 'CommandOrControl+Shift+Right', selector: 'Right' }
+    ]
+  },
   {
-  label: 'View',
-  submenu: [
-    {
-      label: 'Reload',
-      accelerator: 'CmdOrCtrl+R',
-      click (item, focusedWindow) {
-        if (focusedWindow) focusedWindow.reload()
+    role: 'window',
+    submenu: [
+      {role: 'minimize'},
+      {role: 'close'}
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click () { require('electron').shell.openExternal('http://bterm.bleenco.io') }
       }
-    },
-    {
-      label: 'Toggle Developer Tools',
-      accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-      click (item, focusedWindow) {
-        if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-      }
-    }
-  ]}
+    ]
+  }
 ];
 
 export default function() {
