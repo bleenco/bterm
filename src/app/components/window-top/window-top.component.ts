@@ -28,7 +28,7 @@ export class WindowTopComponent implements OnInit {
       if (event.action === 'created') {
         this.tabs.forEach((tab: Tab) => tab.active = false);
         this.zone.run(() => {
-          this.tabs.push({ active: true, title: '' });
+          this.tabs.push({ active: true, title: 'Shell' });
           setTimeout(() => this.config.setConfig());
         });
       } else if (event.action === 'closed') {
@@ -49,6 +49,10 @@ export class WindowTopComponent implements OnInit {
 
   ngOnInit() {
     this.hterm.titleEvents.subscribe(data => {
+      if (data.title === ':') {
+        return;
+      }
+
       if (typeof this.tabs[data.index] !== 'undefined') {
         this.tabs[data.index].title = this.parseTitle(data.title);
       }
