@@ -34,8 +34,8 @@ app.on('ready', () => {
 
   ipcMain.on('close', () => {
     if (current) {
+      unregisterShortcuts();
       current.close();
-      current = null;
     }
   });
 
@@ -43,13 +43,14 @@ app.on('ready', () => {
     unregisterShortcuts();
     if (current) {
       current.close();
-      current = null
     }
   });
 });
 
 app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
   current = win;
+  registerShortcuts(current);
+
   current.on('blur', () => unregisterShortcuts());
   current.on('focus', () => registerShortcuts(current));
   current.on('move', () => current.webContents.send('focusCurrent', true));
