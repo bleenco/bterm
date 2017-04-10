@@ -1,6 +1,7 @@
 let electron = require('electron');
 let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 import menu from './app/menu';
+import { platform } from 'os';
 
 let current: Electron.BrowserWindow = null;
 
@@ -9,7 +10,7 @@ function createWindow(): Electron.BrowserWindow {
     width: 600,
     height: 480,
     frame: false,
-    transparent: true
+    transparent: platform() === 'win32' ? false : true
   });
   win.setMenu(null);
   win.loadURL(`file://${__dirname}/index.html`);
@@ -44,10 +45,6 @@ app.on('ready', () => {
     if (current) {
       current.close();
     }
-  });
-
-  ipcMain.on('setFullscreen', (win) => {
-    console.log(win);
   });
 });
 
