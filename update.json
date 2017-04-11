@@ -1,0 +1,8 @@
+{
+  "linux-x64-prod": {
+    "update": "http://dl.bleenco.io/bterm-0.7.2-x86_64.AppImage",
+    "version": "0.7.2",
+    "platform": "linux",
+    "readme": "Second release"
+  }
+}
