@@ -1,4 +1,5 @@
 let electron = require('electron');
+let updater = require('electron-simple-updater');
 let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 import menu from './app/menu';
 import { platform } from 'os';
@@ -18,7 +19,12 @@ function createWindow(): Electron.BrowserWindow {
   return win;
 }
 
+function updateVersion(): void {
+  updater.init('https://github.com/Izak88/bterm/blob/master/update.json');
+}
+
 app.on('ready', () => {
+  updateVersion();
   menu();
   createWindow();
 
