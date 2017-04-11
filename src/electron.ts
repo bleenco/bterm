@@ -21,7 +21,7 @@ function createWindow(): Electron.BrowserWindow {
 
 function updateVersion(): void {
   updater.init({
-    url: 'https://raw.githubusercontent.com/Izak88/bterm/master/update.json',
+    url: 'https://raw.githubusercontent.com/bleenco/bterm/master/update.json',
     autoDownload: true
  });
 }
