@@ -4,13 +4,15 @@ import menu from './app/menu';
 import { platform } from 'os';
 
 let current: Electron.BrowserWindow = null;
+let osPlatform: String = null;
 
 function createWindow(): Electron.BrowserWindow {
+  osPlatform = platform();
   let win: Electron.BrowserWindow = new BrowserWindow({
     width: 600,
     height: 480,
     frame: false,
-    transparent: platform() === 'win32' ? false : true
+    transparent: osPlatform === 'win32' ? false : true
   });
   win.setMenu(null);
   win.loadURL(`file://${__dirname}/index.html`);
@@ -29,8 +31,18 @@ app.on('ready', () => {
   });
 
   ipcMain.on('maximize', () => {
-    let isFullScreen = current.isFullScreen();
-    current.setFullScreen(!isFullScreen);
+    let isFullScreen = null;
+    if (osPlatform === "linux" || osPlatform === "win32") {
+      isFullScreen = current.isMaximized();
+      if (!isFullScreen) {
+        current.maximize();
+      } else {
+       current.unmaximize()
+      }
+    } else {
+      isFullScreen = current.isFullScreen();
+      current.setFullScreen(!isFullScreen);
+    }
   });
 
   ipcMain.on('close', () => {
