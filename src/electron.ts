@@ -20,7 +20,10 @@ function createWindow(): Electron.BrowserWindow {
 }
 
 function updateVersion(): void {
-  updater.init('https://github.com/Izak88/bterm/blob/master/update.json');
+  updater.init({
+    url: 'https://raw.githubusercontent.com/Izak88/bterm/master/update.json',
+    autoDownload: true
+ });
 }
 
 app.on('ready', () => {
