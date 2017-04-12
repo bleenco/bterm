@@ -1,17 +1,28 @@
 let electron = require('electron');
 let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
+const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { platform } from 'os';
 
 let current: Electron.BrowserWindow = null;
+let osPlatform: String = null;
+
+const mainWindowState = new WindowStateManager('mainWindow', {
+    defaultWidth: 600,
+    defaultHeight: 460
+});
 
 function createWindow(): Electron.BrowserWindow {
+  osPlatform = platform();
   let win: Electron.BrowserWindow = new BrowserWindow({
-    width: 600,
-    height: 480,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     frame: false,
-    transparent: platform() === 'win32' ? false : true
+    transparent: osPlatform === 'win32' ? false : true
   });
+
   win.setMenu(null);
   win.loadURL(`file://${__dirname}/index.html`);
 
@@ -29,12 +40,23 @@ app.on('ready', () => {
   });
 
   ipcMain.on('maximize', () => {
-    let isFullScreen = current.isFullScreen();
-    current.setFullScreen(!isFullScreen);
+    let isFullScreen = null;
+    if (osPlatform === "linux" || osPlatform === "win32") {
+      isFullScreen = current.isMaximized();
+      if (!isFullScreen) {
+        current.maximize();
+      } else {
+       current.unmaximize()
+      }
+    } else {
+      isFullScreen = current.isFullScreen();
+      current.setFullScreen(!isFullScreen);
+    }
   });
 
   ipcMain.on('close', () => {
     if (current) {
+      mainWindowState.saveState(current);
       unregisterShortcuts();
       current.close();
       current = null;
@@ -44,6 +66,7 @@ app.on('ready', () => {
   ipcMain.on('closeApp', () => {
     unregisterShortcuts();
     if (current) {
+      mainWindowState.saveState(current);
       current.close();
       current = null;
     }
