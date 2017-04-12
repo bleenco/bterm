@@ -40,12 +40,14 @@ export function generateCSS(): Promise<null> {
 export function generatePackageJson(): Promise<null> {
   return new Promise((resolve, reject) => {
     let pkgJson: any = fs.readJsonSync(path.resolve(__dirname, '../package.json'));
+    let config: any = fs.readJsonSync(path.resolve(__dirname, '../config.json'));
     let productPkgJson: any = {
       name: pkgJson.name,
       description: pkgJson.description,
       author: pkgJson.author,
       version: pkgJson.version,
-      main: 'electron.js'
+      main: 'electron.js',
+      dependencies: config.dependencies
     };
 
     fs.writeJson(path.resolve(__dirname, '../dist/package.json'), productPkgJson, err => {

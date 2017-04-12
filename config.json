@@ -19,5 +19,9 @@
   },
   "styles": [
     "css/app.css"
-  ]
+  ],
+  "dependencies": {
+    "electron-window-state-manager": "^0.3.2",
+    "node-pty": "^0.6.3"
+  }
 }

@@ -12,12 +12,12 @@ export function makePackages(): Promise<null> {
     config: {
       appId: pkgJson.name,
       directories: {
-        buildResources: path.resolve(__dirname, '../dist'),
+        buildResources: path.resolve(__dirname, '../node_modules'),
         app: path.resolve(__dirname, '../dist'),
         output: path.resolve(__dirname, '../build'),
       },
-      compression: 'store',
-      extraResources: Object.keys(pkgJson.dependencies).map(key => `node_modules/${key}`),
+      compression: 'normal',
+      extraResources: [],
       mac: {
         icon: path.resolve(__dirname, '../dist/assets/icon.icns')
       },
