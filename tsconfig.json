@@ -24,9 +24,6 @@
   ],
   "angularCompilerOptions": {
     "genDir": "./src/ngfactory",
-    "entryModule": "src/app/app.module#AppModule"
-  },
-  "awesomeTypescriptLoaderOptions": {
-    "silent": true
+    "entryModule": "./src/app/app.module#AppModule"
   }
 }
