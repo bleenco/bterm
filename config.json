@@ -23,5 +23,10 @@
   "dependencies": {
     "electron-window-state-manager": "^0.3.2",
     "node-pty": "^0.6.3"
+  },
+  "updateServer": {
+    "url": "dl.bleenco.io",
+    "protocol": "https://",
+    "path": "/update"
   }
 }

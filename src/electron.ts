@@ -1,8 +1,12 @@
 let electron = require('electron');
+let semver = require('semver');
+let notifier = require('node-notifier');
+let config = require('../config.json');
 let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { platform } from 'os';
+import { checkNewVersion } from './utils';
 
 let current: Electron.BrowserWindow = null;
 let osPlatform: String = null;
@@ -11,6 +15,8 @@ const mainWindowState = new WindowStateManager('mainWindow', {
     defaultWidth: 600,
     defaultHeight: 460
 });
+
+let updateServer = `${config.updateServer.protocol}${config.updateServer.url}${config.updateServer.path}`;
 
 function createWindow(): Electron.BrowserWindow {
   osPlatform = platform();
@@ -30,9 +36,25 @@ function createWindow(): Electron.BrowserWindow {
 }
 
 app.on('ready', () => {
-  menu();
-  createWindow();
+  checkNewVersion(updateServer).then(lastVersion => {
+    if (semver.gt(lastVersion, app.getVersion())) {
+      notifier.notify({
+        title: `New version is available!`,
+        message: `bterm version ${lastVersion} is available.`
+      });
+    }
+  }).catch(err => {
+    notifier.notify({
+      title: 'Error',
+      message: JSON.stringify(err)
+    });
+  })
 
+
+  let m = menu();
+  let win = createWindow(); 
+  win.setMenu(m);
+  
   ipcMain.on('minimize', () => {
     if (!current.isMinimized()) {
       current.minimize();
