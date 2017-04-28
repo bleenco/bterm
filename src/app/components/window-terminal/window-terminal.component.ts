@@ -21,6 +21,7 @@ export class WindowTerminalComponent implements OnInit {
     setTimeout(() => this.config.setConfig());
 
     ipcRenderer.on('newTab', () => this.hterm.create());
+    ipcRenderer.on('closeTab', () => this.hterm.deleteTab());
     ipcRenderer.on('switchTab', (ev, data) => this.hterm.switchTab(data));
     ipcRenderer.on('tabLeft', () => this.hterm.switchPrev());
     ipcRenderer.on('tabRight', () => this.hterm.switchNext());
