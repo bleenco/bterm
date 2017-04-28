@@ -169,6 +169,11 @@ export class ConfigService {
           '#b5e4f4',
           '#f7f7f7'
         ]
+      },
+      "updateServer": {
+        "url": "dl.bleenco.io",
+        "protocol": "https://",
+        "path": "/update"
       }
     };
 
@@ -184,6 +189,10 @@ export class ConfigService {
     let config = Object.assign({}, this.getDefaultConfig(), styles);
     this.config = config;
     this.setConfig();
+  }
+
+  getUpdateServer(): string {
+    return `${this.config.updateServer.protocol}${this.config.updateServer.url}${this.config.updateServer.path}`;
   }
 
   writeConfig(): void {
