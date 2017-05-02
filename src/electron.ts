@@ -4,6 +4,7 @@ const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { platform } from 'os';
 import { checkNewVersion } from './utils';
+import { keyboardShortcuts } from './keyboard-shortcuts';
 
 let current: Electron.BrowserWindow = null;
 let osPlatform: String = null;
@@ -95,35 +96,19 @@ app.on('activate', () => {
 });
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
-  globalShortcut.register('CommandOrControl+T', () => win.webContents.send('newTab', true));
-  globalShortcut.register('CommandOrControl+N', () => createWindow());
-  globalShortcut.register('CommandOrControl+Shift+Left', () => win.webContents.send('tabLeft', true));
-  globalShortcut.register('CommandOrControl+Shift+Right', () => win.webContents.send('tabRight', true));
-  globalShortcut.register('CommandOrControl+1', () => win.webContents.send('switchTab', 0));
-  globalShortcut.register('CommandOrControl+2', () => win.webContents.send('switchTab', 1));
-  globalShortcut.register('CommandOrControl+3', () => win.webContents.send('switchTab', 2));
-  globalShortcut.register('CommandOrControl+4', () => win.webContents.send('switchTab', 3));
-  globalShortcut.register('CommandOrControl+5', () => win.webContents.send('switchTab', 4));
-  globalShortcut.register('CommandOrControl+6', () => win.webContents.send('switchTab', 5));
-  globalShortcut.register('CommandOrControl+7', () => win.webContents.send('switchTab', 6));
-  globalShortcut.register('CommandOrControl+8', () => win.webContents.send('switchTab', 7));
-  globalShortcut.register('CommandOrControl+9', () => win.webContents.send('switchTab', 8));
-  globalShortcut.register('CommandOrControl+0', () => win.webContents.send('switchTab', 9));
+  let keypressFunctions = {
+    'send': function(key, value){ win.webContents.send(key, value); },
+    'toggleDevTools': function(){ win.webContents.toggleDevTools(); },
+    'createWindow': function(){ createWindow(); }
+  };
+
+  keyboardShortcuts.forEach( shortcut => {
+    globalShortcut.register(shortcut.keypress, () => keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue));
+  });
 }
 
 function unregisterShortcuts(): void {
-  globalShortcut.unregister('CommandOrControl+T');
-  globalShortcut.unregister('CommandOrControl+N');
-  globalShortcut.unregister('CommandOrControl+Shift+Left');
-  globalShortcut.unregister('CommandOrControl+Shift+Right');
-  globalShortcut.unregister('CommandOrControl+1');
-  globalShortcut.unregister('CommandOrControl+2');
-  globalShortcut.unregister('CommandOrControl+3');
-  globalShortcut.unregister('CommandOrControl+4');
-  globalShortcut.unregister('CommandOrControl+5');
-  globalShortcut.unregister('CommandOrControl+6');
-  globalShortcut.unregister('CommandOrControl+7');
-  globalShortcut.unregister('CommandOrControl+8');
-  globalShortcut.unregister('CommandOrControl+9');
-  globalShortcut.unregister('CommandOrControl+0');
+  keyboardShortcuts.forEach( shortcut => {
+    globalShortcut.unregister(shortcut.keypress);
+  });
 }

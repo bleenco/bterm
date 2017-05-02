@@ -77,6 +77,10 @@ export class HtermService {
     this.currentIndex = this.terminals.length - 1;
   }
 
+  deleteTab(): void {
+    this.terminals[this.currentIndex].ps.exit.emit(true);
+  }
+
   initializeInstance(terminal: Terminal, el: HTMLElement): void {
     let io = terminal.term.io.push();
     terminal.term.keyboard.installKeyboard(el.querySelector('iframe').contentDocument);
