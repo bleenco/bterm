@@ -3,15 +3,14 @@ let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { platform } from 'os';
-import { checkNewVersion } from './utils';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 
 let current: Electron.BrowserWindow = null;
 let osPlatform: String = null;
 
 const mainWindowState = new WindowStateManager('mainWindow', {
-    defaultWidth: 600,
-    defaultHeight: 460
+  defaultWidth: 600,
+  defaultHeight: 460
 });
 
 function createWindow(): Electron.BrowserWindow {
@@ -102,13 +101,13 @@ function registerShortcuts(win: Electron.BrowserWindow): void {
     'createWindow': function(){ createWindow(); }
   };
 
-  keyboardShortcuts.forEach( shortcut => {
+  keyboardShortcuts.forEach(shortcut => {
     globalShortcut.register(shortcut.keypress, () => keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue));
   });
 }
 
 function unregisterShortcuts(): void {
-  keyboardShortcuts.forEach( shortcut => {
+  keyboardShortcuts.forEach(shortcut => {
     globalShortcut.unregister(shortcut.keypress);
   });
 }

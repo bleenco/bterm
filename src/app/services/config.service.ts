@@ -192,11 +192,7 @@ export class ConfigService {
   }
 
   getUpdateServer(): string {
-    if (this.config && this.config.updateServer) {
-      return `${this.config.updateServer.protocol}${this.config.updateServer.url}${this.config.updateServer.path}`;
-    } else {
-      return null;
-    }
+    return 'https://dl.bleenco.io/update';
   }
 
   writeConfig(): void {
