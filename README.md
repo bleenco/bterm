@@ -1,5 +1,7 @@
 # bterm
 
+[![CircleCI](https://circleci.com/gh/bleenco/bterm/tree/master.svg?style=svg)](https://circleci.com/gh/bleenco/bterm/tree/master)
+
 Fully customisable cross-platform terminal.
 
 Runs everywhere. MacOS, Linux or Windows.
