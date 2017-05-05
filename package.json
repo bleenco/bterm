@@ -11,7 +11,7 @@
     "postinstall": "electron-rebuild && install-app-deps",
     "dist": "npm run build && node ./scripts/index.js app",
     "clean": "rimraf dist/ src/ngfactory lib/",
-    "test:e2e": "npm run build && tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js"
+    "test:e2e": "tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js"
   },
   "repository": {
     "type": "git",

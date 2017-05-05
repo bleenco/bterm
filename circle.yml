@@ -1,9 +1,9 @@
 machine:
   node:
-    version: 6.10.2
+    version: 6 
 dependencies:
   override:
     - npm install
 test:
   override:
-    - npm run test:e2e
+    - npm run build && npm run test:e2e
