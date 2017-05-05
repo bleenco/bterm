@@ -5,7 +5,6 @@ import { getConfig } from './config';
 const rollup = require('rollup');
 const angular = require('rollup-plugin-angular');
 const tsr = require('rollup-plugin-typescript');
-const progress = require('rollup-plugin-progress');
 
 export class Build {
   cache: any;
@@ -29,7 +28,6 @@ export class Build {
         plugins: [
           angular(),
           tsr({ typescript: require(path.resolve(__dirname, '../node_modules/typescript/')) }),
-          progress()
         ],
         external: Object.keys(this.config.externalPackages)
       }).then(bundle => {

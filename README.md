@@ -1,6 +1,8 @@
 # bterm
 
 [![CircleCI](https://circleci.com/gh/bleenco/bterm/tree/master.svg?style=svg)](https://circleci.com/gh/bleenco/bterm/tree/master)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/4tjk5sbyewpr802m/branch/master?svg=true)](https://ci.appveyor.com/project/jkuri/bterm/branch/master)
+
 
 Fully customisable cross-platform terminal.
 

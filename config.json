@@ -15,7 +15,8 @@
     "child_process": "child_process",
     "events": "events",
     "net": "net",
-    "hterm": "hterm"
+    "hterm": "hterm",
+    "https": "https"
   },
   "styles": [
     "css/app.css"
