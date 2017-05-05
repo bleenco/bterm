@@ -44,7 +44,13 @@ describe('bterm launch', function() {
       .browserWindow.isMinimized().should.eventually.be.false;
   });
 
-  it('should be focused', () => {
+  it('should minimize the application after click on minimize', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .click('.minimize')
+      .browserWindow.isMinimized().should.eventually.be.true;
+  });
+
+  it('should be focused on app after start', () => {
     return this.app.client.waitUntilWindowLoaded()
       .browserWindow.isFocused().should.eventually.be.true;
   });
@@ -65,6 +71,18 @@ describe('bterm launch', function() {
 
   it('should have the shell title', () => {
     return this.app.client.getText('.title').should.eventually.equal('Shell');
+  });
+
+  it('should have focus after click', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .click('.terminal-instance')
+      .browserWindow.isFocused('.terminal-instance').should.eventually.equal(true);
+  });
+
+  it('should open the right menu', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .click('.menu-open')
+      .browserWindow.isVisible('.sidebar-container').should.eventually.equal(true);
   });
 
 })
