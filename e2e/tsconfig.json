@@ -10,7 +10,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "../dist/out-tsc-e2e",
+    "outDir": "./out",
     "sourceMap": true,
     "target": "es6",
     "typeRoots": [

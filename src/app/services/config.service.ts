@@ -170,10 +170,10 @@ export class ConfigService {
           '#f7f7f7'
         ]
       },
-      "updateServer": {
-        "url": "dl.bleenco.io",
-        "protocol": "https://",
-        "path": "/update"
+      updateServer: {
+        url: "dl.bleenco.io",
+        protocol: "https://",
+        path: "/update"
       }
     };
 
@@ -192,7 +192,11 @@ export class ConfigService {
   }
 
   getUpdateServer(): string {
-    return `${this.config.updateServer.protocol}${this.config.updateServer.url}${this.config.updateServer.path}`;
+    if (this.config && this.config.updateServer) {
+      return `${this.config.updateServer.protocol}${this.config.updateServer.url}${this.config.updateServer.path}`;
+    } else {
+      return null;
+    }
   }
 
   writeConfig(): void {
