@@ -7,7 +7,7 @@ describe('bterm launch', function() {
   let timeout = (mseconds) => this.timeout(mseconds);
   let app: any;
   const electronPath = resolve(__dirname, '../../node_modules/.bin/electron');
-  timeout(10000);
+  timeout(120000);
 
   beforeEach(() => {
     this.app = new Application({
