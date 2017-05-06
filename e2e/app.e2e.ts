@@ -93,8 +93,56 @@ describe('bterm launch', function() {
   it('should open the right menu', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.click('.menu-open'))
-      .then(() => this.app.client.browserWindow.isVisible('.sidebar-container'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
       .then(result => expect(result).to.be.true);
+  });
+
+  it('should have correct text on right menu', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.click('.menu-open'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.sidebar-container h1'))
+      .then(result => expect(result).to.equal('Theme Browser'));
+  });
+
+  it('should have clicked theme selected', () => {
+    let styleProp = '';
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.click('.menu-open'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
+      .then((style) => styleProp = style)
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
+      .then(() => wait(2000))
+      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
+      .then((style) => expect(style).to.not.equal(styleProp))
+  });
+
+  it('should give focus to clicked theme', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.click('.menu-open'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.browserWindow.isFocused('.theme-browser > span:nth-child(2)'))
+      .then(result => expect(result).to.be.true);
+  });
+
+  it('should close the right menu', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
+      .then(result => expect(result).to.be.false)
+      .then(() => this.app.client.click('.menu-open'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
+      .then(result => expect(result).to.be.true)
+      .then(() => this.app.client.click('.close-icon'))
+      .then(() => wait(2000))
+      .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
+      .then(result => expect(result).to.be.false);
   });
 
 })
