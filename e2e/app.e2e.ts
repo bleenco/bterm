@@ -1,12 +1,16 @@
 const Application = require('spectron').Application;
 const { resolve } = require('path');
+import * as os from 'os';
 import { expect } from 'chai';
 import { wait } from './helpers';
 
 describe('bterm launch', function() {
   let timeout = (mseconds) => this.timeout(mseconds);
   let app: any;
-  const electronPath = resolve(__dirname, '../../node_modules/.bin/electron');
+  let electronPath = resolve(__dirname, '../../node_modules/.bin/electron');
+  if (os.platform() === 'win32') {
+    electronPath += '.cmd';
+  }
   timeout(120000);
 
   beforeEach(() => {
