@@ -6,7 +6,7 @@ import { platform } from 'os';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 
 let current: Electron.BrowserWindow = null;
-let osPlatform: String = null;
+let osPlatform: string = null;
 
 const mainWindowState = new WindowStateManager('mainWindow', {
   defaultWidth: 600,

@@ -3,6 +3,7 @@ import { PTYService, Process } from './pty.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
 import * as hterm from 'hterm';
+import { platform } from 'os';
 
 export interface Terminal {
   el: HTMLElement,
@@ -23,6 +24,7 @@ export class HtermService {
   titleEvents: EventEmitter<{ index: number, title: string }>;
   resizeEvents: EventEmitter<{ cols: number, rows: number }>;
   currentIndex: number;
+  osPlatform: string;
 
   constructor(@Inject(PTYService) private pty: PTYService, @Inject(NgZone) private zone: NgZone) {
     this.terminals = [];
@@ -32,6 +34,7 @@ export class HtermService {
     hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
     hterm.hterm.Terminal.prototype.overlaySize = () => {};
     this.fixKeyboard();
+    this.osPlatform = platform();
   }
 
   create(): void {
@@ -79,6 +82,11 @@ export class HtermService {
 
   deleteTab(): void {
     this.terminals[this.currentIndex].ps.exit.emit(true);
+  }
+
+  clearTab(): void {
+    let termOutput = this.terminals[this.currentIndex].output;
+    this.osPlatform === 'win32' ? termOutput.emit('\n cls \n') : termOutput.emit('\n clear \n');
   }
 
   initializeInstance(terminal: Terminal, el: HTMLElement): void {

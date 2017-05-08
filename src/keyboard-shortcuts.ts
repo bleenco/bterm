@@ -3,6 +3,7 @@ export let keyboardShortcuts = [
   {keypress:'CommandOrControl+Shift+Right', sctype: 'send', sckey: 'tabRight', scvalue: true},
   {keypress:'CommandOrControl+T', sctype: 'send', sckey: 'newTab', scvalue: true},
   {keypress:'CommandOrControl+W', sctype: 'send', sckey: 'closeTab', scvalue: true},
+  {keypress:'CommandOrControl+K', sctype: 'send', sckey: 'clearTab', scvalue: true},
   {keypress:'CommandOrControl+1', sctype: 'send', sckey: 'switchTab', scvalue: 0},
   {keypress:'CommandOrControl+2', sctype: 'send', sckey: 'switchTab', scvalue: 1},
   {keypress:'CommandOrControl+3', sctype: 'send', sckey: 'switchTab', scvalue: 2},
