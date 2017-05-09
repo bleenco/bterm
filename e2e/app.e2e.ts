@@ -144,5 +144,12 @@ describe('bterm launch', function() {
       .then(result => expect(result).to.be.false);
   });
 
+  it('should maximize the app with click on header tab', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.doubleClick('.window-top-container'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.browserWindow.isMaximized())
+      .then(result => expect(result).to.be.true);
+  });
 })
 

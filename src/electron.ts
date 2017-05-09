@@ -36,23 +36,19 @@ app.on('ready', () => {
   win.setMenu(m);
 
   ipcMain.on('minimize', () => {
-    if (!current.isMinimized()) {
-      current.minimize();
-    }
+    current.minimize();
+  });
+
+  ipcMain.on('tabMaximize', () => {
+    current.isMaximized() ? current.unmaximize() : current.maximize();
   });
 
   ipcMain.on('maximize', () => {
-    let isFullScreen = null;
-    if (osPlatform === "linux" || osPlatform === "win32") {
-      isFullScreen = current.isMaximized();
-      if (!isFullScreen) {
-        current.maximize();
-      } else {
-       current.unmaximize()
-      }
+    let isMac = osPlatform !== 'darwin'
+    if (isMac) {
+      current.isMaximized() ? current.unmaximize() : current.maximize();
     } else {
-      isFullScreen = current.isFullScreen();
-      current.setFullScreen(!isFullScreen);
+      current.setFullScreen(!current.isFullScreen());
     }
   });
 

@@ -96,4 +96,5 @@ export class WindowTopComponent implements OnInit {
 
   minimize(): void { ipcRenderer.send('minimize'); }
   maximize(): void { ipcRenderer.send('maximize'); }
+  tabMaximize(): void { ipcRenderer.send('tabMaximize'); }
 }
