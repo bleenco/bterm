@@ -35,13 +35,6 @@ app.on('ready', () => {
   let win = createWindow();
   win.setMenu(m);
 
-  ipcMain.on('fork', (event, args) => {
-    let win = createWindow();
-    win.setMenu(m);
-    win.show();
-    win.focus();
-  });
-
   ipcMain.on('minimize', () => {
     current.minimize();
   });
