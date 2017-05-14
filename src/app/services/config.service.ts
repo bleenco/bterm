@@ -142,7 +142,8 @@ export class ConfigService {
         'cursor_blink': false,
         'windowPadding': '20px 35px 10px 35px',
         'clipboard_notice': false,
-        'theme_name': 'AtelierSulphurpool'
+        'theme_name': 'AtelierSulphurpool',
+        'scrollBufferSave': false
       },
       'style': {
         'background': '#090300',

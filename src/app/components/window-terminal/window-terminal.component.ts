@@ -40,6 +40,10 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     this.ctxMenu = new Menu();
     this.ctxMenu.append(new MenuItem({ label: 'Copy', click: () => this.copy() }));
     this.ctxMenu.append(new MenuItem({ label: 'Paste', click: () => this.paste() }));
+
+    if (this.config.config.settings.scrollBufferSave) {
+      this.ctxMenu.append(new MenuItem({ label: 'Save Screen Buffer', click: () => this.saveBuffer() }));
+    }
   }
 
   getFrameDocs(): HTMLDocument[] {
@@ -74,11 +78,28 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
           frameDoc.getSelection().removeAllRanges();
         }
       }
-    })
+    });
   }
 
   paste(): void {
     this.hterm.terminals[this.hterm.currentIndex].output.emit(clipboard.readText());
+  }
+
+  saveBuffer(): void {
+    let parent: HTMLIFrameElement = <HTMLIFrameElement>document.querySelector('.terminal-instance.active iframe');
+    if (!parent) { return; }
+
+    let doc: HTMLDocument = parent.contentWindow.document;
+    let lines: NodeList = doc.querySelectorAll('x-row');
+    let lineBuffer: string[] = [].map.call(lines, (line: Node) => line.textContent).filter(line => line.length);
+
+    dialog.showSaveDialog(remote.getCurrentWindow(), (fn) => {
+      if (!fn) { return; }
+
+      writeFile(fn, lineBuffer.join(EOL), (err) => {
+        if (err) { alert(`Error writing screen buffer to file "${fn}"`); }
+      });
+    });
   }
 
   ngOnDestroy() {
