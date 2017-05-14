@@ -3,6 +3,7 @@
     <span class="icon close" (click)="close()"></span>
     <span class="icon minimize" (click)="minimize()"></span>
     <span class="icon maximize" (click)="maximize()"></span>
+    <span class="icon fork" (click)="fork()"></span>
   </div>
   <div class="window-top-container__center">
     <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (click)="switchTab(i)">
