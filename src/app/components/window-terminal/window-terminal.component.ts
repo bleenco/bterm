@@ -33,38 +33,37 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     ipcRenderer.on('focusCurrent', () => this.hterm.focusCurrent());
 
     this.initMenu();
-    setTimeout( () => this.frameListener(false) );
+    setTimeout(() => this.frameListener(false));
   }
 
   initMenu() {
     this.ctxMenu = new Menu();
-    this.ctxMenu.append(new MenuItem({
-      label: "Copy", 
-      click: () => this.copy()
-    }));
-    this.ctxMenu.append(new MenuItem({
-      label: "Paste",
-      click: () => this.paste()
-    }));
+    this.ctxMenu.append(new MenuItem({ label: 'Copy', click: () => this.copy() }));
+    this.ctxMenu.append(new MenuItem({ label: 'Paste', click: () => this.paste() }));
   }
 
   getFrameDocs(): HTMLDocument[] {
     let hostFrames: NodeListOf<HTMLIFrameElement> = document.querySelectorAll('iframe');
     let frameDocs: HTMLDocument[] = [];
-    
-    [].forEach.call(hostFrames, (hostFrame: HTMLIFrameElement) => { frameDocs.push(hostFrame.contentWindow.document); });
-    return frameDocs;
+
+    return [].map.call(hostFrames, (hostFrame: HTMLIFrameElement) => hostFrame.contentWindow.document);
   }
 
   frameListener(detachOnly: boolean = true): void {
     this.getFrameDocs().forEach(frameDoc => {
       let frameBody: HTMLElement = frameDoc.querySelector('body');
-      if (frameBody) { frameBody.removeEventListener('contextmenu', this.popup); }      
-      if (!detachOnly) {frameBody.addEventListener('contextmenu', this.popup); }
+      if (frameBody) {
+        frameBody.removeEventListener('contextmenu', this.popup);
+      }
+      if (!detachOnly) {
+        frameBody.addEventListener('contextmenu', this.popup);
+      }
     });
   }
 
-  popup = (ev: any) => { this.ctxMenu.popup(remote.getCurrentWindow()); }
+  popup = (ev: any) => {
+    this.ctxMenu.popup(remote.getCurrentWindow());
+  }
 
   copy() {
     this.getFrameDocs().forEach(frameDoc => {
@@ -77,8 +76,10 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
       }
     })
   }
-  
-  paste(): void { this.hterm.terminals[this.hterm.currentIndex].output.emit(clipboard.readText()); }
+
+  paste(): void {
+    this.hterm.terminals[this.hterm.currentIndex].output.emit(clipboard.readText());
+  }
 
   ngOnDestroy() {
     this.frameListener();

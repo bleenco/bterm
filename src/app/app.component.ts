@@ -11,7 +11,7 @@ const { app } = require('electron').remote;
 })
 
 export class AppComponent {
-  constructor(private config: ConfigService){
+  constructor(private config: ConfigService) {
     checkNewVersion(config.getUpdateServer()).then(lastVersion => {
       if (semver.gt(lastVersion, app.getVersion())) {
         notifier.notify({

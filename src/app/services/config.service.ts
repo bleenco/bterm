@@ -171,9 +171,9 @@ export class ConfigService {
         ]
       },
       updateServer: {
-        url: "dl.bleenco.io",
-        protocol: "https://",
-        path: "/update"
+        url: 'dl.bleenco.io',
+        protocol: 'https://',
+        path: '/update'
       }
     };
 
