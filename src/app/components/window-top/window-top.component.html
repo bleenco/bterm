@@ -1,8 +1,16 @@
 <div class="window-top-container" (dblclick)="tabMaximize()">
   <div class="window-top-container__left" [ngClass]="{ 'bordered': tabs.length > 1 && !tabs[0].active }">
-    <span class="icon close" (click)="close()"></span>
-    <span class="icon minimize" (click)="minimize()"></span>
-    <span class="icon maximize" (click)="maximize()"></span>
+    <div class="icons">
+      <span class="icon close" (click)="close()">
+        <span>
+          <svg viewBox="13 0 74 74" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M81.4,1.6 L52.1,30.9 C50.9,32.1 49,32.1 47.9,30.9 L18.6,1.6 C17.4,0.4 15.5,0.4 14.4,1.6 L14.4,1.6 C13.2,2.8 13.2,4.7 14.4,5.8 L43.7,35.1 C44.9,36.3 44.9,38.2 43.7,39.3 L14.3,68.7 C13.1,69.9 13.1,71.8 14.3,72.9 L14.3,72.9 C15.5,74.1 17.4,74.1 18.5,72.9 L47.8,43.6 C49,42.4 50.9,42.4 52,43.6 L81.4,73 C82.6,74.2 84.5,74.2 85.6,73 L85.6,73 C86.8,71.8 86.8,69.9 85.6,68.8 L56.4,39.4 C55.2,38.2 55.2,36.3 56.4,35.2 L85.7,5.9 C86.9,4.7 86.9,2.8 85.7,1.7 L85.7,1.7 C84.5,0.5 82.6,0.5 81.4,1.6" id="Shape" stroke-width="4" stroke="black"></path>
+          </svg>
+        </span>
+      </span>
+      <span class="icon minimize" (click)="minimize()"><span>&ndash;</span></span>
+      <span class="icon maximize" (click)="maximize()"><span>+</span></span>
+    </div>
   </div>
   <div class="window-top-container__center">
     <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (click)="switchTab(i)">
