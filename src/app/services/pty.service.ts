@@ -22,7 +22,7 @@ export class PTYService {
     this.user = os.userInfo({ encoding: 'utf8' });
     switch (os.platform()) {
       case 'win32':
-        this.shell = 'powershell.exe';
+        this.shell = 'bash.exe';
         this.args = [];
         break;
       case 'darwin':
