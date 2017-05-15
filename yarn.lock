@@ -87,12 +87,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/electron-builder@^2.8.0":
-  version "2.8.0"
-  resolved "http://morose.bleenco.io/@types/electron-builder/-/electron-builder-2.8.0.tgz#b4fe5efa910fc8287fcc8ec6e214cdcfa87405d6"
-  dependencies:
-    electron-builder "*"
-
 "@types/electron@^1.4.37":
   version "1.4.37"
   resolved "http://morose.bleenco.io/@types/electron/-/electron-1.4.37.tgz#cfff6958f224842c1742a6e4873ed7135e5f2ff3"
@@ -1393,7 +1387,7 @@ electron-builder-util@17.2.0, electron-builder-util@~17.2.0:
     stat-mode "^0.2.2"
     tunnel-agent "^0.6.0"
 
-electron-builder@*, electron-builder@^17.3.0:
+electron-builder@^17.3.0:
   version "17.3.1"
   resolved "http://morose.bleenco.io/electron-builder/-/electron-builder-17.3.1.tgz#5485ff8f7f55bbc9acd0d248263355937e53a037"
   dependencies:
@@ -2875,9 +2869,9 @@ ncname@1.0.x:
   dependencies:
     xml-char-classes "^1.0.0"
 
-ng2-slimscroll@^1.3.2:
-  version "1.3.2"
-  resolved "http://morose.bleenco.io/ng2-slimscroll/-/ng2-slimscroll-1.3.2.tgz#8b052ca8748080ecce8138f1ab5826beaddf5d49"
+ng2-slimscroll@^2.0.1:
+  version "2.0.1"
+  resolved "http://morose.bleenco.io/ng2-slimscroll/-/ng2-slimscroll-2.0.1.tgz#3c912531c39c50edcbee8f40abbc9c438bb4ed7b"
 
 no-case@^2.2.0:
   version "2.3.1"
