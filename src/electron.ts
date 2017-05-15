@@ -2,11 +2,10 @@ let electron = require('electron');
 let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
-import { platform } from 'os';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 
 let current: Electron.BrowserWindow = null;
-let osPlatform: string = null;
+let windows = [];
 
 const mainWindowState = new WindowStateManager('mainWindow', {
   defaultWidth: 600,
@@ -14,14 +13,13 @@ const mainWindowState = new WindowStateManager('mainWindow', {
 });
 
 function createWindow(): Electron.BrowserWindow {
-  osPlatform = platform();
   let win: Electron.BrowserWindow = new BrowserWindow({
     width: mainWindowState.width,
     height: mainWindowState.height,
     x: mainWindowState.x,
     y: mainWindowState.y,
     frame: false,
-    transparent: osPlatform === 'win32' ? false : true
+    transparent: process.platform === 'win32' ? false : true
   });
 
   win.setMenu(null);
@@ -44,35 +42,25 @@ app.on('ready', () => {
   });
 
   ipcMain.on('maximize', () => {
-    let isMac = osPlatform !== 'darwin'
+    let isMac = process.platform === 'darwin'
     if (isMac) {
-      current.isMaximized() ? current.unmaximize() : current.maximize();
-    } else {
       current.setFullScreen(!current.isFullScreen());
+    } else {
+      current.isMaximized() ? current.unmaximize() : current.maximize();
     }
   });
 
   ipcMain.on('close', () => {
-    if (current) {
-      mainWindowState.saveState(current);
-      unregisterShortcuts();
-      current.close();
-      current = null;
-    }
+    handleWindowsOnClose();
   });
 
   ipcMain.on('closeApp', () => {
-    unregisterShortcuts();
-    if (current) {
-      mainWindowState.saveState(current);
-      current.close();
-      current = null;
-    }
+    handleWindowsOnClose();
   });
 });
 
 app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
-  current = win;
+  handleWindowsOnStart(win);
   registerShortcuts(current);
 
   current.on('blur', () => unregisterShortcuts());
@@ -81,7 +69,7 @@ app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
 });
 
 app.on('browser-window-focus', (e: Event, win: Electron.BrowserWindow) => {
-  current = win;
+  handleWindowsOnStart(win);
 });
 
 app.on('activate', () => {
@@ -89,6 +77,21 @@ app.on('activate', () => {
     current = createWindow();
   }
 });
+
+function handleWindowsOnStart(win: Electron.BrowserWindow) {
+  current = win;
+  if (!windows.filter(w => w.id === win.id).length) {
+    windows.push(win);
+  }
+}
+
+function handleWindowsOnClose() {
+  unregisterShortcuts();
+  mainWindowState.saveState(current);
+  windows = windows.filter(w => w.id !== current.id);
+  current.close();
+  current = windows[windows.length - 1] || null;
+}
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
   let keypressFunctions = {
