@@ -5,28 +5,25 @@ import { wait } from './helpers';
 
 let getElectronPath = () => {
   let electronPath = resolve(__dirname, '../../node_modules/.bin/electron');
-  if (process.platform === 'win32') {
-    electronPath += '.cmd';
-  }
-  return electronPath;
+  return (process.platform === 'win32') ? electronPath += '.cmd' : electronPath;
 }
 
-let startApplication = () => {
+let getAppInstance = () => {
   return new Application({
-      path: getElectronPath(),
-      args: [resolve(__dirname, '../../dist')],
-      env: { SPECTRON: true }
-    }).start();
+    path: getElectronPath(),
+    args: [resolve(__dirname, '../../dist')],
+    env: { SPECTRON: true }
+  });
 }
 
-describe('bterm launch', function() {
+describe('bterm basic e2e', function() {
   let timeout = (mseconds) => this.timeout(mseconds);
   let app: any;
   timeout(120000);
 
   beforeEach(() => {
-    return startApplication()
-      .then((startedApp) => this.app = startedApp);
+    this.app = getAppInstance();
+    return this.app.start();
   });
 
   afterEach(() => {
@@ -170,29 +167,22 @@ describe('bterm launch', function() {
       .then(() => this.app.client.browserWindow.isMaximized())
       .then(result => expect(result).to.be.true);
   });
+});
+
+
+describe('bterm e2e', function() {
+  let timeout = (mseconds) => this.timeout(mseconds);
+  timeout(12000);
 
   it('should open and close multi window of the app', () => {
-    let appToClose = null;
-    let appToMinimize = null;
-    return this.app.client.waitUntilWindowLoaded()
-      .then(() => startApplication()
-      .then((startedApp) => appToClose = startedApp))
-      .then(() => appToClose.client.waitUntilWindowLoaded())
-      .then(() => startApplication()
-      .then((startedApp) => appToMinimize = startedApp))
-      .then(() => appToMinimize.client.waitUntilWindowLoaded())
-      .then(() => appToClose.stop())
-      .then(() => wait(1000))
-      .then(() => appToClose.isRunning())
-      .then(result => expect(result).to.be.false)
-      .then(() => appToMinimize.client.click('.minimize'))
-      .then(() => wait(1000))
-      .then(() => appToMinimize.client.browserWindow.isMinimized())
-      .then(result => expect(result).to.be.true)
-      .then(() => appToMinimize.stop())
-      .then(() => wait(1000))
-      .then(() => appToMinimize.isRunning())
-      .then(result => expect(result).to.be.false);
+    let app = getAppInstance();
+
+    return app.start()
+      .then(() => app.client.waitUntilWindowLoaded())
+      .then(() => app.webContents.sendInputEvent({ type: 'keyDown', keyCode: 'N', modifiers: ['CommandOrControl'] }))
+      .then(() => app.client.getWindowCount())
+      .then(count => expect(count).to.be.equal(2))
+      .then(() => app.stop());
   });
-})
+});
 
