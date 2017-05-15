@@ -11,6 +11,7 @@ export class WindowSidebarComponent implements OnInit {
   opened: boolean;
   scrollOptions: SlimScrollOptions;
   themeNames: string[];
+  selectedTheme: string;
 
   constructor(private config: ConfigService) {
     this.scrollOptions = new SlimScrollOptions({
@@ -24,11 +25,13 @@ export class WindowSidebarComponent implements OnInit {
 
   ngOnInit() {
     this.themeNames = Object.keys(themes);
+    this.selectedTheme = this.config.config.settings['theme_name'];
   }
 
   previewTheme(theme: string): void {
     let styles = { style: themes[theme] };
-    this.config.previewTheme(styles);
+    this.config.previewTheme(styles, theme);
+    this.selectedTheme = theme;
   }
 
   openSidebar(): void {

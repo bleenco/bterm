@@ -141,7 +141,8 @@ export class ConfigService {
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
         'windowPadding': '20px 35px 10px 35px',
-        'clipboard_notice': false
+        'clipboard_notice': false,
+        'theme_name': 'AtelierSulphurpool'
       },
       'style': {
         'background': '#090300',
@@ -185,8 +186,9 @@ export class ConfigService {
     fs.writeFileSync(this.configPath, JSON.stringify(defaultConfig, null, 2), { encoding: 'utf8' });
   }
 
-  previewTheme(styles: any): void {
+  previewTheme(styles: any, theme: string): void {
     let config = Object.assign({}, this.getDefaultConfig(), styles);
+    config.settings.theme_name  = theme;
     this.config = config;
     this.setConfig();
   }

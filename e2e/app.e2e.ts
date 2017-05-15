@@ -116,11 +116,22 @@ describe('bterm launch', function() {
   });
 
   it('should have correct text on right menu', () => {
+    let theme = '';
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.click('.menu-open'))
       .then(() => wait(1000))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.theme-browser > span:nth-child(2)'))
+      .then(result => theme = result)
       .then(() => this.app.client.getText('.sidebar-container h1'))
-      .then(result => expect(result).to.equal('Theme Browser'));
+      .then(result => expect(result).to.equal(`Theme Browser (${theme})`))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.theme-browser > span:nth-child(3)'))
+      .then(result => theme = result)
+      .then(() => this.app.client.getText('.sidebar-container h1'))
+      .then(result => expect(result).to.equal(`Theme Browser (${theme})`));
   });
 
   it('should have clicked theme selected', () => {

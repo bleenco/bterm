@@ -14,7 +14,7 @@
     </svg>
   </span>
   <div class="sidebar-container">
-    <h1>Theme Browser</h1>
+    <h1>Theme Browser ({{ selectedTheme }})</h1>
     <div class="theme-browser" slimScroll [options]="scrollOptions">
       <span *ngFor="let theme of themeNames" (click)="previewTheme(theme)">{{ theme }}</span>
     </div>
