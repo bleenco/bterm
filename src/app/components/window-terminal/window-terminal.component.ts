@@ -1,8 +1,8 @@
-import { Component, OnInit, HostBinding, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding, Inject, OnDestroy, HostListener } from '@angular/core';
 let electron = require('electron');
 let { ipcRenderer, clipboard, remote } = electron;
 let { Menu, MenuItem, dialog } = remote;
-import { HtermService, Terminal } from '../../services/hterm.service';
+import { XtermService, Terminal } from '../../services/xterm.service';
 import { ConfigService } from '../../services/config.service';
 import { EOL } from 'os';
 import { writeFile } from 'fs';
@@ -16,21 +16,21 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
   ctxMenu: Electron.Menu;
 
   constructor(
-    @Inject(HtermService) private hterm: HtermService,
+    @Inject(XtermService) private xterm: XtermService,
     @Inject(ConfigService) private config: ConfigService
   ) { }
 
   ngOnInit() {
-    this.hterm.create();
+    this.xterm.create();
     setTimeout(() => this.config.setConfig());
 
-    ipcRenderer.on('newTab', () => { this.hterm.create(), this.frameListener(false); } );
-    ipcRenderer.on('closeTab', () => { this.hterm.deleteTab(), this.frameListener(false); } );
-    ipcRenderer.on('clearTab', () => this.hterm.clearTab());
-    ipcRenderer.on('switchTab', (ev, data) => this.hterm.switchTab(data));
-    ipcRenderer.on('tabLeft', () => this.hterm.switchPrev());
-    ipcRenderer.on('tabRight', () => this.hterm.switchNext());
-    ipcRenderer.on('focusCurrent', () => this.hterm.focusCurrent());
+    ipcRenderer.on('newTab', () => { this.xterm.create(), this.frameListener(false); } );
+    ipcRenderer.on('closeTab', () => { this.xterm.deleteTab(), this.frameListener(false); } );
+    ipcRenderer.on('clearTab', () => this.xterm.clearTab());
+    ipcRenderer.on('switchTab', (ev, data) => this.xterm.switchTab(data));
+    ipcRenderer.on('tabLeft', () => this.xterm.switchPrev());
+    ipcRenderer.on('tabRight', () => this.xterm.switchNext());
+    ipcRenderer.on('focusCurrent', () => this.xterm.focusCurrent());
 
     this.initMenu();
     setTimeout(() => this.frameListener(false));
@@ -82,7 +82,7 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
   }
 
   paste(): void {
-    this.hterm.terminals[this.hterm.currentIndex].output.emit(clipboard.readText());
+    this.xterm.terminals[this.xterm.currentIndex].output.emit(clipboard.readText());
   }
 
   saveBuffer(): void {
@@ -105,5 +105,9 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.frameListener();
   }
+
+
+  @HostListener('window:resize', ['$event'])
+  windowResized(ev: any) { this.xterm.fitTerminal(); }
 
 }

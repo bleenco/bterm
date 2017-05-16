@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { HtermService } from '../../services/hterm.service';
+import { XtermService, IResizeGeom } from '../../services/xterm.service';
 
 @Component({
   selector: 'window-notification',
@@ -10,14 +10,14 @@ export class WindowNotificationComponent implements OnInit {
   notificationText: string;
   timeout: any;
 
-  constructor(private hterm: HtermService, private zone: NgZone) {
+  constructor(private xterm: XtermService, private zone: NgZone) {
     this.isVisible = false;
   }
 
   ngOnInit() {
-    this.hterm.resizeEvents.subscribe(data => {
+    this.xterm.resizeEvents.subscribe((data: IResizeGeom) => {
       this.zone.run(() => {
-        this.notificationText = `${data.cols}:${data.rows}`;
+        this.notificationText = `${data.col}:${data.row}`;
         this.isVisible = true;
 
         clearTimeout(this.timeout);

@@ -4895,6 +4895,10 @@ xtend@~2.1.1:
   dependencies:
     object-keys "~0.4.0"
 
+xterm@^2.6.0:
+  version "2.6.0"
+  resolved "http://morose.bleenco.io/xterm/-/xterm-2.6.0.tgz#d8daa6d9c3ebee0c850b156cd2f92fbfc8fdfb3e"
+
 xvfb-maybe@^0.2.1:
   version "0.2.1"
   resolved "http://morose.bleenco.io/xvfb-maybe/-/xvfb-maybe-0.2.1.tgz#ed8cb132957b7848b439984c66f010ea7f24361b"

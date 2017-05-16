@@ -1,5 +1,5 @@
 import { Injectable, Provider, Inject } from '@angular/core';
-import { HtermService, Terminal } from './hterm.service';
+import { XtermService, Terminal } from './xterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
 
@@ -10,7 +10,7 @@ export class ConfigService {
   config: any;
   watcher: any;
 
-  constructor(@Inject(HtermService) private hterm: HtermService) {
+  constructor(@Inject(XtermService) private hterm: XtermService) {
     this.homeDir = os.homedir();
     this.configPath = `${this.homeDir}/.bterm.json`;
 
@@ -30,13 +30,14 @@ export class ConfigService {
     let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
     this.hterm.terminals.forEach((term: Terminal) => {
+      /*
       term.term.prefs_.set('font-family', this.config.settings.font);
       term.term.prefs_.set('font-size', this.config.settings.font_size);
       term.term.prefs_.set('background-color', this.config.style.background);
       term.term.prefs_.set('foreground-color', this.config.style.color);
       term.term.prefs_.set('cursor-color', this.config.style.cursor);
       term.term.prefs_.set('color-palette-overrides', this.config.style.colors);
-
+*/
       let el = term.el as HTMLElement;
       el.style.background = this.config.style.background;
       if (term.active) {

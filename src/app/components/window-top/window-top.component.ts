@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
-import { HtermService } from '../../services/hterm.service';
+import { XtermService } from '../../services/xterm.service';
 import { ConfigService } from '../../services/config.service';
 let electron = require('electron');
 let remote = require('electron').remote;
@@ -19,7 +19,7 @@ export class WindowTopComponent implements OnInit {
   tabs: Tab[];
 
   constructor(
-    @Inject(HtermService) private hterm: HtermService,
+    @Inject(XtermService) private hterm: XtermService,
     @Inject(ConfigService) private config: ConfigService,
     @Inject(NgZone) private zone: NgZone) {
     this.tabs = [];

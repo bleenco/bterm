@@ -2,7 +2,7 @@ import { Injectable, Provider, EventEmitter, Inject, NgZone } from '@angular/cor
 import { PTYService, Process } from './pty.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
-import * as hterm from 'hterm';
+let XTerminal = require('xterm');
 import { platform } from 'os';
 
 export interface Terminal {
@@ -17,12 +17,17 @@ export interface Terminal {
   dir: string
 };
 
+export interface IResizeGeom {
+  col: number;
+  row: number;
+};
+
 @Injectable()
-export class HtermService {
+export class XtermService {
   terminals: Terminal[];
   outputEvents: EventEmitter<{ action: string, data: number | null }>;
   titleEvents: EventEmitter<{ index: number, title: string }>;
-  resizeEvents: EventEmitter<{ cols: number, rows: number }>;
+  resizeEvents: EventEmitter<IResizeGeom>;
   currentIndex: number;
   osPlatform: string;
 
@@ -30,10 +35,10 @@ export class HtermService {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
-    this.resizeEvents = new EventEmitter<{ cols: number, rows: number }>();
-    hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
-    hterm.hterm.Terminal.prototype.overlaySize = () => {};
-    this.fixKeyboard();
+    this.resizeEvents = new EventEmitter<IResizeGeom>();
+    // hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
+    // hterm.hterm.Terminal.prototype.overlaySize = () => {};
+    // this.fixKeyboard();
     this.osPlatform = platform();
   }
 
@@ -46,10 +51,12 @@ export class HtermService {
 
     this.terminals.forEach((term: Terminal) => term.active = false);
 
+    XTerminal.loadAddon('fit');
     let terminal: Terminal = {
       el: el,
-      storage: new hterm.lib.Storage.Local(),
-      term: new hterm.hterm.Terminal(),
+      storage: null,
+     // storage: new hterm.lib.Storage.Local(),
+      term: new XTerminal({ scrollback: 1000 }), // TODO: Get from config
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
       active: true,
@@ -57,6 +64,7 @@ export class HtermService {
       dir: ''
     };
 
+/*
     terminal.term.decorate(el);
     terminal.term.prefs_.storage.clear();
     terminal.term.prefs_.set('font-smoothing', 'subpixel-antialiased');
@@ -69,15 +77,19 @@ export class HtermService {
     terminal.term.prefs_.set('scrollbar-visible', false);
     terminal.term.prefs_.set('enable-clipboard-notice', false);
     terminal.term.prefs_.set('background-color', 'transparent');
+*/
 
-    terminal.term.onTerminalReady = () => {
+    terminal.term.on('open', () => {
       this.initializeInstance(terminal, el);
       this.initializeProcess(terminal);
-    };
+      this.terminals.push(terminal);
+      this.outputEvents.emit({ action: 'created', data: null });
+      this.currentIndex = this.terminals.length - 1;
+      this.focusCurrent();
+    });
 
-    this.terminals.push(terminal);
-    this.outputEvents.emit({ action: 'created', data: null });
-    this.currentIndex = this.terminals.length - 1;
+
+    setTimeout(() => terminal.term.open(terminal.el, true));
   }
 
   deleteTab(): void {
@@ -90,21 +102,12 @@ export class HtermService {
   }
 
   initializeInstance(terminal: Terminal, el: HTMLElement): void {
-    let io = terminal.term.io.push();
-    terminal.term.keyboard.installKeyboard(el.querySelector('iframe').contentDocument);
+    terminal.term.on('key', (str: string) => terminal.output.emit(str));
 
-    io.sendString = (str: string) => {
-      terminal.output.emit(str);
-    }
-
-    io.onVTKeystroke = (str: string) => {
-      terminal.output.emit(str.toString());
-    }
-
-    io.onTerminalResize = (col: number, row: number) => {
-      terminal.ps.resize.emit({ col: col, row: row });
-      this.resizeEvents.emit({ cols: col, rows: row });
-    }
+    terminal.term.on('resize', (size) => {
+      terminal.ps.resize.emit({ col: size.cols, row: size.rows });
+      this.resizeEvents.emit({ col: size.cols, row: size.rows });
+    });
 
     terminal.input.subscribe((str: string) => {
       requestAnimationFrame(() => this.write(str, terminal));
@@ -113,7 +116,7 @@ export class HtermService {
 
   initializeProcess(terminal: Terminal): void {
     terminal.ps = this.pty.create();
-    terminal.ps.output.subscribe((str: string) => terminal.input.emit(str));
+    terminal.ps.output.subscribe((str: string) => { terminal.term.write(str); terminal.term.fit(); });
     terminal.ps.exit.subscribe((code: boolean) => {
       let el = terminal.el;
       let index = this.terminals.findIndex((term: Terminal) => term === terminal);
@@ -129,6 +132,7 @@ export class HtermService {
         this.currentIndex = idx;
       }
     });
+
     terminal.output.subscribe((str: string) => terminal.ps.input.emit(str));
 
     terminal.term.on('title', (title: string) => {
@@ -149,37 +153,13 @@ export class HtermService {
   }
 
   write(str: string, terminal: Terminal): void {
-    if (terminal.term.vt.characterEncoding !== 'raw') {
-      terminal.term.vt.characterEncoding = 'raw';
-    }
-
-    terminal.term.io.writeUTF8(str.toString());
+    terminal.term.write(str.toString());
   }
 
-  fixKeyboard(): void {
-    let that = this;
-    let oldKeyDown = hterm.hterm.Keyboard.prototype.onKeyDown_;
-
-    hterm.hterm.Keyboard.prototype.onKeyDown_ = function(e: KeyboardEvent) {
-      if (e.key === 'Dead') {
-        let idx = that.terminals.findIndex((term: Terminal) => !!term.active);
-        let terminal = that.terminals[idx];
-
-        switch (e.code) {
-          case 'KeyN':
-            terminal.output.emit('~');
-            break;
-          case 'IntlBackslash':
-            terminal.output.emit('`');
-            break;
-          case 'Backslash':
-            terminal.output.emit('`');
-            break;
-        }
-      }
-
-      return oldKeyDown.call(this, e);
-    }
+  fitTerminal() {
+    // let newGeom: IResizeGeom = { col: Math.floor(geomInPx.col/25), row: Math.floor(geomInPx.row/25) };
+    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); }); // resize(newGeom.col, newGeom.row); });
+    this.focusCurrent();
   }
 
   switchTab(index: number): void {
@@ -204,10 +184,11 @@ export class HtermService {
   }
 
   focusCurrent(): void {
-    this.terminals[this.currentIndex].el.focus();
+     setTimeout(() => this.terminals[this.currentIndex].term.focus());
   }
+
 }
 
-export let HtermServiceProvider: Provider = {
-  provide: HtermService, useClass: HtermService
+export let XtermServiceProvider: Provider = {
+  provide: XtermService, useClass: XtermService
 };

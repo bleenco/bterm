@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
-import { HtermService } from '../../services/hterm.service';
+import { XtermService } from '../../services/xterm.service';
 import { SearchService } from '../../services/search.service';
 import { platform } from 'os';
 
@@ -27,7 +27,7 @@ export class WindowBottomComponent implements OnInit {
   constructor(
     @Inject(NgZone) private zone: NgZone,
     @Inject(SearchService) private search: SearchService,
-    @Inject(HtermService) private hterm: HtermService
+    @Inject(XtermService) private xterm: XtermService
   ) { }
 
   ngOnInit() {
@@ -37,16 +37,16 @@ export class WindowBottomComponent implements OnInit {
       return;
     }
 
-    this.hterm.titleEvents.subscribe(event => {
+    this.xterm.titleEvents.subscribe(event => {
       if (event.title === ':') {
         this.currentDir = null;
         return;
       }
 
       this.zone.run(() => {
-        if (this.hterm.terminals[event.index] && event.index === this.hterm.currentIndex) {
-          this.currentProcess = this.hterm.terminals[event.index].title;
-          this.currentDir = this.hterm.terminals[event.index].dir;
+        if (this.xterm.terminals[event.index] && event.index === this.xterm.currentIndex) {
+          this.currentProcess = this.xterm.terminals[event.index].title;
+          this.currentDir = this.xterm.terminals[event.index].dir;
         }
       });
     });

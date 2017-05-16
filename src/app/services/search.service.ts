@@ -1,11 +1,11 @@
 import { Injectable, Provider, Inject } from '@angular/core';
-import { HtermService } from './hterm.service';
+import { XtermService } from './xterm.service';
 
 @Injectable()
 export class SearchService {
   query: string;
 
-  constructor(@Inject(HtermService) private hterm: HtermService) { }
+  constructor(@Inject(XtermService) private hterm: XtermService) { }
 
   searchQuery(query: string) {
     this.reset();

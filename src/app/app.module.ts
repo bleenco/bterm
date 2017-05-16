@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SlimScrollModule } from 'ng2-slimscroll';
-import { HtermServiceProvider } from './services/hterm.service';
+import { XtermServiceProvider } from './services/xterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
 import { SearchServiceProvider } from './services/search.service';
@@ -30,7 +30,7 @@ import { WindowNotificationComponent } from './components/window-notification';
     SlimScrollModule
   ],
   providers: [
-    HtermServiceProvider,
+    XtermServiceProvider,
     PTYServiceProvider,
     ConfigServiceProvider,
     SearchServiceProvider
