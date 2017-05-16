@@ -35,7 +35,6 @@
     "@angular/router": "4.1.1",
     "bulma": "^0.4.1",
     "electron-window-state-manager": "^0.3.2",
-    "hterm": "0.0.1",
     "ng2-slimscroll": "^2.0.1",
     "node-notifier": "^5.1.2",
     "node-pty": "^0.6.4",
