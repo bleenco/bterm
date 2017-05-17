@@ -36,9 +36,6 @@ export class XtermService {
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
     this.resizeEvents = new EventEmitter<IResizeGeom>();
-    // hterm.hterm.defaultStorage = new hterm.lib.Storage.Local();
-    // hterm.hterm.Terminal.prototype.overlaySize = () => {};
-    // this.fixKeyboard();
     this.osPlatform = platform();
   }
 
@@ -55,29 +52,13 @@ export class XtermService {
     let terminal: Terminal = {
       el: el,
       storage: null,
-     // storage: new hterm.lib.Storage.Local(),
-      term: new XTerminal({ scrollback: 1000 }), // TODO: Get from config
+      term: new XTerminal({ scrollback: 1000 }),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
       active: true,
       title: '',
       dir: ''
     };
-
-/*
-    terminal.term.decorate(el);
-    terminal.term.prefs_.storage.clear();
-    terminal.term.prefs_.set('font-smoothing', 'subpixel-antialiased');
-    terminal.term.prefs_.set('enable-bold', false);
-    terminal.term.prefs_.set('backspace-sends-backspace', true);
-    terminal.term.prefs_.set('cursor-blink', false);
-    terminal.term.prefs_.set('receive-encoding', 'raw');
-    terminal.term.prefs_.set('send-encoding', 'raw');
-    terminal.term.prefs_.set('alt-sends-what', 'browser-key');
-    terminal.term.prefs_.set('scrollbar-visible', false);
-    terminal.term.prefs_.set('enable-clipboard-notice', false);
-    terminal.term.prefs_.set('background-color', 'transparent');
-*/
 
     terminal.term.on('open', () => {
       this.initializeInstance(terminal, el);
@@ -157,8 +138,7 @@ export class XtermService {
   }
 
   fitTerminal() {
-    // let newGeom: IResizeGeom = { col: Math.floor(geomInPx.col/25), row: Math.floor(geomInPx.row/25) };
-    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); }); // resize(newGeom.col, newGeom.row); });
+    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); }); 
     this.focusCurrent();
   }
 

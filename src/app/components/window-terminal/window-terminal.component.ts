@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, Inject, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, HostBinding, Inject, HostListener } from '@angular/core';
 let electron = require('electron');
 let { ipcRenderer, clipboard, remote } = electron;
 let { Menu, MenuItem, dialog } = remote;
@@ -11,7 +11,7 @@ import { writeFile } from 'fs';
   selector: 'window-terminal',
   templateUrl: 'window-terminal.component.html'
 })
-export class WindowTerminalComponent implements OnInit, OnDestroy {
+export class WindowTerminalComponent implements OnInit {
   @HostBinding('class') class = 'window-terminal';
   ctxMenu: Electron.Menu;
 
@@ -24,8 +24,8 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     this.xterm.create();
     setTimeout(() => this.config.setConfig());
 
-    ipcRenderer.on('newTab', () => { this.xterm.create(), this.frameListener(false); } );
-    ipcRenderer.on('closeTab', () => { this.xterm.deleteTab(), this.frameListener(false); } );
+    ipcRenderer.on('newTab', () => this.xterm.create());
+    ipcRenderer.on('closeTab', () => this.xterm.deleteTab());
     ipcRenderer.on('clearTab', () => this.xterm.clearTab());
     ipcRenderer.on('switchTab', (ev, data) => this.xterm.switchTab(data));
     ipcRenderer.on('tabLeft', () => this.xterm.switchPrev());
@@ -33,7 +33,6 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     ipcRenderer.on('focusCurrent', () => this.xterm.focusCurrent());
 
     this.initMenu();
-    setTimeout(() => this.frameListener(false));
   }
 
   initMenu() {
@@ -46,39 +45,18 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     }
   }
 
-  getFrameDocs(): HTMLDocument[] {
-    let hostFrames: NodeListOf<HTMLIFrameElement> = document.querySelectorAll('iframe');
-    let frameDocs: HTMLDocument[] = [];
-
-    return [].map.call(hostFrames, (hostFrame: HTMLIFrameElement) => hostFrame.contentWindow.document);
-  }
-
-  frameListener(detachOnly: boolean = true): void {
-    this.getFrameDocs().forEach(frameDoc => {
-      let frameBody: HTMLElement = frameDoc.querySelector('body');
-      if (frameBody) {
-        frameBody.removeEventListener('contextmenu', this.popup);
-      }
-      if (!detachOnly) {
-        frameBody.addEventListener('contextmenu', this.popup);
-      }
-    });
-  }
-
   popup = (ev: any) => {
     this.ctxMenu.popup(remote.getCurrentWindow());
   }
 
   copy() {
-    this.getFrameDocs().forEach(frameDoc => {
-      if (frameDoc.getSelection) {
-        let copyText: string = frameDoc.getSelection().toString();
+      if (document.getSelection) {
+        let copyText: string = document.getSelection().toString();
         if (copyText.length) {
           clipboard.writeText(copyText);
-          frameDoc.getSelection().removeAllRanges();
+          document.getSelection().removeAllRanges();
         }
       }
-    });
   }
 
   paste(): void {
@@ -86,11 +64,10 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
   }
 
   saveBuffer(): void {
-    let parent: HTMLIFrameElement = <HTMLIFrameElement>document.querySelector('.terminal-instance.active iframe');
+    let parent: HTMLElement = <HTMLElement>document.querySelector('.terminal-instance.active .xterm-rows');
     if (!parent) { return; }
 
-    let doc: HTMLDocument = parent.contentWindow.document;
-    let lines: NodeList = doc.querySelectorAll('x-row');
+    let lines: NodeList = parent.querySelectorAll('div');
     let lineBuffer: string[] = [].map.call(lines, (line: Node) => line.textContent).filter(line => line.length);
 
     dialog.showSaveDialog(remote.getCurrentWindow(), (fn) => {
@@ -102,10 +79,8 @@ export class WindowTerminalComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.frameListener();
-  }
-
+  @HostListener('document:contextmenu', ['$event'])
+  contextMenu(ev: any) { this.popup(ev); }
 
   @HostListener('window:resize', ['$event'])
   windowResized(ev: any) { this.xterm.fitTerminal(); }
