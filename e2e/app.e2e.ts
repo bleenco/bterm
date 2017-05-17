@@ -61,6 +61,33 @@ describe('bterm launch', function() {
       .then(result => expect(result).to.be.true);
   });
 
+  it('should maximize the application after click on maximize', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.click('.maximize'))
+      .then(() => wait(1000))
+      .then(() => {
+        if (process.platform === 'darwin') {
+          this.app.client.browserWindow.isFullScreen()
+          .then(result => expect(result).to.be.true);
+        } else {
+          this.app.client.browserWindow.isMaximized()
+          .then(result => expect(result).to.be.true);
+        }
+      })
+      .then(() => wait(1000))
+      .then(() => this.app.client.click('.maximize'))
+      .then(() => wait(1000))
+      .then(() => {
+        if (process.platform === 'darwin') {
+          this.app.client.browserWindow.isFullScreen()
+          .then(result => expect(result).to.be.false);
+        } else {
+          this.app.client.browserWindow.isMaximized()
+          .then(result => expect(result).to.be.fasle);
+        }
+      })
+  });
+
   if (process.platform !== 'win32') {
     it('should be focused on app after start', () => {
       return this.app.client.waitUntilWindowLoaded()
