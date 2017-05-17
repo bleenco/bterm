@@ -35,6 +35,15 @@ describe('bterm launch', function() {
     }
   });
 
+  it('should have focus on terminal after new tab is opened', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => wait(1000))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.hasFocus('.active textarea'))
+      .then(result => expect(result).to.be.true);
+  });
+
   it('should show an initial window', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.getWindowCount())
