@@ -65,25 +65,49 @@ describe('bterm launch', function() {
     it('should be focused on app after start', () => {
       return this.app.client.waitUntilWindowLoaded()
         .then(() => this.app.browserWindow.isFocused())
+        .then(() => this.app.client.hasFocus('iframe'))
         .then(result => expect(result).to.be.true);
     });
 
-    it('should have focus after click', () => {
+    it('should check if globalShortcut is registered', () => {
       return this.app.client.waitUntilWindowLoaded()
-        .then(() => this.app.client.click('.terminal-instance'))
-        .then(() => this.app.client.browserWindow.isFocused('.terminal-instance'))
-        .then(result => expect(result).to.be.true);
-    });
-
-    it('should give focus to clicked theme', () => {
-      return this.app.client.waitUntilWindowLoaded()
-        .then(() => this.app.client.click('.menu-open'))
-        .then(() => wait(1000))
-        .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
-        .then(() => wait(1000))
-        .then(() => this.app.client.browserWindow.isFocused('.theme-browser > span:nth-child(2)'))
-        .then(result => expect(result).to.be.true);
-    });
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+Shift+O'))
+        .then((result) => expect(result).to.be.false) // First is not existing that shpuld be false
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+Shift+Left'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+Shift+Right'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+T'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+W'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+K'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+1'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+2'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+3'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+4'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+5'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+6'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+7'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+8'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+9'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+0'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+N'))
+        .then((result) => expect(result).to.be.true)
+        .then(() => this.app.electron.remote.globalShortcut.isRegistered('CommandOrControl+Shift+I'))
+        .then((result) => expect(result).to.be.true)
+    })
   }
 
   it('should have a width', () => {
@@ -134,17 +158,18 @@ describe('bterm launch', function() {
       .then(result => expect(result).to.equal(`Theme Browser (${theme})`));
   });
 
-  xit('should have clicked theme selected', () => {
+  it('should have clicked theme selected', () => {
     let styleProp = '';
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.click('.menu-open'))
-      .then(() => wait(1000))
+      .then(() => wait(2000))
       .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
-      .then(() => wait(1000))
+      .then(() => wait(2000))
       .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
       .then((style) => styleProp = style)
-      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
       .then(() => wait(2000))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
+      .then(() => wait(3000))
       .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
       .then((style) => expect(style).to.not.equal(styleProp))
   });
@@ -194,5 +219,6 @@ describe('bterm launch', function() {
       .then(() => appToMinimize.isRunning())
       .then(result => expect(result).to.be.false);
   });
+
 })
 
