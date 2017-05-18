@@ -2,6 +2,7 @@ import { Injectable, Provider, Inject } from '@angular/core';
 import { XtermService, Terminal } from './xterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
+import { CssBuilder } from '../../utils';
 
 @Injectable()
 export class ConfigService {
@@ -9,8 +10,10 @@ export class ConfigService {
   configPath: string;
   config: any;
   watcher: any;
+  css: CssBuilder;
 
-  constructor(@Inject(XtermService) private hterm: XtermService) {
+  constructor(@Inject(XtermService) private xterm: XtermService) {
+    this.css = new CssBuilder();
     this.homeDir = os.homedir();
     this.configPath = `${this.homeDir}/.bterm.json`;
 
@@ -29,28 +32,21 @@ export class ConfigService {
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
     let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
-    this.hterm.terminals.forEach((term: Terminal) => {
-      /*
-      term.term.prefs_.set('font-family', this.config.settings.font);
-      term.term.prefs_.set('font-size', this.config.settings.font_size);
-      term.term.prefs_.set('background-color', this.config.style.background);
-      term.term.prefs_.set('foreground-color', this.config.style.color);
-      term.term.prefs_.set('cursor-color', this.config.style.cursor);
-      term.term.prefs_.set('color-palette-overrides', this.config.style.colors);
-*/
-      let el = term.el as HTMLElement;
-      el.style.background = this.config.style.background;
-      if (term.active) {
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-      }
+    this.css.clear();
+
+    this.config.style.colors.forEach( (color: string, index: number) => {
+      this.css.add(`.xterm-color-${index + 1}`, `color: ${color} !important;`);
     });
+
+    this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
+    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font_size}px !important;`);
+    this.css.add('.xterm-rows', `color: ${this.config.style.color} !important; font-family: ${this.config.settings.font} !important;`);
+    this.css.inject();
 
     terminal.style.padding = this.config.settings.windowPadding;
 
-    doc.style.fontFamily = this.config.style.font;
-    doc.style.fontSize = this.config.style.font_size;
+    doc.style.fontFamily = this.config.settings.font;
+    doc.style.fontSize = this.config.settings.font_size + 'px';
     terminal.style.background = this.config.style.background;
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
@@ -59,6 +55,21 @@ export class ConfigService {
     topBar.style.font = this.config.style.font;
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
       title.style.color = this.config.style.color;
+    });
+
+    this.xterm.terminals.forEach((term: Terminal) => {
+      let el = term.el as HTMLElement;
+      el.style.background = this.config.style.background;
+      if (term.active) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+
+      setTimeout(() => {
+        term.term.fit();
+        if (term.active) { term.term.focus(); }
+      });
     });
 
     setTimeout(() => {

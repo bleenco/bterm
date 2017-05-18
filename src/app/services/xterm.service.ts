@@ -123,7 +123,7 @@ export class XtermService {
         terminal.title = splitted[0].trim();
         terminal.dir = splitted[1].trim();
       } catch (e) {
-        terminal.title = title;
+        terminal.title = title || 'Shell';
       }
 
       let index = this.terminals.findIndex(t => t.term === terminal.term);
@@ -138,7 +138,7 @@ export class XtermService {
   }
 
   fitTerminal() {
-    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); }); 
+    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); });
     this.focusCurrent();
   }
 
@@ -164,7 +164,7 @@ export class XtermService {
   }
 
   focusCurrent(): void {
-     setTimeout(() => this.terminals[this.currentIndex].term.focus());
+    setTimeout(() => this.terminals[this.currentIndex].term.focus());
   }
 
 }

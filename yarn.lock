@@ -2076,10 +2076,6 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.4.2:
   version "2.4.2"
   resolved "http://morose.bleenco.io/hosted-git-info/-/hosted-git-info-2.4.2.tgz#0076b9f46a270506ddbaaea56496897460612a67"
 
-hterm@0.0.1:
-  version "0.0.1"
-  resolved "http://morose.bleenco.io/hterm/-/hterm-0.0.1.tgz#50519959a3696e5fd7784d2842324a45cefdc670"
-
 html-comment-regex@^1.1.0:
   version "1.1.1"
   resolved "http://morose.bleenco.io/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
@@ -3982,7 +3978,7 @@ rx@^4.1.0:
   version "4.1.0"
   resolved "http://morose.bleenco.io/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
 
-rxjs@5.3.1, rxjs@^5.1.1:
+rxjs@^5.1.1, rxjs@^5.3.1:
   version "5.3.1"
   resolved "http://morose.bleenco.io/rxjs/-/rxjs-5.3.1.tgz#9ecc9e722247e4f4490d30a878577a3740fd0cb7"
   dependencies:
