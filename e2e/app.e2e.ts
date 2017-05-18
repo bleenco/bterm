@@ -35,15 +35,6 @@ describe('bterm launch', function() {
     }
   });
 
-  it('should have focus on terminal after new tab is opened', () => {
-    return this.app.client.waitUntilWindowLoaded()
-      .then(() => wait(1000))
-      .then(() => this.app.client.browserWindow.send('newTab', true))
-      .then(() => wait(1000))
-      .then(() => this.app.client.hasFocus('.active textarea'))
-      .then(result => expect(result).to.be.true);
-  });
-
   it('should show an initial window', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.getWindowCount())
@@ -101,7 +92,15 @@ describe('bterm launch', function() {
     it('should be focused on app after start', () => {
       return this.app.client.waitUntilWindowLoaded()
         .then(() => this.app.browserWindow.isFocused())
-        .then(() => this.app.client.hasFocus('iframe'))
+        .then(result => expect(result).to.be.true);
+    });
+
+    it('should have focus on terminal after new tab is opened', () => {
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => wait(1000))
+        .then(() => this.app.client.browserWindow.send('newTab', true))
+        .then(() => wait(2000))
+        .then(() => this.app.client.hasFocus('.active textarea'))
         .then(result => expect(result).to.be.true);
     });
 
