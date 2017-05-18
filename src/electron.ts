@@ -22,7 +22,6 @@ function createWindow(): Electron.BrowserWindow {
     x: getPosition('width'),
     y: getPosition('height'),
     frame: false,
-    transparent: process.platform === 'win32' ? false : true,
     show: false
   });
 
