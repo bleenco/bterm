@@ -300,6 +300,34 @@ describe('bterm launch', function() {
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(el.value.length).to.equal(1))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('switchTab', 0))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => {
+        expect(el.value.length).to.equal(1);
+        activeTab = el.value[0].ELEMENT;
+      })
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[0].ELEMENT))
+      .then(() => this.app.client.browserWindow.send('switchTab', 1))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => {
+        expect(el.value.length).to.equal(1);
+        activeTab = el.value[0].ELEMENT;
+      })
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[1].ELEMENT))
+      .then(() => this.app.client.browserWindow.send('switchTab', 2))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => {
+        expect(el.value.length).to.equal(1);
+        activeTab = el.value[0].ELEMENT;
+      })
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT))
+      .then(() => this.app.client.browserWindow.send('closeTab', true))
+      .then(() => this.app.client.browserWindow.send('closeTab', true));
    });
 
 })
