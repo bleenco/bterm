@@ -3,9 +3,11 @@ let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { keyboardShortcuts } from './keyboard-shortcuts';
+import { getExtraMargin, WindowPosition } from './utils';
 
 let current: Electron.BrowserWindow = null;
 let windows = [];
+let positionData: WindowPosition = null;
 
 const mainWindowState = new WindowStateManager('mainWindow', {
   defaultWidth: 600,
@@ -16,8 +18,8 @@ function createWindow(): Electron.BrowserWindow {
   let win: Electron.BrowserWindow = new BrowserWindow({
     width: mainWindowState.width,
     height: mainWindowState.height,
-    x: mainWindowState.x,
-    y: mainWindowState.y,
+    x: getPosition('width'),
+    y: getPosition('height'),
     frame: false,
     transparent: process.platform === 'win32' ? false : true
   });
@@ -29,6 +31,14 @@ function createWindow(): Electron.BrowserWindow {
 }
 
 app.on('ready', () => {
+  positionData = {
+    screenSize: electron.screen.getPrimaryDisplay().workAreaSize,
+    widthLines: 0,
+    heightLines: 0,
+    width: mainWindowState.x,
+    height: mainWindowState.y
+  }
+
   let m = menu();
   let win = createWindow();
   win.setMenu(m);
@@ -77,6 +87,21 @@ app.on('activate', () => {
     current = createWindow();
   }
 });
+
+function getPosition(attr: string) {
+  let attrLines = attr + 'Lines';
+  let isHeight = attr === 'height';
+  let extraMargin = getExtraMargin(process.platform, positionData[attrLines], positionData[attr], isHeight);
+  let position = positionData[attrLines] * 40 + (positionData[attr] + extraMargin);
+  let bound = position + mainWindowState.height;
+  if (bound > positionData.screenSize[attr]) {
+    positionData[attrLines] = positionData[attr] = 0;
+    positionData[attr] = getExtraMargin(process.platform, positionData[attrLines], positionData[attr], isHeight);
+  } else {
+    positionData[attrLines]++;
+  }
+  return position;
+}
 
 function handleWindowsOnStart(win: Electron.BrowserWindow) {
   current = win;

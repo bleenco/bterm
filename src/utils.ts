@@ -15,6 +15,24 @@ export function checkNewVersion(options: string): Promise<string> {
   });
 }
 
+export function getExtraMargin(osPlatform, winInLine, positionOnLine, isHeight): number{
+  let extraMargin = 0;
+  if (osPlatform === 'darwin' && isHeight) {
+    if (winInLine === 0 && positionOnLine === 0) {
+      extraMargin = 23;
+    }
+  }
+  return  extraMargin;
+}
+
+export interface WindowPosition {
+    screenSize: Electron.Size;
+    widthLines: number;
+    heightLines: number;
+    width: number;
+    height: number;
+}
+
 interface ICSSRule {
   selector: string;
   rule: string;
