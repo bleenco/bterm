@@ -255,8 +255,7 @@ describe('bterm launch', function() {
       .then(result => expect(result).to.be.false);
   });
 
-  it('should open and switch tabs correctly', () => {
-    let activeTab = null;
+  it('should open new tabs correctly', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => wait(1000))
@@ -265,69 +264,96 @@ describe('bterm launch', function() {
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(el.value.length).to.equal(3))
+      .then((el) => expect(el.value.length).to.equal(3));
+  });
+
+  it('should have only one active tab', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(1000))
       .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
+      .then((el) => expect(el.value.length).to.equal(1));
+  });
+
+  it('should have the latest tab active', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = el.value[0].ELEMENT)
       .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT))
+      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT));
+  });
+
+  it('should switch to tab left', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => this.app.client.browserWindow.send('tabLeft', true))
+      .then(() => wait(1000))
       .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
+      .then((el) => activeTab = el.value[0].ELEMENT)
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[1].ELEMENT));
+  });
+
+  it('should switch to tab right', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('tabLeft', true))
+      .then(() => this.app.client.browserWindow.send('tabRight', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = el.value[0].ELEMENT)
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT));
+  });
+
+  it('should switch to tab number', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('switchTab', 0))
+      .then(() => wait(1000))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = el.value[0].ELEMENT)
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(el.value[0].ELEMENT))
+      .then(() => this.app.client.browserWindow.send('switchTab', 1))
+      .then(() => wait(1000))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = el.value[0].ELEMENT)
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(activeTab).to.equal(el.value[1].ELEMENT))
-      .then(() => this.app.client.browserWindow.send('tabRight', true))
+      .then(() => this.app.client.browserWindow.send('switchTab', 2))
+      .then(() => wait(1000))
       .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
+      .then((el) => activeTab = el.value[0].ELEMENT)
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT))
-      .then(() => this.app.client.browserWindow.send('closeTab', true))
+  });
+
+  it('should close tabs', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+       .then(() => this.app.client.browserWindow.send('closeTab', true))
       .then(() => wait(1000))
-      .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(el.value.length).to.equal(2))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(el.value.length).to.equal(2))
       .then(() => this.app.client.browserWindow.send('closeTab', true))
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(el.value.length).to.equal(1))
-      .then(() => this.app.client.browserWindow.send('newTab', true))
-      .then(() => this.app.client.browserWindow.send('newTab', true))
-      .then(() => this.app.client.browserWindow.send('switchTab', 0))
-      .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
-      .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[0].ELEMENT))
-      .then(() => this.app.client.browserWindow.send('switchTab', 1))
-      .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
-      .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[1].ELEMENT))
-      .then(() => this.app.client.browserWindow.send('switchTab', 2))
-      .then(() => this.app.client.elements('.is-active'))
-      .then((el) => {
-        expect(el.value.length).to.equal(1);
-        activeTab = el.value[0].ELEMENT;
-      })
-      .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT))
-      .then(() => this.app.client.browserWindow.send('closeTab', true))
-      .then(() => this.app.client.browserWindow.send('closeTab', true));
-   });
+  });
 
 })
 
