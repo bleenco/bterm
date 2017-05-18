@@ -32,8 +32,8 @@ import { WindowNotificationComponent } from './components/window-notification';
   providers: [
     XtermServiceProvider,
     PTYServiceProvider,
-    ConfigServiceProvider,
-    SearchServiceProvider
+    SearchServiceProvider,
+    ConfigServiceProvider
   ],
   bootstrap: [ AppComponent ]
 })

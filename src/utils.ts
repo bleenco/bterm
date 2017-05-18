@@ -77,7 +77,6 @@ export class CssBuilder {
     this.styleEl.setAttribute('type', 'text/css');
     this.styleEl.innerHTML = this.css;
 
-    console.log(this.styleEl);
     setTimeout(() => document.querySelector('head').appendChild(this.styleEl));
   }
 }

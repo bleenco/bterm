@@ -1,8 +1,15 @@
 import { Injectable, Provider, Inject } from '@angular/core';
 import { XtermService, Terminal } from './xterm.service';
+import { PTYService } from './pty.service';
+
 import * as os from 'os';
 import * as fs from 'fs';
 import { CssBuilder } from '../../utils';
+
+export interface IShellDef {
+  shell: string;
+  args: string[];
+};
 
 @Injectable()
 export class ConfigService {
@@ -11,11 +18,19 @@ export class ConfigService {
   config: any;
   watcher: any;
   css: CssBuilder;
+  defaultShell: IShellDef;
 
   constructor(@Inject(XtermService) private xterm: XtermService) {
     this.css = new CssBuilder();
     this.homeDir = os.homedir();
+    let user = os.userInfo({ encoding: 'utf8' });
     this.configPath = `${this.homeDir}/.bterm.json`;
+
+    switch (os.platform()) {
+      case 'win32': this.defaultShell = { shell: 'cmd.exe', args: [] }; break;
+      case 'darwin': this.defaultShell = { shell: 'login', args: ['-fp', user.username] }; break;
+      case 'linux': this.defaultShell = { shell: '/bin/bash', args: [] }; break;
+    }
 
     if (!fs.existsSync(this.configPath)) {
       this.recovery();
@@ -25,7 +40,15 @@ export class ConfigService {
     this.setWatcher();
   }
 
+  getShell(): IShellDef {
+    return this.defaultShell;
+  }
+
   setConfig(): void {
+    if (this.config.settings.shell && this.config.settings.shell.shell && this.config.settings.shell.args) {
+      this.defaultShell = this.config.settings['shell'];
+    }
+
     let doc: HTMLElement = document.documentElement;
     let terminal: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
@@ -190,6 +213,7 @@ export class ConfigService {
         path: '/update'
       }
     };
+
 
     return defaultConfig;
   }

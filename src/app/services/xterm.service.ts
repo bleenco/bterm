@@ -1,5 +1,7 @@
 import { Injectable, Provider, EventEmitter, Inject, NgZone } from '@angular/core';
 import { PTYService, Process } from './pty.service';
+import { ConfigService } from './config.service';
+
 let electron = require('electron');
 let { ipcRenderer } = electron;
 let XTerminal = require('xterm');
@@ -31,7 +33,9 @@ export class XtermService {
   currentIndex: number;
   osPlatform: string;
 
-  constructor(@Inject(PTYService) private pty: PTYService, @Inject(NgZone) private zone: NgZone) {
+  constructor(@Inject(PTYService) private pty: PTYService,
+    @Inject(NgZone) private zone: NgZone,
+    private config: ConfigService) {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
@@ -43,6 +47,10 @@ export class XtermService {
     let doc: HTMLDocument = document;
     let container: HTMLElement = doc.querySelector('.window-terminal-container') as HTMLElement;
     let el: HTMLElement = doc.createElement('div');
+
+    this.config.readConfig();
+    this.pty.setShell(this.config.getShell());
+
     el.classList.add('terminal-instance');
     container.appendChild(el);
 
