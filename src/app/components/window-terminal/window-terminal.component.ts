@@ -31,6 +31,8 @@ export class WindowTerminalComponent implements OnInit {
     ipcRenderer.on('tabLeft', () => this.xterm.switchPrev());
     ipcRenderer.on('tabRight', () => this.xterm.switchNext());
     ipcRenderer.on('focusCurrent', () => this.xterm.focusCurrent());
+    ipcRenderer.on('paste', () => this.paste());
+    ipcRenderer.on('copy', () => this.copy());
 
     this.initMenu();
   }

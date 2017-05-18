@@ -14,6 +14,8 @@ export let keyboardShortcuts = [
   {keypress: 'CommandOrControl+8', sctype: 'send', sckey: 'switchTab', scvalue: 7 },
   {keypress: 'CommandOrControl+9', sctype: 'send', sckey: 'switchTab', scvalue: 8 },
   {keypress: 'CommandOrControl+0', sctype: 'send', sckey: 'switchTab', scvalue: 9 },
+  {keypress: 'CommandOrControl+V', sctype: 'send', sckey: 'paste', scvalue: null },
+  {keypress: 'CommandOrControl+C', sctype: 'send', sckey: 'copy', scvalue: null },
   {keypress: 'CommandOrControl+N', sctype: 'createWindow', sckey: 'createWindow', scvalue: null },
   {keypress: 'CommandOrControl+Shift+I', sctype: 'toggleDevTools', sckey: 'toggleDevTools', scvalue: null }
 ]
