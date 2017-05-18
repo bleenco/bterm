@@ -5,6 +5,8 @@ import { getConfig } from './config';
 const rollup = require('rollup');
 const angular = require('rollup-plugin-angular');
 const tsr = require('rollup-plugin-typescript');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
 
 export class Build {
   cache: any;
@@ -28,6 +30,8 @@ export class Build {
         plugins: [
           angular(),
           tsr({ typescript: require(path.resolve(__dirname, '../node_modules/typescript/')) }),
+          commonjs(),
+          nodeResolve()
         ],
         external: Object.keys(this.config.externalPackages)
       }).then(bundle => {
