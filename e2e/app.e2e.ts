@@ -296,9 +296,9 @@ describe('bterm launch', function() {
       .then(() => this.app.client.browserWindow.send('tabLeft', true))
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.is-active'))
-      .then((el) => activeTab = el.value[0].ELEMENT)
+      .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[1].ELEMENT));
+      .then((el) => expect(activeTab).to.equal(parseFloat(el.value[1].ELEMENT).toFixed(2)));
   });
 
   it('should switch to tab right', () => {
@@ -310,9 +310,9 @@ describe('bterm launch', function() {
       .then(() => this.app.client.browserWindow.send('tabRight', true))
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.is-active'))
-      .then((el) => activeTab = el.value[0].ELEMENT)
+      .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
-      .then((el) => expect(activeTab).to.equal(el.value[2].ELEMENT));
+      .then((el) => expect(activeTab).to.equal(parseFloat(el.value[2].ELEMENT).toFixed(2)));
   });
 
   it('should switch to tab number', () => {
@@ -345,7 +345,7 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => this.app.client.browserWindow.send('newTab', true))
-       .then(() => this.app.client.browserWindow.send('closeTab', true))
+      .then(() => this.app.client.browserWindow.send('closeTab', true))
       .then(() => wait(1000))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(el.value.length).to.equal(2))
