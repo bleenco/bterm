@@ -4,6 +4,7 @@ const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 import { getExtraMargin, WindowPosition } from './utils';
+import { platform } from 'os';
 
 let current: Electron.BrowserWindow = null;
 let windows = [];
@@ -119,14 +120,22 @@ function handleWindowsOnClose() {
 }
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
+  let isLinux = platform() === 'linux';
+
   let keypressFunctions = {
-    'send': function(key, value){ win.webContents.send(key, value); },
-    'toggleDevTools': function(){ win.webContents.toggleDevTools(); },
-    'createWindow': function(){ createWindow(); }
+    send: (key, value) => win.webContents.send(key, value),
+    toggleDevTools: () => win.webContents.toggleDevTools(),
+    createWindow: () => createWindow()
   };
 
   keyboardShortcuts.forEach(shortcut => {
-    globalShortcut.register(shortcut.keypress, () => keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue));
+    if (isLinux && shortcut.sckey === 'copy') {
+      return;
+    }
+
+    globalShortcut.register(shortcut.keypress, () => {
+      keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue);
+    });
   });
 }
 

@@ -31,10 +31,23 @@ export class WindowTerminalComponent implements OnInit {
     ipcRenderer.on('tabLeft', () => this.xterm.switchPrev());
     ipcRenderer.on('tabRight', () => this.xterm.switchNext());
     ipcRenderer.on('focusCurrent', () => this.xterm.focusCurrent());
+
     ipcRenderer.on('paste', () => this.paste());
     ipcRenderer.on('copy', () => this.copy());
 
     this.initMenu();
+
+    // auto-copy on selection
+    let selectionTimeout;
+    document.addEventListener('selectionchange', (e: Event) => {
+      if (selectionTimeout) {
+        clearTimeout(selectionTimeout);
+      }
+
+      selectionTimeout = setTimeout(() => {
+        this.copy();
+      }, 800);
+    }, false);
   }
 
   initMenu() {
@@ -52,13 +65,13 @@ export class WindowTerminalComponent implements OnInit {
   }
 
   copy() {
-      if (document.getSelection) {
-        let copyText: string = document.getSelection().toString();
-        if (copyText.length) {
-          clipboard.writeText(copyText);
-          document.getSelection().removeAllRanges();
-        }
+    if (document.getSelection) {
+      let copyText: string = document.getSelection().toString();
+      if (copyText.length) {
+        clipboard.writeText(copyText);
+        document.getSelection().removeAllRanges();
       }
+    }
   }
 
   paste(): void {
