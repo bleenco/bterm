@@ -1,4 +1,5 @@
-import { Injectable, Provider, EventEmitter } from '@angular/core';
+import { Injectable, Provider, EventEmitter, Inject, forwardRef } from '@angular/core';
+import { ConfigService, IShellDef } from './config.service';
 import * as os from 'os';
 let pty = require('node-pty');
 
@@ -12,34 +13,17 @@ export interface Process {
 
 @Injectable()
 export class PTYService {
-  shell: string;
-  args: string[];
-  user: any;
+  shell: IShellDef;
   path: string;
   processes: Process[];
 
-  constructor() {
-    this.user = os.userInfo({ encoding: 'utf8' });
-    switch (os.platform()) {
-      case 'win32':
-        this.shell = 'cmd.exe';
-        this.args = [];
-        break;
-      case 'darwin':
-        this.shell = 'login';
-        this.args = ['-fp', this.user.username];
-        break;
-      case 'linux':
-        this.shell = '/bin/bash';
-        this.args = [];
-        break;
-    }
-    this.processes = [];
-  }
+  constructor() { this.processes = []; }
+
+  setShell(shell: IShellDef) { this.shell = shell; }
 
   create(): Process {
     let ps: Process = {
-      pty: pty.spawn(this.shell, this.args, {
+      pty: pty.spawn(this.shell.shell, this.shell.args, {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
