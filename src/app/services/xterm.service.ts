@@ -77,6 +77,10 @@ export class XtermService {
     this.terminals[this.currentIndex].ps.exit.emit(true);
   }
 
+  deleteTabByIndex(index: number) {
+    this.terminals[index].ps.exit.emit(true);
+  }
+
   clearTab(): void {
     let termOutput = this.terminals[this.currentIndex].output;
     this.osPlatform === 'win32' ? termOutput.emit('\n cls \r\n') : termOutput.emit('\n clear \n');
