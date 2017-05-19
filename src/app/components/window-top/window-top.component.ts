@@ -145,7 +145,7 @@ export class WindowTopComponent implements OnInit {
             return([ mm.screenX - startX, mm.screenY - startY ]);
           }
         )
-        .filter(x => x[0] != 0 || x[1] != 0)
+        .filter(x => x[0] !== 0 || x[1] !== 0)
         .takeUntil(mouseUp$)
       }
     )

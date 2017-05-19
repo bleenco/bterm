@@ -87,14 +87,16 @@ export class CssBuilder {
     return this.css;
   }
 
-  inject(): void {
+  inject(seamless: boolean = true): void {
     this.build();
+    if (!seamless && this.styleEl) { this.styleEl.remove(); }
+
+    let newStyle: HTMLStyleElement = document.createElement('style') as HTMLStyleElement;
+    newStyle.setAttribute('type', 'text/css');
+    newStyle.innerHTML = this.css;
+
+    document.querySelector('head').appendChild(newStyle);
     if (this.styleEl) { this.styleEl.remove(); }
-
-    this.styleEl = document.createElement('style') as HTMLStyleElement;
-    this.styleEl.setAttribute('type', 'text/css');
-    this.styleEl.innerHTML = this.css;
-
-    setTimeout(() => document.querySelector('head').appendChild(this.styleEl));
+    this.styleEl = newStyle;
   }
 }

@@ -464,5 +464,10 @@ describe('bterm launch', function() {
     });
   }
 
-})
+  it('should inject a style element into head', () => {
+  return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.elements('head style'))
+      .then(result => expect(result.value.length).to.equal(1));
+  });
 
+});
