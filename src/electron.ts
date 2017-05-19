@@ -22,11 +22,14 @@ function createWindow(): Electron.BrowserWindow {
     x: getPosition('width'),
     y: getPosition('height'),
     frame: false,
-    transparent: process.platform === 'win32' ? false : true
+    transparent: process.platform === 'win32' ? false : true,
+    show: false
   });
 
   win.setMenu(null);
   win.loadURL(`file://${__dirname}/index.html`);
+
+  win.on('ready-to-show', () => win.show());
 
   return win;
 }
