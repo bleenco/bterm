@@ -34,7 +34,7 @@ export class ConfigService {
 
     this.css.clear();
 
-    this.config.style.colors.forEach( (color: string, index: number) => {
+    this.config.style.colors.reverse().forEach( (color: string, index: number) => {
       this.css.add(`.xterm-color-${index + 1}`, `color: ${color} !important;`);
     });
 
