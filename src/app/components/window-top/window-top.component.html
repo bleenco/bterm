@@ -13,7 +13,16 @@
     </div>
   </div>
   <div class="window-top-container__center">
-    <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (click)="switchTab(i)">
+    <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (click)="$event.which === 2 ? closeTab($event, i) : switchTab($event, i)">
+      <span class="close-icon" (click)="closeTab($event, i)" *ngIf="tabs.length > 1">
+        <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="icon" fill-rule="nonzero" fill="#FFFFFF">
+              <path d="M13.98,0 C6.259,0 0,6.261 0,13.983 C0,21.704 6.259,27.965 13.98,27.965 C21.705,27.965 27.965,21.703 27.965,13.983 C27.965,6.261 21.705,0 13.98,0 Z M19.992,17.769 L17.765,19.993 C17.765,19.993 14.242,16.213 13.979,16.213 C13.72,16.213 10.196,19.993 10.196,19.993 L7.968,17.769 C7.968,17.769 11.752,14.297 11.752,13.988 C11.752,13.674 7.968,10.201 7.968,10.201 L10.196,7.972 C10.196,7.972 13.749,11.754 13.979,11.754 C14.211,11.754 17.765,7.972 17.765,7.972 L19.992,10.201 C19.992,10.201 16.207,13.724 16.207,13.988 C16.207,14.239 19.992,17.769 19.992,17.769 Z" id="Shape"></path>
+            </g>
+          </g>
+        </svg>
+      </span>
       <span class="title">{{ tab.title }}</span>
     </div>
   </div>

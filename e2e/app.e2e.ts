@@ -217,7 +217,7 @@ describe('bterm launch', function() {
       .then(() => wait(2000))
       .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
       .then(result => expect(result).to.be.true)
-      .then(() => this.app.client.click('.close-icon'))
+      .then(() => this.app.client.click('.sidebar .close-icon'))
       .then(() => wait(2000))
       .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
       .then(result => expect(result).to.be.false);

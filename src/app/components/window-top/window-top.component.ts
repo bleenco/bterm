@@ -43,7 +43,9 @@ export class WindowTopComponent implements OnInit {
       } else if (event.action === 'closed') {
         this.zone.run(() => {
           this.tabs.splice(event.data, 1);
-          this.tabs[event.data].active = true;
+          if (this.tabs.findIndex(t => t.active) === -1) {
+            this.tabs[this.tabs.length - 1].active = true;
+          }
           setTimeout(() => this.config.setConfig());
         });
       } else if (event.action === 'switch') {
@@ -70,7 +72,8 @@ export class WindowTopComponent implements OnInit {
     if (!this.isDarwin) { this.handleDrag(); }
   }
 
-  switchTab(index: number): void {
+  switchTab(e: MouseEvent, index: number): void {
+    e.preventDefault();
     this.xterm.switchTab(index);
     this.tabs.forEach((tab: Tab) => tab.active = false);
     this.tabs[index].active = true;
@@ -103,6 +106,13 @@ export class WindowTopComponent implements OnInit {
         ipcRenderer.send('close');
       }
     }
+  }
+
+  closeTab(e: MouseEvent, index: number): void {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.xterm.deleteTabByIndex(index);
   }
 
   minimize(): void { ipcRenderer.send('minimize'); }
