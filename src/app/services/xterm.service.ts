@@ -79,7 +79,7 @@ export class XtermService {
 
   clearTab(): void {
     let termOutput = this.terminals[this.currentIndex].output;
-    this.osPlatform === 'win32' ? termOutput.emit('\n cls \n') : termOutput.emit('\n clear \n');
+    this.osPlatform === 'win32' ? termOutput.emit('\n cls \r\n') : termOutput.emit('\n clear \n');
   }
 
   initializeInstance(terminal: Terminal, el: HTMLElement): void {

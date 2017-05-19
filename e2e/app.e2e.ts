@@ -214,7 +214,7 @@ describe('bterm launch', function() {
       .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
       .then(result => expect(result).to.be.false)
       .then(() => this.app.client.click('.menu-open'))
-      .then(() => wait(1000))
+      .then(() => wait(2000))
       .then(() => this.app.client.isVisibleWithinViewport('.sidebar-container'))
       .then(result => expect(result).to.be.true)
       .then(() => this.app.client.click('.close-icon'))
@@ -293,8 +293,9 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(3000))
       .then(() => this.app.client.browserWindow.send('tabLeft', true))
-      .then(() => wait(1000))
+      .then(() => wait(3000))
       .then(() => this.app.client.elements('.is-active'))
       .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
@@ -306,9 +307,11 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(3000))
       .then(() => this.app.client.browserWindow.send('tabLeft', true))
+      .then(() => wait(3000))
       .then(() => this.app.client.browserWindow.send('tabRight', true))
-      .then(() => wait(1000))
+      .then(() => wait(3000))
       .then(() => this.app.client.elements('.is-active'))
       .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
@@ -320,20 +323,21 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.browserWindow.send('newTab', true))
       .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(3000))
       .then(() => this.app.client.browserWindow.send('switchTab', 0))
-      .then(() => wait(1000))
+      .then(() => wait(3000))
       .then(() => this.app.client.elements('.is-active'))
       .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(activeTab).to.equal(parseFloat(el.value[0].ELEMENT).toFixed(2)))
       .then(() => this.app.client.browserWindow.send('switchTab', 1))
-      .then(() => wait(1000))
+      .then(() => wait(3000))
       .then(() => this.app.client.elements('.is-active'))
       .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(activeTab).to.equal(parseFloat(el.value[1].ELEMENT).toFixed(2)))
       .then(() => this.app.client.browserWindow.send('switchTab', 2))
-      .then(() => wait(1000))
+      .then(() => wait(3000))
       .then(() => this.app.client.elements('.is-active'))
       .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
       .then(() => this.app.client.elements('.tab'))
@@ -354,6 +358,111 @@ describe('bterm launch', function() {
       .then(() => this.app.client.elements('.tab'))
       .then((el) => expect(el.value.length).to.equal(1))
   });
+
+  if (process.platform === 'win32') {
+    it('should start with clear terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(4)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(5)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(6)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+
+    it('should clear the terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.keys('dir \r\n'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(4)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(5)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(6)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.browserWindow.send('clearTab', true))
+        .then(() => wait(3000))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(4)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(5)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(6)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+  }
+  if (process.platform === 'darwin') {
+    it('should start with clear terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+
+    it('should clear the terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.keys('ls \n'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.browserWindow.send('clearTab', true))
+        .then(() => wait(3000))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+  }
+
+  if (process.platform === 'linux') {
+    it('should start with clear terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+
+    it('should clear the terminal', () => {
+      let activeTab = null;
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.browserWindow.send('clearTab', true))
+        .then(() => wait(3000))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+        .then(() => this.app.client.getText('.xterm-rows div:nth-child(4)'))
+        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
+    });
+  }
 
 })
 
