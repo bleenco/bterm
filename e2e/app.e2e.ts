@@ -344,6 +344,22 @@ describe('bterm launch', function() {
       .then((el) => expect(activeTab).to.equal(parseFloat(el.value[2].ELEMENT).toFixed(2)))
   });
 
+  it('should switch to tab by click', () => {
+    let activeTab = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(parseFloat(el.value[1].ELEMENT).toFixed(2)))
+      .then(() => this.app.client.click('.tab'))
+      .then(() => this.app.client.elements('.is-active'))
+      .then((el) => activeTab = parseFloat(el.value[0].ELEMENT).toFixed(2))
+      .then(() => this.app.client.elements('.tab'))
+      .then((el) => expect(activeTab).to.equal(parseFloat(el.value[0].ELEMENT).toFixed(2)))
+  });
+
   it('should close tabs', () => {
     let activeTab = null;
     return this.app.client.waitUntilWindowLoaded()
