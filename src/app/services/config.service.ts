@@ -35,7 +35,7 @@ export class ConfigService {
     this.css.clear();
 
     this.config.style.colors.reverse().forEach( (color: string, index: number) => {
-      this.css.add(`.xterm-color-${index + 1}`, `color: ${color} !important;`);
+      this.css.add(`.xterm-color-${index + 1}`, `color: ${color};`);
     });
 
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
