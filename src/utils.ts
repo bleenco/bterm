@@ -15,7 +15,7 @@ export function checkNewVersion(options: string): Promise<string> {
   });
 }
 
-export function getExtraMargin(osPlatform, winInLine, positionOnLine, isHeight): number{
+export function getExtraMargin(osPlatform, winInLine, positionOnLine, isHeight): number {
   let extraMargin = 0;
   if (osPlatform === 'darwin' && isHeight) {
     if (winInLine === 0 && positionOnLine === 0) {

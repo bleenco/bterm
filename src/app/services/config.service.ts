@@ -88,8 +88,6 @@ export class ConfigService {
 
       this.setSidebarConfig();
     }, 1000);
-
-    this.writeConfig();
   }
 
   setSidebarConfig(): void {
@@ -204,6 +202,7 @@ export class ConfigService {
     config.settings.theme_name  = theme;
     this.config = config;
     this.setConfig();
+    this.writeConfig();
   }
 
   getUpdateServer(): string {
