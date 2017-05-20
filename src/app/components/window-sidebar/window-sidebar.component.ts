@@ -8,12 +8,14 @@ import { themes } from '../../themes';
   templateUrl: 'window-sidebar.component.html'
 })
 export class WindowSidebarComponent implements OnInit {
+  menu: string;
   opened: boolean;
   scrollOptions: SlimScrollOptions;
   themeNames: string[];
   selectedTheme: string;
 
   constructor(private config: ConfigService) {
+    this.menu = 'themes';
     this.scrollOptions = new SlimScrollOptions({
       barBackground: '#666666',
       gridBackground: '#666666',
