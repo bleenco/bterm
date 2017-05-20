@@ -7,6 +7,7 @@ import { XtermServiceProvider } from './services/xterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
 import { SearchServiceProvider } from './services/search.service';
+import { GITServiceProvider } from './services/git.service';
 import { AppComponent } from './app.component';
 import { WindowTopComponent } from './components/window-top';
 import { WindowTerminalComponent } from './components/window-terminal';
@@ -33,7 +34,8 @@ import { WindowNotificationComponent } from './components/window-notification';
     ConfigServiceProvider,
     XtermServiceProvider,
     PTYServiceProvider,
-    SearchServiceProvider
+    SearchServiceProvider,
+    GITServiceProvider
   ],
   bootstrap: [ AppComponent ]
 })
