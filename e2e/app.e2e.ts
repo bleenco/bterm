@@ -520,4 +520,32 @@ describe('bterm launch', function() {
         .then(result => expect(result.value.length).to.equal(1))
     });
 
+    it('should show inner marks on icons on hover', () => {
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.moveToObject('.icons'))
+        .then(() => this.app.client.isVisibleWithinViewport('.close span'))
+        .then(result => expect(result).to.true)
+        .then(() => this.app.client.moveToObject('.icons'))
+        .then(() => this.app.client.isVisibleWithinViewport('.minimize span'))
+        .then(result => expect(result).to.true)
+        .then(() => this.app.client.moveToObject('.icons'))
+        .then(() => this.app.client.isVisibleWithinViewport('.maximize span'))
+        .then(result => expect(result).to.true);
+    });
+
+    if (process.platform === 'darwin') {
+      it('should disable minimize in full screen', () => {
+        return this.app.client.waitUntilWindowLoaded()
+          .then(() => this.app.client.click('.maximize'))
+          .then(() => wait(1000))
+          .then(() => this.app.client.getHTML('.minimize'))
+          .then(result => expect(result).to.contain('disabled'))
+          .then(() => this.app.client.isVisibleWithinViewport('.minimize span'))
+          .then(result => expect(result).to.false)
+          .then(() => this.app.client.click('.minimize'))
+          .then(() => this.app.client.browserWindow.isMinimized())
+          .then(result => expect(result).to.be.false);
+      });
+    }
+
 });

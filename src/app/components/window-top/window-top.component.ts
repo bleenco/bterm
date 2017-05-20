@@ -26,6 +26,7 @@ export interface Tab {
 export class WindowTopComponent implements OnInit {
   tabs: Tab[];
   isDarwin: boolean;
+  isDisabled: boolean;
 
   constructor(
     @Inject(XtermService) private xterm: XtermService,
@@ -116,7 +117,14 @@ export class WindowTopComponent implements OnInit {
   }
 
   minimize(): void { ipcRenderer.send('minimize'); }
-  maximize(): void { ipcRenderer.send('maximize'); }
+
+  maximize(): void {
+    ipcRenderer.send('maximize');
+    if (this.isDarwin) {
+      this.isDisabled = !this.isDisabled;
+    }
+  }
+
   tabMaximize(): void { ipcRenderer.send('tabMaximize'); }
 
   handleDrag() {
