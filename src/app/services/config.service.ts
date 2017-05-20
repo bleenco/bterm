@@ -1,5 +1,5 @@
-import { Injectable, Provider, Inject } from '@angular/core';
-import { XtermService, Terminal } from './xterm.service';
+import { Injectable, Provider } from '@angular/core';
+import { Terminal } from './xterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
 import { CssBuilder } from '../../utils';
@@ -11,8 +11,10 @@ export class ConfigService {
   config: any;
   watcher: any;
   css: CssBuilder;
+  terminals: Terminal[];
 
-  constructor(@Inject(XtermService) private xterm: XtermService) {
+  constructor() {
+    this.terminals = [];
     this.css = new CssBuilder();
     this.homeDir = os.homedir();
     this.configPath = `${this.homeDir}/.bterm.json`;
@@ -23,6 +25,25 @@ export class ConfigService {
 
     this.readConfig();
     this.setWatcher();
+  }
+
+  setTerminals(terminals: Terminal[]) { this.terminals = terminals; this.decorateTerminals(); }
+
+  decorateTerminals() {
+    this.terminals.forEach((term: Terminal) => {
+      let el = term.el as HTMLElement;
+      el.style.background = this.config.style.background;
+      if (term.active) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+
+      setTimeout(() => {
+        term.term.fit();
+        if (term.active) { term.term.focus(); }
+      });
+    });
   }
 
   setConfig(): void {
@@ -43,6 +64,8 @@ export class ConfigService {
     this.css.add('.xterm-rows', `color: ${this.config.style.color} !important; font-family: ${this.config.settings.font} !important;`);
     this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
+    this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
+    this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
 
     this.css.inject();
 
@@ -60,20 +83,7 @@ export class ConfigService {
       title.style.color = this.config.style.color;
     });
 
-    this.xterm.terminals.forEach((term: Terminal) => {
-      let el = term.el as HTMLElement;
-      el.style.background = this.config.style.background;
-      if (term.active) {
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-      }
 
-      setTimeout(() => {
-        term.term.fit();
-        if (term.active) { term.term.focus(); }
-      });
-    });
 
     setTimeout(() => {
       let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;
@@ -91,6 +101,8 @@ export class ConfigService {
 
       this.setSidebarConfig();
     }, 1000);
+
+    this.decorateTerminals();
   }
 
   setSidebarConfig(): void {
