@@ -93,6 +93,7 @@ export class ConfigService {
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
     this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
     this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
 
     this.css.inject();
 
