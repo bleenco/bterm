@@ -41,6 +41,7 @@
     "reflect-metadata": "0.1.10",
     "rxjs": "5.3.1",
     "semver": "^5.3.0",
+    "shelljs": "^0.7.7",
     "xterm": "^2.6.0",
     "zone.js": "0.8.10"
   },
@@ -81,7 +82,7 @@
     "rollup-plugin-progress": "^0.2.1",
     "rollup-plugin-typescript": "^0.8.1",
     "sass-loader": "^6.0.3",
-    "spectron": "^3.6.2",
+    "spectron": "^3.6.4",
     "style-loader": "^0.17.0",
     "tslint": "^5.2.0",
     "typescript": "2.3.2",

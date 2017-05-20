@@ -3748,6 +3748,12 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
+rechoir@^0.6.2:
+  version "0.6.2"
+  resolved "http://morose.bleenco.io/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
+  dependencies:
+    resolve "^1.1.6"
+
 redent@^1.0.0:
   version "1.0.0"
   resolved "http://morose.bleenco.io/redent/-/redent-1.0.0.tgz#cf916ab1fd5f1f16dfb20822dd6ec7f730c2afde"
@@ -4110,6 +4116,14 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "http://morose.bleenco.io/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
+shelljs@^0.7.7:
+  version "0.7.7"
+  resolved "http://morose.bleenco.io/shelljs/-/shelljs-0.7.7.tgz#b2f5c77ef97148f4b4f6e22682e10bba8667cff1"
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
+
 shellwords@^0.1.0:
   version "0.1.0"
   resolved "http://morose.bleenco.io/shellwords/-/shellwords-0.1.0.tgz#66afd47b6a12932d9071cbfd98a52e785cd0ba14"
@@ -4209,9 +4223,9 @@ spdx-license-ids@^1.0.2:
   version "1.2.2"
   resolved "http://morose.bleenco.io/spdx-license-ids/-/spdx-license-ids-1.2.2.tgz#c9df7a3424594ade6bd11900d596696dc06bac57"
 
-spectron@^3.6.2:
-  version "3.6.2"
-  resolved "http://morose.bleenco.io/spectron/-/spectron-3.6.2.tgz#e7583cee7e78d72ded0195943ff2834e23cd9e0a"
+spectron@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/spectron/-/spectron-3.6.4.tgz#56f42ab5c48154791d8db2f3b531b258e7205aa0"
   dependencies:
     dev-null "^0.1.1"
     electron-chromedriver "~1.6.0"
