@@ -9,10 +9,10 @@
   border-left: 1px solid transparent
   border-bottom: 1px solid transparent
   background: #1e1f29
-  transition: width 500ms ease-in
+  transition: width 300ms ease-in
 
   &.is-active
-    width: 220px
+    width: 320px
     border-color: $vdark
 
   .menu-open
@@ -45,9 +45,29 @@
       height: 12px
       cursor: pointer
 
+  .sidebar-menu-icons
+    display: flex
+    align-items: center
+    width: 300px
+    height: 40px
+    margin: 0 auto
+    padding-bottom: 10px
+    border-bottom: 1px solid $vdark
+
+    .sidebar-icon
+      display: block
+      width: 25px
+      height: 25px
+      margin: 0 10px
+      cursor: pointer
+
+      svg
+        width: 25px
+        height: 25px
+
   .sidebar-container
     padding: 10px 10px 20px 10px
-    width: 220px
+    width: 320px
     height: 100%
     overflow: hidden
     display: inline-block
@@ -57,7 +77,8 @@
       display: block
       font-size: 10px
       color: $dark
-      padding-bottom: 5px
+      padding-top: 10px
+      padding-bottom: 10px
       margin-bottom: 5px
       text-align: center
       font-weight: bold
@@ -72,8 +93,8 @@
       height: auto !important
 
     .theme-browser
-      width: 200px
-      height: calc(100% - 30px)
+      width: 300px
+      height: calc(100% - 90px)
 
       span
         display: block
