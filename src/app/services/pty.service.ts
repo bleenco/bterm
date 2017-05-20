@@ -1,4 +1,5 @@
-import { Injectable, Provider, EventEmitter } from '@angular/core';
+import { Injectable, Provider, EventEmitter, Inject } from '@angular/core';
+import { ConfigService } from './config.service';
 import * as os from 'os';
 let pty = require('node-pty');
 
@@ -18,7 +19,7 @@ export class PTYService {
   path: string;
   processes: Process[];
 
-  constructor() {
+  constructor(@Inject(ConfigService) private _config: ConfigService) {
     this.user = os.userInfo({ encoding: 'utf8' });
     switch (os.platform()) {
       case 'win32':
@@ -39,7 +40,7 @@ export class PTYService {
 
   create(): Process {
     let ps: Process = {
-      pty: pty.spawn(this.shell, this.args, {
+      pty: pty.spawn(this._config.shell.shell, this._config.shell.args, {
         name: 'xterm-color',
         cols: 80,
         rows: 30,

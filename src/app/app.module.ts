@@ -30,9 +30,9 @@ import { WindowNotificationComponent } from './components/window-notification';
     SlimScrollModule
   ],
   providers: [
+    ConfigServiceProvider,
     XtermServiceProvider,
     PTYServiceProvider,
-    ConfigServiceProvider,
     SearchServiceProvider
   ],
   bootstrap: [ AppComponent ]
