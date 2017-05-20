@@ -486,4 +486,21 @@ describe('bterm launch', function() {
       .then(result => expect(result.value.length).to.equal(1));
   });
 
+  it('should close tab on \'x\' tab icon click', () => {
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.browserWindow.send('newTab', true))
+        .then(() => this.app.client.browserWindow.send('newTab', true))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(3))
+        .then(() => this.app.client.moveToObject('.tab:nth-child(1)').click('.tab:nth-child(1) .close-icon'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(2))
+        .then(() => this.app.client.moveToObject('.tab:nth-child(1)').click('.tab:nth-child(1) .close-icon'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(1))
+    });
+
 });
