@@ -503,4 +503,21 @@ describe('bterm launch', function() {
         .then(result => expect(result.value.length).to.equal(1))
     });
 
+  it('should close a tab with middle click', () => {
+      return this.app.client.waitUntilWindowLoaded()
+        .then(() => this.app.client.browserWindow.send('newTab', true))
+        .then(() => this.app.client.browserWindow.send('newTab', true))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(3))
+        .then(() => this.app.client.middleClick('.tab:nth-child(1)'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(2))
+        .then(() => this.app.client.middleClick('.tab:nth-child(2)'))
+        .then(() => wait(2000))
+        .then(() => this.app.client.elements('.tab'))
+        .then(result => expect(result.value.length).to.equal(1))
+    });
+
 });

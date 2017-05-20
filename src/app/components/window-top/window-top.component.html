@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="window-top-container__center">
-    <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (click)="$event.which === 2 ? closeTab($event, i) : switchTab($event, i)">
+    <div class="tab" *ngFor="let tab of tabs; let i = index;" [class.is-active]="tab.active" (mousedown)="$event.which === 2 ? closeTab($event, i) : switchTab($event, i)">
       <span class="close-icon" (click)="closeTab($event, i)" *ngIf="tabs.length > 1">
         <svg  class="close-tab-fill" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <g id="Page-1" stroke="none" stroke-width="1" class="close-tab-fill" fill-rule="evenodd">
