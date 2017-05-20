@@ -8,7 +8,7 @@
           </svg>
         </span>
       </span>
-      <span class="icon minimize" (click)="minimize()"><span>&ndash;</span></span>
+      <span class="icon minimize" (click)="minimize()" [ngClass]="{ 'disabled': isDisabled }" ><span>&ndash;</span></span>
       <span class="icon maximize" (click)="maximize()"><span>+</span></span>
     </div>
   </div>
