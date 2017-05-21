@@ -548,4 +548,13 @@ describe('bterm launch', function() {
       });
     }
 
+  it('should type the uri in terminal on will-navigate', () => {
+    let testString: string = '/path/to/blah/random.bleenco.test';
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('navigate', testString))
+      .then(() => wait(2000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then(text => expect(text).to.contain(testString));
+  });
+
 });
