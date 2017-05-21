@@ -16,11 +16,12 @@
     ]
   },
   "files": [
-    "src/app/app.module.ts",
-    "src/main.aot.ts"
+    "src/app/app.module.ts"//,
+    //"src/main.aot.ts"
   ],
   "exclude": [
-    "src/main.ts"
+    "src/main.ts",
+    "src/main.aot.ts"
   ],
   "angularCompilerOptions": {
     "genDir": "./src/ngfactory",
