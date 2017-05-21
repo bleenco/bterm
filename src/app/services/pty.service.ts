@@ -15,26 +15,10 @@ export interface Process {
 export class PTYService {
   shell: string;
   args: string[];
-  user: any;
   path: string;
   processes: Process[];
 
   constructor(@Inject(ConfigService) private _config: ConfigService) {
-    this.user = os.userInfo({ encoding: 'utf8' });
-    switch (os.platform()) {
-      case 'win32':
-        this.shell = 'cmd.exe';
-        this.args = [];
-        break;
-      case 'darwin':
-        this.shell = 'login';
-        this.args = ['-fp', this.user.username];
-        break;
-      case 'linux':
-        this.shell = '/bin/bash';
-        this.args = [];
-        break;
-    }
     this.processes = [];
   }
 
@@ -44,7 +28,7 @@ export class PTYService {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
-        cwd: os.homedir(),
+        cwd: process.cwd() || os.homedir(),
         env: process.env
       }),
       input: new EventEmitter<string>(),

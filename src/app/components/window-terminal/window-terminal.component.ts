@@ -34,7 +34,9 @@ export class WindowTerminalComponent implements OnInit {
 
     ipcRenderer.on('paste', () => this.paste());
     ipcRenderer.on('copy', () => this.copy());
-
+    ipcRenderer.on('navigate', (ev, url) => {
+      this.xterm.terminals[this.xterm.currentIndex].output.emit(url);
+    });
     this.initMenu();
 
     // auto-copy on selection

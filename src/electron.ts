@@ -79,6 +79,10 @@ app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
   current.on('blur', () => unregisterShortcuts());
   current.on('focus', () => registerShortcuts(current));
   current.on('move', () => current.webContents.send('focusCurrent', true));
+  current.webContents.on('will-navigate', (ev: Electron.Event, url: string) => {
+    ev.preventDefault();
+    current.webContents.send('navigate', url);
+  });
 });
 
 app.on('browser-window-focus', (e: Event, win: Electron.BrowserWindow) => {
