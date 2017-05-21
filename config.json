@@ -16,7 +16,8 @@
     "events": "events",
     "net": "net",
     "hterm": "hterm",
-    "https": "https"
+    "https": "https",
+    "shelljs": "shelljs"
   },
   "styles": [
     "css/app.css"
