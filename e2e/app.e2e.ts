@@ -557,4 +557,35 @@ describe('bterm launch', function() {
       .then(text => expect(text).to.contain(testString));
   });
 
+  it('should copy and paste the text', () => {
+    let text = 'texttotest';
+    let textOut = '';
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.keys(text))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then((result) => textOut = result.replace(/\n|\r/g, '').replace(/ /g, ''))
+      .then(() => expect(textOut.endsWith(text)).to.be.true)
+      .then(() => this.app.client.browserWindow.send('clearTab', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then((result) => textOut = result.replace(/\n|\r/g, '').replace(/ /g, ''))
+      .then(() => expect(textOut.endsWith(text)).to.be.false)
+      .then(() => wait(1000))
+      .then(() => this.app.client.getSelectedText())
+      .then((result) => expect(result).to.equal(''))
+      .then(() => this.app.client.webContents.selectAll())
+      .then(() => this.app.client.getSelectedText())
+      .then((result) => text = result)
+      .then(() => expect(text).to.not.equal(''))
+      .then(() => this.app.client.webContents.selectAll())
+      .then(() => this.app.client.browserWindow.send('copy', true))
+      .then(() => this.app.client.browserWindow.send('paste', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then((result) => textOut = result.replace(/\n|\r/g, '').replace(/ /g, ''))
+      .then(() => expect(textOut.endsWith(text)).to.be.true)
+  });
+
 });
+
