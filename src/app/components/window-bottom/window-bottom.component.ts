@@ -55,8 +55,8 @@ export class WindowBottomComponent implements OnInit {
           this.currentProcess = this.xterm.terminals[event.index].title;
           this.currentDir = this.xterm.terminals[event.index].dir;
           this._git.dir = this.currentDir;
-          this.currentBranch = this._git.branch;
-          this.currentStatus = this._git.status;
+          this._git.branch.then(res => this.currentBranch = res);
+          this._git.status.then(res => this.currentStatus = res);
         }
       });
     });

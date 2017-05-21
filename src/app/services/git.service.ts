@@ -4,57 +4,43 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
 import * as path from 'path';
-let shx = require('shelljs');
+import { which } from 'shelljs';
 
 export type TGitStatus = '?'|'*'|'\u2713';
 
 @Injectable()
 export class GITService {
-  currentBranch: string;
-  currentStatus: TGitStatus;
+  currentBranch: Promise<string>;
+  currentStatus: Promise<TGitStatus>;
 
   cwd: string;
   git: GITHandler;
 
   constructor(@Inject(ConfigService) private _config: ConfigService) {
     this.git = new GITHandler();
-    this.currentBranch = null;
-    this.currentStatus = '?';
     this.cwd = null;
   }
 
-  hasGit(): boolean {
-    if (!this.cwd) { return false; }
-    this.cwd = this.cwd.replace(/^~/, os.homedir());
-
-    try {
-      let branch: IGitResult = this.git.from(this.cwd).getBranch();
-      this.branch = !branch.code ? branch.value : null;
-
-      let status = this.git.from(this.cwd).getStatus();
-      this.status = !status.code ? this.parseStatus(status.value) : '?';
-      return true;
-    } catch (e) {
-      this.currentStatus = null;
-      this.currentBranch = null;
-      return false;
-    }
-  }
-
   parseStatus(s: string): TGitStatus {
+    if (s === null) { return '?'; }
     if (s.trim().length === 0) { return '\u2713'; }
     if (s.length > 0) { return '*'; }
     return '?';
   }
 
-  get status(): TGitStatus { return this.currentStatus; }
-  set status(s: TGitStatus) { this.currentStatus = s; }
-  set branch(b: string) { this.currentBranch = b; }
-  get branch(): string { return this.currentBranch; }
+  get status(): Promise<TGitStatus> {
+    if (!this.cwd) { return Promise.resolve('?'); }
+    return this.git.from(this.cwd).getStatus().then(status => !status.code ? this.parseStatus(status.value) : '?');
+  }
+
+  get branch(): Promise<string> {
+    if (!this.cwd) { return Promise.resolve(null); }
+    return this.git.from(this.cwd).getBranch().then(branch => !branch.code ? branch.value : null);
+  }
 
   set dir(d: string) {
     this.cwd = d;
-    this.hasGit();
+    this.cwd = this.cwd.replace(/^~/, os.homedir());
   }
 }
 
@@ -64,7 +50,6 @@ export let GITServiceProvider: Provider = {
 };
 
 class GITHandler {
-  cwd: string;
   dir: string;
   gitBin: string;
 
@@ -79,29 +64,30 @@ class GITHandler {
   }
 
   hasGitBin() {
-    let gitPath: string = shx.which('git');
-    if (gitPath.length > 3) { this.gitBin = gitPath; }
-    console.log('git bin: ', gitPath);
+    let gitPath: string = which('git');
+    if (gitPath.length >= 3) { this.gitBin = gitPath.toString(); }
   }
 
-  gitExec(params: string[]): IGitResult {
-    if (!this.gitBin || !fs.existsSync(this.dir)) { return; }
-    let options: child_process.SpawnSyncOptionsWithStringEncoding = {
-      timeout: 50,
-      encoding: 'utf8',
-      env: process.env,
-      stdio: 'pipe'
-    };
+  gitExec(params: string[]): Promise<IGitResult> {
+    return new Promise<IGitResult>(resolve => {
+      if (!this.gitBin || !fs.existsSync(this.dir)) { resolve({ code: null, value: null }); }
+      let log: string = '';
+      let options: child_process.SpawnSyncOptionsWithStringEncoding = {
+        timeout: 100,
+        encoding: 'utf8',
+        env: process.env,
+        cwd: this.dir
+      };
 
-    this.cwd = process.cwd();
-    process.chdir(this.dir);
-    let output: child_process.SpawnSyncReturns<string> = child_process.spawnSync(this.gitBin, params, options);
-    process.chdir(this.cwd);
+      let output: child_process.ChildProcess = child_process.spawn(this.gitBin, params, options);
 
-    let result: IGitResult = { code: output.status, value: output.output.join('\n').trim() }
+      output.stdout.on('data', data => log += data.toString());
+      output.on('close', (code: number, signal: string) => {
+        let result: IGitResult = { code: code, value: log };
 
-    if (!result.code) { return result || null; }
-    return null;
+        resolve(result);
+      });
+    });
   }
 
   from(d: string): GITHandler {
@@ -109,12 +95,12 @@ class GITHandler {
     return this;
   }
 
-  getBranch(): IGitResult {
+  getBranch(): Promise<IGitResult> {
     if (!this.check()) { return null; }
     return this.gitExec(['rev-parse', '--abbrev-ref',  'HEAD']);
   }
 
-  getStatus(): IGitResult {
+  getStatus(): Promise<IGitResult> {
     if (!this.check()) { return null; }
     return this.gitExec(['status', '--porcelain']);
   }
