@@ -41,23 +41,25 @@
     display: flex
     flex: 1
     align-items: center
-    justify-content: center
+    justify-content: flex-end
+    padding-right: 50px
 
     .git-output
       display: flex
+      align-items: center
       float: right
       padding: 0px 10px
 
-      .icon-git
+      .git-branch
+        display: flex
+        align-items: center
         svg
           width: 46px
           height: 36px
 
-      .current-branch-text
-        display: flex
-        align-self: center
-        font-size: 11px
-        font-weight: 100
-        margin-left: -10px
-        letter-spacing: 1px
-        transition: all 0.5s
+        .current-branch-text
+          font-size: 11px
+          font-weight: 100
+          margin-left: -10px
+          letter-spacing: 1px
+          transition: all 0.5s
