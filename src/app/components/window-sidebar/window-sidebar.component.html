@@ -49,7 +49,19 @@
     </div>
 
     <div *ngIf="menu === 'settings'">
-
+      <div class="theme-browser" slimScroll [options]="scrollOptions">
+        <bterm-dropdown
+          [options]="availableFonts"
+          (onSelect)="setFont($event)"
+          [defaultTitle]="'Select Terminal Font'">
+        </bterm-dropdown>
+        <bterm-dropdown
+          *ngIf="availableShells.length"
+          [options]="availableShells"
+          (onSelect)="setShell($event)"
+          [defaultTitle]="'Select Default Shell'">
+        </bterm-dropdown>
+      </div>
     </div>
 
   </div>
