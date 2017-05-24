@@ -7,6 +7,8 @@ import { CssBuilder } from '../../utils';
 export interface IShellDef {
   shell: string;
   args: string[];
+  short?: string;
+  toString?: () => string;
 };
 
 @Injectable()
@@ -86,6 +88,7 @@ export class ConfigService {
       this.css.add(`.xterm-color-${index + 1}`, `color: ${color};`);
     });
 
+    this.css.add('html', 'background: ${this.config.style.background} !important;');
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
     this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font_size}px !important;`);
     this.css.add('.xterm-rows', `color: ${this.config.style.color} !important; font-family: ${this.config.settings.font} !important;`);
@@ -93,6 +96,8 @@ export class ConfigService {
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
     this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
     this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-fg', `background-color: ${this.config.style.color} !important;`);
     this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
 
     this.css.inject();
@@ -129,6 +134,22 @@ export class ConfigService {
     }, 1000);
 
     this.decorateTerminals();
+  }
+
+  setFont(font: string) {
+    if (this.config && this.config.settings) {
+      this.config.settings['font'] = font;
+    }
+
+    this.writeConfig();
+    this.setConfig();
+  }
+
+  setShell(shell: IShellDef) {
+    if (this.config && this.config.settings) { this.config.settings['shell'] = shell; }
+
+    this.writeConfig();
+    this.setConfig();
   }
 
   setSidebarConfig(): void {
@@ -178,6 +199,8 @@ export class ConfigService {
         config = updatedConfig;
       }
     });
+
+    return this.config;
   }
 
   readConfig(): void {
@@ -194,7 +217,8 @@ export class ConfigService {
         'windowPadding': '20px 35px 10px 35px',
         'clipboard_notice': false,
         'theme_name': 'AtelierSulphurpool',
-        'scrollBufferSave': false
+        'scrollBufferSave': false,
+        'shells': [ 'bash', 'zsh', 'sh', 'powershell', 'cmd', 'login', 'tcsh', 'csh', 'ash' ]
       },
       'style': {
         'background': '#090300',

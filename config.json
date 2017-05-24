@@ -15,9 +15,9 @@
     "child_process": "child_process",
     "events": "events",
     "net": "net",
-    "hterm": "hterm",
     "https": "https",
-    "shelljs": "shelljs"
+    "shelljs": "shelljs",
+    "font-manager": "font-manager"
   },
   "styles": [
     "css/app.css"

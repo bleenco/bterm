@@ -1,0 +1,6 @@
+<div class="dropdown">
+  <span>{{ title }}</span>
+  <div class="dropdown-content theme-fg theme-bg-color">
+    <span class="theme-bg-color" *ngFor="let i of options" (click)="select(i)">{{ i.toString() }}</span>
+  </div>
+</div>
