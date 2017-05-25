@@ -12,6 +12,7 @@ matrix:
     env: SCRIPT=test:e2e
 
 preinstall:
+  - apt-get -y install fluxbox
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn config set spin false
@@ -21,8 +22,8 @@ install:
   - yarn
 
 postinstall:
+  - fluxbox &
   - yarn build
 
 test:
   - if [[ "$SCRIPT" ]]; then npm run-script $SCRIPT; fi
-
