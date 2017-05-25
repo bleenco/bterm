@@ -12,7 +12,6 @@ matrix:
     env: SCRIPT=test:e2e
 
 preinstall:
-  - apt-get install fluxbox -y
   - npm config set spin false
   - npm config set progress false
 
@@ -20,6 +19,8 @@ install:
   - npm install
 
 postinstall:
+  - /etc/init.d/xvfb start
+  - sleep 3
   - fluxbox &
   - npm run build
 
