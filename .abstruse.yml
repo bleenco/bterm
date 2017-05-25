@@ -12,17 +12,20 @@ matrix:
     env: SCRIPT=test:e2e
 
 preinstall:
-  - npm config set spin false
-  - npm config set progress false
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - ln -s ~/.yarn/bin/yarn /usr/local/bin
+  - yarn config set spin false
+  - yarn config set progress false
 
 install:
-  - npm install
+  - yarn
 
 postinstall:
   - /etc/init.d/xvfb start
   - sleep 3
+  - export DISPLAY=:99
   - fluxbox &
-  - npm run build
+  - yarn build
 
 test:
   - if [[ "$SCRIPT" ]]; then npm run-script $SCRIPT; fi
