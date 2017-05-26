@@ -36,11 +36,6 @@ export class WindowBottomComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = new SearchForm();
-
-    if (platform() === 'win32') {
-      return;
-    }
-
     this.xterm.titleEvents.subscribe(event => {
       if (event.title === ':') {
         this.currentDir = null;

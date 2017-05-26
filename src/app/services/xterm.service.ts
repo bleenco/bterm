@@ -32,9 +32,11 @@ export class XtermService {
   currentIndex: number;
   osPlatform: string;
 
-  constructor(@Inject(PTYService) private pty: PTYService,
-  @Inject(NgZone) private zone: NgZone,
-  @Inject(ConfigService) private _config: ConfigService) {
+  constructor(
+    @Inject(PTYService) private pty: PTYService,
+    @Inject(NgZone) private zone: NgZone,
+    @Inject(ConfigService) private _config: ConfigService
+  ) {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
@@ -127,6 +129,7 @@ export class XtermService {
 
     terminal.term.on('title', (title: string) => {
       title = title.trim();
+
       try {
         let splitted = title.split(':');
         terminal.title = splitted[0].trim();
