@@ -84,6 +84,8 @@ export class WindowTopComponent implements OnInit {
   parseTitle(title: string): string {
     if (title.indexOf(':') !== -1 && title.indexOf('~') !== -1) {
       return title.split(':').slice(0, -1).join(':').trim();
+    } else if (title === '') {
+      return 'Shell';
     } else {
       return title;
     }
