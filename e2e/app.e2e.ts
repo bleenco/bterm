@@ -557,4 +557,23 @@ describe('bterm launch', function() {
       .then(text => expect(text).to.contain(testString));
   });
 
+  it('should copy the url on clicking ', () => {
+    let url: string = 'http://bleenco.com/';
+    let textOut = '';
+
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.send('clearTab', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.keys(url + '\r\n'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.pause(2000))
+      .then(() => this.app.client.click('.terminal-instance a'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.browserWindow.send('paste', true))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then((result) => textOut = result.replace(/\n|\r/g, '').replace(/ /g, ''))
+      .then(() => expect(textOut.endsWith(url)).to.be.true)
+  });
+
 });
