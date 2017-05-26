@@ -52,6 +52,19 @@ export class WindowTerminalComponent implements OnInit {
     }, false);
   }
 
+  @HostListener('click', ['$event']) handleURLClick(event: any) {
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        clipboard.writeText(event.target.href);
+        let isMac = process.platform === 'darwin';
+          if (isMac && event.metaKey) {
+            electron.shell.openExternal(event.target.href)
+          } else if (!isMac && event.ctrlKey) {
+            electron.shell.openExternal(event.target.href)
+          }
+      }
+  }
+
   initMenu() {
     this.ctxMenu = new Menu();
     this.ctxMenu.append(new MenuItem({ label: 'Copy', click: () => this.copy() }));
