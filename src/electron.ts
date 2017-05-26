@@ -126,9 +126,6 @@ function handleWindowsOnClose() {
 }
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
-  let isLinux = platform() === 'linux';
-  let isWin = platform() === 'win32';
-
   let keypressFunctions = {
     send: (key, value) => win.webContents.send(key, value),
     toggleDevTools: () => win.webContents.toggleDevTools(),
@@ -136,10 +133,6 @@ function registerShortcuts(win: Electron.BrowserWindow): void {
   };
 
   keyboardShortcuts.forEach(shortcut => {
-    if ((isLinux || isWin) && shortcut.sckey === 'copy') {
-      return;
-    }
-
     globalShortcut.register(shortcut.keypress, () => {
       keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue);
     });
