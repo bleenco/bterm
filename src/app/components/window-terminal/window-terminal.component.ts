@@ -14,15 +14,18 @@ import { writeFile } from 'fs';
 export class WindowTerminalComponent implements OnInit {
   @HostBinding('class') class = 'window-terminal';
   ctxMenu: Electron.Menu;
+  ctrlKey: boolean;
+  selectionTimeout: any;
 
   constructor(
     @Inject(XtermService) private xterm: XtermService,
     @Inject(ConfigService) private config: ConfigService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.xterm.create();
     setTimeout(() => this.config.setConfig());
+    this.ctrlKey = false;
 
     ipcRenderer.on('newTab', () => this.xterm.create());
     ipcRenderer.on('closeTab', () => this.xterm.deleteTab());
@@ -39,30 +42,17 @@ export class WindowTerminalComponent implements OnInit {
     });
     this.initMenu();
 
-    // auto-copy on selection
-    let selectionTimeout;
-    document.addEventListener('selectionchange', (e: Event) => {
-      if (selectionTimeout) {
-        clearTimeout(selectionTimeout);
+    ipcRenderer.on('url-clicked', (ev, url) => {
+      if (this.ctrlKey) {
+        this.ctrlKey = false;
+        remote.shell.openExternal(url);
+        return;
       }
 
-      selectionTimeout = setTimeout(() => {
-        this.copy();
-      }, 800);
-    }, false);
-  }
+      clipboard.writeText(url);
+    });
 
-  @HostListener('click', ['$event']) handleURLClick(event: any) {
-    if (event.target.tagName === 'A') {
-        event.preventDefault();
-        clipboard.writeText(event.target.href);
-        let isMac = process.platform === 'darwin';
-          if (isMac && event.metaKey) {
-            electron.shell.openExternal(event.target.href)
-          } else if (!isMac && event.ctrlKey) {
-            electron.shell.openExternal(event.target.href)
-          }
-      }
+
   }
 
   initMenu() {
@@ -114,5 +104,23 @@ export class WindowTerminalComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   windowResized(ev: any) { this.xterm.fitTerminal(); }
+
+  @HostListener('document:click', ['$event'])
+  clickListener(ev: any) {
+    if (ev.ctrlKey && this.config.config.settings.urlKey === 'ctrl') { this.ctrlKey = true; return; }
+    if (ev.metaKey && this.config.config.settings.urlKey === 'meta') { this.ctrlKey = true; return; }
+    if (ev.shiftKey && this.config.config.settings.urlKey === 'shift') { this.ctrlKey = true; return; }
+    this.ctrlKey = false;
+  }
+
+
+  @HostListener('document:selectionchange', ['$event'])
+  autoCopy(ev: any) {
+    if (this.selectionTimeout) {
+      clearTimeout(this.selectionTimeout);
+    }
+    this.selectionTimeout = setTimeout(() => { this.copy(); }, 1000);
+    return false;
+  }
 
 }
