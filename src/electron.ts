@@ -83,6 +83,11 @@ app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
     ev.preventDefault();
     current.webContents.send('navigate', url);
   });
+
+  current.webContents.on('new-window', (ev: Electron.Event, url: string) => {
+    ev.preventDefault();
+    current.webContents.send('url-clicked', url);
+  });
 });
 
 app.on('browser-window-focus', (e: Event, win: Electron.BrowserWindow) => {

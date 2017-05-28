@@ -10,6 +10,10 @@ export interface IFonts {
   toString?: () => string;
 };
 
+export interface IUrlKeys {
+  key: string;
+  toString?: () => string;
+}
 
 @Injectable()
 export class SystemService {
@@ -53,6 +57,14 @@ export class SystemService {
 
       resolve(this.shells);
     });
+  }
+
+  getUrlKeys(): IUrlKeys[] {
+    return [
+      { key: 'ctrl', toString: function() { return this.key.toUpperCase(); } },
+      { key: 'shift', toString: function() { return this.key.toUpperCase(); } },
+      { key: 'meta', toString: function() { return this.key.toUpperCase(); } }
+    ];
   }
 
 }

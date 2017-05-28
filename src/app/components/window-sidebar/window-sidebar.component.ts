@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService, IShellDef } from '../../services/config.service';
 import { SlimScrollOptions } from 'ng2-slimscroll';
 import { themes } from '../../themes';
-import { IFonts, SystemService } from '../../services/system.service';
+import { IFonts, IUrlKeys, SystemService } from '../../services/system.service';
 
 @Component({
   selector: 'window-sidebar',
@@ -16,10 +16,12 @@ export class WindowSidebarComponent implements OnInit {
   selectedTheme: string;
   availableFonts: IFonts[];
   availableShells: IShellDef[];
+  availableUrlKeys: IUrlKeys[];
 
   constructor(private config: ConfigService, private _system: SystemService) {
     this.availableFonts = [];
     this.availableShells = [];
+    this.availableUrlKeys = this._system.getUrlKeys();
 
     this.menu = 'themes';
     this.scrollOptions = new SlimScrollOptions({
@@ -40,6 +42,7 @@ export class WindowSidebarComponent implements OnInit {
 
   setFont(font: string) { this.config.setFont(font); }
   setShell(shell: IShellDef) { this.config.setShell(shell); }
+  setUrlKey(key: IUrlKeys) { this.config.setUrlKey(key); }
 
   previewTheme(theme: string): void {
     let styles = { style: themes[theme] };

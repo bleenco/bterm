@@ -587,4 +587,16 @@ it('should copy and paste the text', () => {
     .then(() => expect(textOut.endsWith(text)).to.be.true)
   });
 
+  it('should copy a link on click', () => {
+    let testString: string = 'http://bleenco.com/';
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.keys(testString + '\r\n'))
+      .then(() => wait(2000))
+      .then(() => this.app.client.pause(2000))
+      .then(() => this.app.client.click('.terminal-instance a'))
+      .then(() => wait(1000))
+      .then(() => console.log(this.app.electron.clipboard.getText()))
+      .then(() => expect(this.app.electron.clipboard.getText()).to.contain(testString));
+  });
+
 });

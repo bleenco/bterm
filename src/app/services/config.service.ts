@@ -3,6 +3,7 @@ import { Terminal } from './xterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
 import { CssBuilder } from '../../utils';
+import { IUrlKeys } from './system.service';
 
 export interface IShellDef {
   shell: string;
@@ -88,6 +89,8 @@ export class ConfigService {
       this.css.add(`.xterm-color-${index + 1}`, `color: ${color};`);
     });
 
+    if (!this.config.settings.urlKey) { this.config.settings['urlKey'] = 'shift'; }
+
     this.css.add('html', 'background: ${this.config.style.background} !important;');
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
     this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font_size}px !important;`);
@@ -138,20 +141,26 @@ export class ConfigService {
     this.decorateTerminals();
   }
 
-  setFont(font: string) {
-    if (this.config && this.config.settings) {
-      this.config.settings['font'] = font;
-    }
-
+  updateConfig() {
     this.writeConfig();
     this.setConfig();
   }
 
+  setFont(font: string) {
+    if (this.config && this.config.settings) {
+      this.config.settings['font'] = { family: font, size: this.config.settings.font.size || '13' };
+    }
+    this.updateConfig();
+  }
+
   setShell(shell: IShellDef) {
     if (this.config && this.config.settings) { this.config.settings['shell'] = shell; }
+    this.updateConfig();
+  }
 
-    this.writeConfig();
-    this.setConfig();
+  setUrlKey(urlkey: IUrlKeys) {
+    if (this.config && this.config.settings) { this.config.settings['urlKey'] = urlkey.key; }
+    this.updateConfig();
   }
 
   setSidebarConfig(): void {
@@ -206,7 +215,7 @@ export class ConfigService {
   }
 
   readConfig(): void {
-    this.config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
+    this.config = Object.assign({}, this.getDefaultConfig(), JSON.parse(fs.readFileSync(this.configPath, 'utf8')));
   }
 
   getDefaultConfig(): any {
@@ -222,7 +231,8 @@ export class ConfigService {
         'clipboard_notice': false,
         'theme_name': 'AtelierSulphurpool',
         'scrollBufferSave': false,
-        'shells': [ 'bash', 'zsh', 'sh', 'powershell', 'cmd', 'login', 'tcsh', 'csh', 'ash' ]
+        'shells': [ 'bash', 'zsh', 'sh', 'powershell', 'cmd', 'login', 'tcsh', 'csh', 'ash' ],
+        'urlKey': 'shift'
       },
       'style': {
         'background': '#090300',
