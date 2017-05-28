@@ -16,6 +16,7 @@ preinstall:
   - ln -s ~/.yarn/bin/yarn /usr/local/bin
   - yarn config set spin false
   - yarn config set progress false
+  - apt-get -y install libfontconfig-dev
 
 install:
   - yarn
