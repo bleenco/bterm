@@ -2,6 +2,7 @@ import { Injectable, Provider } from '@angular/core';
 import { Terminal } from './xterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
+import { join } from 'path';
 import { CssBuilder } from '../../utils';
 import { IUrlKeys } from './system.service';
 
@@ -34,6 +35,7 @@ export class ConfigService {
       this.recovery();
     }
 
+    this.writePS1();
     this.readConfig();
     this.updateShell();
     this.setWatcher();
@@ -290,6 +292,32 @@ export class ConfigService {
 
   writeConfig(): void {
     fs.writeFileSync(this.configPath, JSON.stringify(this.config, null, 2), 'utf8');
+  }
+
+  writePS1(): void {
+    const bashrcPath = join(os.homedir(), '.bashrc');
+    const contents = fs.readFileSync(bashrcPath).toString();
+    let found: boolean;
+
+    let splitted = contents.split('\n');
+    splitted = splitted.map(line => {
+      if (line.includes('PS1=') && !line.includes('\\[\\033]0;\\w\\007\\]')) {
+        found = true;
+        line = line.replace(/PS1=['"](.*)['"]/g, 'PS1="\\[\\033]0;\\w\\007\\]$1"');
+      }
+
+      if (line.includes('\\[\\033]0;\\w\\007\\]')) {
+        found = true;
+      }
+
+      return line;
+    });
+
+    if (!found) {
+      splitted.push('PS1="\\[\\033]0;\\w\\007\\]> "');
+    }
+
+    fs.writeFileSync(bashrcPath, splitted.join('\n'), 'utf8');
   }
 }
 
