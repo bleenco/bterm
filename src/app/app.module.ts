@@ -15,7 +15,6 @@ import { WindowBottomComponent } from './components/window-bottom';
 import { WindowSidebarComponent } from './components/window-sidebar';
 import { WindowNotificationComponent } from './components/window-notification';
 import { SystemServiceProvider } from './services/system.service';
-import { DropdownComponent } from './components/dropdown';
 
 @NgModule({
   declarations: [
@@ -24,8 +23,7 @@ import { DropdownComponent } from './components/dropdown';
     WindowTerminalComponent,
     WindowBottomComponent,
     WindowSidebarComponent,
-    WindowNotificationComponent,
-    DropdownComponent
+    WindowNotificationComponent
   ],
   imports: [
     BrowserModule,
