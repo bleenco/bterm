@@ -865,7 +865,7 @@ export let themes = {
   },
   'Dracula': {
     'background': '#2D303E',
-    'color': '#f8f8f2',
+    'color': '#FFFFFF',
     'cursor': '#bbbbbb',
     'top_bar_background': '#2D303E',
     'top_bar_tab_color': '#4C4B4B',

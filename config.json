@@ -26,6 +26,7 @@
     "electron-window-state-manager": "^0.3.2",
     "node-pty": "^0.6.3",
     "semver": "^5.3.0",
-    "node-notifier": "^5.1.2"
+    "node-notifier": "^5.1.2",
+    "font-manager": "^0.2.2"
   }
 }
