@@ -91,7 +91,9 @@ export class ConfigService {
     this.css.add('html', 'background: ${this.config.style.background} !important;');
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
     this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font_size}px !important;`);
-    this.css.add('.xterm-rows', `color: ${this.config.style.color} !important; font-family: ${this.config.settings.font} !important;`);
+    this.css.add('.xterm-rows',
+      `color: ${this.config.style.color}; font-family: ${this.config.settings.font.family}; font-size: ${this.config.settings.font.size}`
+    );
     this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
     this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
@@ -104,14 +106,14 @@ export class ConfigService {
 
     terminal.style.padding = this.config.settings.windowPadding;
 
-    doc.style.fontFamily = this.config.settings.font;
-    doc.style.fontSize = this.config.settings.font_size + 'px';
+    doc.style.fontFamily = this.config.settings.font.family;
+    doc.style.fontSize = this.config.settings.font.size + 'px';
     terminal.style.background = this.config.style.background;
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;
 
-    topBar.style.font = this.config.style.font;
+    topBar.style.font =  this.config.settings.font.family;
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
       title.style.color = this.config.style.color;
     });
@@ -210,8 +212,10 @@ export class ConfigService {
   getDefaultConfig(): any {
     let defaultConfig = {
       'settings': {
-        'font': 'monaco, Menlo, \'DejaVu Sans Mono\', \'Lucida Console\', monospace',
-        'font_size': '13',
+        'font': {
+          'family': 'monaco, Menlo, \'DejaVu Sans Mono\', \'Lucida Console\', monospace',
+          'size': '13'
+        },
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
         'windowPadding': '20px 35px 10px 35px',

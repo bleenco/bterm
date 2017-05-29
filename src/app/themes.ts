@@ -874,7 +874,7 @@ export let themes = {
     'colors': [
       '#000000',
       '#ff5555',
-      '#50fa7b',
+      '#5AFB86',
       '#f1fa8c',
       '#bd93f9',
       '#ff79c6',
@@ -882,7 +882,7 @@ export let themes = {
       '#bbbbbb',
       '#555555',
       '#ff5555',
-      '#50fa7b',
+      '#5AFB86',
       '#f1fa8c',
       '#bd93f9',
       '#ff79c6',
