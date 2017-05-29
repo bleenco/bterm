@@ -135,7 +135,7 @@ export class XtermService {
         terminal.title = splitted[0].trim();
         terminal.dir = splitted[1].trim();
       } catch (e) {
-        terminal.title = title || 'Shell';
+        terminal.dir = title || 'Shell';
       }
 
       let index = this.terminals.findIndex(t => t.term === terminal.term);
