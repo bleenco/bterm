@@ -28,8 +28,7 @@ export class PTYService {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
-        cwd: process.cwd() || os.homedir(),
-        env: process.env
+        cwd: process.cwd() || os.homedir()
       }),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
