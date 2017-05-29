@@ -56,4 +56,12 @@ export class WindowSidebarComponent implements OnInit {
     this.opened = false;
     this.config.setSidebarConfig();
   }
+
+  setMenu(e: MouseEvent, menu: string): void {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.menu = menu;
+    this.config.setSidebarConfig();
+  }
 }
