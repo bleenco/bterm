@@ -2,6 +2,7 @@ const Application = require('spectron').Application;
 const { resolve } = require('path');
 import { expect } from 'chai';
 import { wait } from './helpers';
+import { homedir } from 'os';
 
 let getElectronPath = () => {
   let electronPath = resolve(__dirname, '../../node_modules/.bin/electron');
@@ -599,4 +600,22 @@ it('should copy and paste the text', () => {
       .then(res => expect(res).to.contain(testString))
   });
 
+  // TODO: uncomment following two tests when `bash` will be default shell
+  xit('should show current directory', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.current-folder-text'))
+      .then(result => expect(result.replace(/~/, homedir())).to.equal(process.cwd()));
+  });
+
+  xit('should update current directory', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => wait(1000))
+      .then(() => this.app.client.keys('cd ..\r\n'))
+      .then(() => wait(1000))
+      .then(() => process.chdir('..'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.current-folder-text'))
+      .then(result => expect(result.replace(/~/, homedir())).to.equal(process.cwd()));
+  });
 });
