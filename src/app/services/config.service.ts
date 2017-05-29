@@ -159,7 +159,7 @@ export class ConfigService {
 
       [].forEach.call(sidebar.querySelectorAll('.menu-open path'), dot => dot.style.fill = this.config.style.color);
       let closeIcon = sidebar.querySelector('.close-icon > svg > path') as SVGPathElement;
-      let sideBarHeading = sidebar.querySelector('.sidebar-container > h1') as HTMLElement;
+      let sideBarHeading = sidebar.querySelector('.sidebar h1') as HTMLElement;
 
       if (closeIcon) {
         closeIcon.style.fill = this.config.style.color;
