@@ -864,13 +864,13 @@ export let themes = {
     ]
   },
   'Dracula': {
-    'background': '#1e1f29',
+    'background': '#2D303E',
     'color': '#f8f8f2',
     'cursor': '#bbbbbb',
-    'top_bar_background': '#1e1f29',
+    'top_bar_background': '#2D303E',
     'top_bar_tab_color': '#4C4B4B',
     'top_bar_tab_active_color': '#a5a2a2',
-    'bottom_bar_background': '#1e1f29',
+    'bottom_bar_background': '#2D303E',
     'colors': [
       '#000000',
       '#ff5555',
