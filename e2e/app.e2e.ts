@@ -592,11 +592,11 @@ it('should copy and paste the text', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.keys(testString + '\r\n'))
       .then(() => wait(2000))
-      .then(() => this.app.client.pause(2000))
+      .then(() => this.app.client.pause(3000))
       .then(() => this.app.client.click('.terminal-instance a'))
-      .then(() => wait(1000))
-      .then(() => console.log(this.app.electron.clipboard.getText()))
-      .then(() => expect(this.app.electron.clipboard.getText()).to.contain(testString));
+      .then(() => this.app.client.pause(1000))
+      .then(() => this.app.electron.clipboard.readText())
+      .then(res => expect(res).to.contain(testString))
   });
 
 });
