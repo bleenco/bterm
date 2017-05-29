@@ -50,6 +50,6 @@ module.exports = {
     'system': '{}',
     'file': '{}',
     'node-pty': 'require("node-pty")',
-    "font-manager": '"font-manager"'
+    "font-manager": 'require("font-manager")'
   }
 };

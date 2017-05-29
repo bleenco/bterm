@@ -16,8 +16,7 @@
     "events": "events",
     "net": "net",
     "https": "https",
-    "shelljs": "shelljs",
-    "font-manager": "font-manager"
+    "shelljs": "shelljs"
   },
   "styles": [
     "css/app.css"
