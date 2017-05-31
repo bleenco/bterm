@@ -128,6 +128,8 @@ function handleWindowsOnClose() {
   windows = windows.filter(w => w.id !== current.id);
   current.close();
   current = windows[windows.length - 1] || null;
+
+  if (!windows.length) { setTimeout(() => process.exit(0), 5000); }
 }
 
 function registerShortcuts(win: Electron.BrowserWindow): void {
