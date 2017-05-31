@@ -40,7 +40,7 @@ export class WindowSidebarComponent implements OnInit {
     this._system.getShells().then(s => this.availableShells = s);
   }
 
-  setFont(font: string) { this.config.setFont(font); }
+  setFont(font: IFonts) { this.config.setFont(font); }
   setShell(shell: IShellDef) { this.config.setShell(shell); }
   setUrlKey(key: IUrlKeys) { this.config.setUrlKey(key); }
 

@@ -22,7 +22,8 @@ function createWindow(): Electron.BrowserWindow {
     x: getPosition('width'),
     y: getPosition('height'),
     frame: false,
-    show: false
+    show: false,
+    backgroundColor: '#000000'
   });
 
   win.setMenu(null);

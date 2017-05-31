@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as fs from 'fs';
 import { join } from 'path';
 import { CssBuilder } from '../../utils';
-import { IUrlKeys } from './system.service';
+import { IUrlKeys, IFonts } from './system.service';
 
 export interface IShellDef {
   shell: string;
@@ -93,11 +93,12 @@ export class ConfigService {
 
     if (!this.config.settings.urlKey) { this.config.settings['urlKey'] = 'shift'; }
 
-    this.css.add('html', 'background: ${this.config.style.background} !important;');
+    this.css.add('html', `background: ${this.config.style.background} !important;`);
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
-    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font_size}px !important;`);
+    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
     this.css.add('.xterm-rows',
-      `color: ${this.config.style.color}; font-family: ${this.config.settings.font.family}; font-size: ${this.config.settings.font.size}`
+      `color: ${this.config.style.color}; font-family: "${this.config.settings.font.family}";`
+      + `font-size: ${this.config.settings.font.size}px`
     );
     this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
@@ -148,9 +149,9 @@ export class ConfigService {
     this.setConfig();
   }
 
-  setFont(font: string) {
+  setFont(font: IFonts) {
     if (this.config && this.config.settings) {
-      this.config.settings['font'] = { family: font, size: this.config.settings.font.size || '13' };
+      this.config.settings['font'] = { family: font.family, size: this.config.settings.font.size || '13' };
     }
     this.updateConfig();
   }
