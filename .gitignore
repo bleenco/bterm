@@ -7,3 +7,5 @@ lib/
 src/ngfactory
 .vscode
 e2e/out/
+.idea
+
