@@ -61,10 +61,6 @@ export class WindowTopComponent implements OnInit {
 
   ngOnInit() {
     this.xterm.titleEvents.subscribe(data => {
-      if (data.title === ':') {
-        return;
-      }
-
       if (typeof this.tabs[data.index] !== 'undefined') {
         this.tabs[data.index].title = this.parseTitle(data.title);
       }
@@ -75,6 +71,12 @@ export class WindowTopComponent implements OnInit {
 
   switchTab(e: MouseEvent, index: number): void {
     e.preventDefault();
+    e.stopPropagation();
+
+    if (this.xterm.currentIndex === index) {
+      return;
+    }
+
     this.xterm.switchTab(index);
     this.tabs.forEach((tab: Tab) => tab.active = false);
     this.tabs[index].active = true;
@@ -82,13 +84,7 @@ export class WindowTopComponent implements OnInit {
   }
 
   parseTitle(title: string): string {
-    if (title.indexOf(':') !== -1 && title.indexOf('~') !== -1) {
-      return title.split(':').slice(0, -1).join(':').trim();
-    } else if (title === '') {
-      return 'Shell';
-    } else {
-      return title;
-    }
+    return title.trim();
   }
 
   close(): void {
