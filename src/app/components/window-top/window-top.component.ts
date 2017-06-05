@@ -71,7 +71,6 @@ export class WindowTopComponent implements OnInit {
 
   switchTab(e: MouseEvent, index: number): void {
     e.preventDefault();
-    e.stopPropagation();
 
     if (this.xterm.currentIndex === index) {
       return;
@@ -84,7 +83,8 @@ export class WindowTopComponent implements OnInit {
   }
 
   parseTitle(title: string): string {
-    return title.trim();
+    let parsedTitle: string =  title.trim();
+    return parsedTitle.length ? 'Shell' : parsedTitle;
   }
 
   close(): void {
