@@ -49,16 +49,22 @@ export class WindowBottomComponent implements OnInit {
 
       this.zone.run(() => {
         if (this.xterm.terminals[event.index] && event.index === this.xterm.currentIndex) {
-          this.currentProcess = this.xterm.terminals[event.index].title;
+          let dir;
+          if (this.xterm.terminals[event.index].title.indexOf(':') !== -1) {
+            dir = this.xterm.terminals[event.index].title.split(':')[1].trim();
+          } else if (this.xterm.terminals[event.index].title.indexOf('~') !== -1) {
+            dir = this.xterm.terminals[event.index].title.trim();
+          }
 
-          let dir = this.xterm.terminals[event.index].dir;
-          dir = dir.replace(/~/, homedir());
-          if (existsSync(dir)) {
-            process.chdir(dir);
-            this.currentDir = this.xterm.terminals[event.index].dir;
-            this._git.dir = this.currentDir;
-            this._git.branch.then(res => this.currentBranch = res);
-            this._git.status.then(res => this.currentStatus = res);
+          if (dir) {
+            dir = dir.replace(/~/, homedir());
+            if (existsSync(dir)) {
+              process.chdir(dir);
+              this.currentDir = dir;
+              this._git.dir = this.currentDir;
+              this._git.branch.then(res => this.currentBranch = res);
+              this._git.status.then(res => this.currentStatus = res);
+            }
           }
         }
       });

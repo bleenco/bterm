@@ -129,17 +129,12 @@ export class XtermService {
 
     terminal.term.on('title', (title: string) => {
       title = title.trim();
-
-      try {
-        let splitted = title.split(':');
-        terminal.title = splitted[0].trim();
-        terminal.dir = splitted[1].trim();
-      } catch (e) {
-        terminal.dir = title || 'Shell';
-      }
-
       let index = this.terminals.findIndex(t => t.term === terminal.term);
-      this.titleEvents.emit({ index: index, title: title });
+
+      if (!title.startsWith('..')) {
+        this.terminals[index].title = title;
+        this.titleEvents.emit({ index: index, title: title });
+      }
     });
 
     this.focusCurrent();
@@ -161,8 +156,7 @@ export class XtermService {
     this.outputEvents.emit({ action: 'switch', data: index });
     this.currentIndex = index;
     this.focusCurrent();
-    this.titleEvents.emit({ index: this.currentIndex,
-      title: this.terminals[this.currentIndex].title + ':' + this.terminals[this.currentIndex].dir });
+    this.titleEvents.emit({ index: this.currentIndex, title: this.terminals[this.currentIndex].title });
   }
 
   switchPrev(): void {
