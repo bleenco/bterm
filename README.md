@@ -9,7 +9,7 @@ Fully customisable cross-platform terminal.
 Runs everywhere. MacOS, Linux or Windows.
 
 ## Download
-To download wisit
+To download visit
 [http://bterm.bleenco.io](http://bterm.bleenco.io) click the right installer depending on
 operating system you use.
 
