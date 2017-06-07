@@ -36,6 +36,19 @@ describe('bterm launch', function() {
     }
   });
 
+
+  it('should type the uri in terminal on will-navigate', () => {
+    let testString: string = 'random test data xxss34';
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.browserWindow.webContens.send('navigate', testString))
+      .then(() => wait(2000))
+      .then(() => this.app.client.getText('.terminal-instance .active > .xterm-rows div'))
+      .then(text => { 
+        console.log('text-data', text);
+        return expect(text).to.contain(testString);
+      });
+  });
+
   it('should show an initial window', () => {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.getWindowCount())
@@ -548,6 +561,20 @@ describe('bterm launch', function() {
           .then(result => expect(result).to.be.false);
       });
     }
+
+  it('should display the current branch', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.pause(1000))
+      .then(() => this.app.client.getText('.current-branch-text'))
+      .then(text => expect(text.length).to.be.above(2));
+  });
+
+  it('should display the current branch status', () => {
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.pause(1600))
+      .then(() => this.app.client.getText('.current-branch-text'))
+      .then(text =>  expect(text).to.match(/ [\*\?\u2713]{1}$/));
+  });
 
   it('should type the uri in terminal on will-navigate', () => {
     let testString: string = '/path/to/blah/random.bleenco.test';
