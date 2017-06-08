@@ -3,6 +3,8 @@ import { ConfigService, IShellDef } from '../../services/config.service';
 import { SlimScrollOptions } from 'ngx-slimscroll';
 import { themes } from '../../themes';
 import { IFonts, IUrlKeys, SystemService } from '../../services/system.service';
+const electron = require('electron');
+const dialog = electron.remote.dialog;
 
 @Component({
   selector: 'window-sidebar',
@@ -54,6 +56,13 @@ export class WindowSidebarComponent implements OnInit {
   setFont(font: IFonts) { this.config.setFont(font); }
   setShell(shell: IShellDef) { this.config.setShell(shell); }
   setUrlKey(key: IUrlKeys) { this.config.setUrlKey(key); }
+
+  selectShell() {
+    dialog.showOpenDialog(electron.remote.getCurrentWindow(), (fn: string[]) => {
+      if (!fn || !fn.length) { return; }
+      this.setShell({ args: [], shell: fn[0] });
+    });
+  }
 
   previewTheme(theme: string): void {
     let styles = { style: themes[theme] };
