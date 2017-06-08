@@ -84,7 +84,7 @@ export class WindowTopComponent implements OnInit {
 
   parseTitle(title: string): string {
     let parsedTitle: string =  title.trim();
-    return parsedTitle.length ? 'Shell' : parsedTitle;
+    return parsedTitle.length ? parsedTitle : 'Shell';
   }
 
   close(): void {
