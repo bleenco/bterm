@@ -5,6 +5,7 @@ import { platform } from 'os';
 import { GITService, TGitStatus } from '../../services/git.service';
 import { existsSync } from 'fs';
 import { homedir } from 'os';
+let { remote } = require('electron');
 
 export class ISearchForm {
   query: string
@@ -70,6 +71,8 @@ export class WindowBottomComponent implements OnInit {
       });
     });
   }
+
+  showDir() { remote.shell.showItemInFolder(this.currentDir); }
 
   queryChanged() {
     if (this.searchForm.query.length > 2) {
