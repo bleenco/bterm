@@ -13,7 +13,8 @@
     "rootDir": ".",
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "skipLibCheck": true
   },
   "files": [
     "src/app/specs.js"

@@ -126,7 +126,7 @@ export class WindowTopComponent implements OnInit {
   tabMaximize(): void { ipcRenderer.send('tabMaximize'); }
 
   handleDrag() {
-    let win: Electron.BrowserWindow = electron.remote.getCurrentWindow();
+    let win: any = electron.remote.getCurrentWindow();
     let winSize: number[] = [];
     let startWinPos: number[] = electron.remote.getCurrentWindow().getPosition();
     let startPos: any;

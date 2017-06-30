@@ -29,7 +29,7 @@ export class GITService {
   }
 
   get status(): Promise<TGitStatus> {
-    if (!this.cwd) { return Promise.resolve('?'); }
+    if (!this.cwd) { return Promise.resolve('?' as TGitStatus); }
     return this.git.from(this.cwd).getStatus().then(status => !status.code ? this.parseStatus(status.value) : '?');
   }
 

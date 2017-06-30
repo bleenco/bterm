@@ -13,7 +13,7 @@ import { writeFile } from 'fs';
 })
 export class WindowTerminalComponent implements OnInit {
   @HostBinding('class') class = 'window-terminal';
-  ctxMenu: Electron.Menu;
+  ctxMenu: any;
   ctrlKey: boolean;
   selectionTimeout: any;
 

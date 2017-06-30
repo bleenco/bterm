@@ -26,7 +26,7 @@ export function getExtraMargin(osPlatform, winInLine, positionOnLine, isHeight):
 }
 
 export interface WindowPosition {
-    screenSize: Electron.Size;
+    screenSize: any;
     widthLines: number;
     heightLines: number;
     width: number;
