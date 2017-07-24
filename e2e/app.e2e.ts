@@ -15,7 +15,7 @@ let getElectronPath = () => {
 let startApplication = () => {
   return new Application({
       path: getElectronPath(),
-      args: [resolve(__dirname, '../../dist')],
+      args: [resolve(__dirname, '../../build')],
       env: { SPECTRON: true }
     }).start();
 }
@@ -180,15 +180,15 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.click('.menu-open'))
       .then(() => wait(1000))
-      .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(1)'))
       .then(() => wait(1000))
-      .then(() => this.app.client.getText('.theme-browser > span:nth-child(2)'))
+      .then(() => this.app.client.getText('.theme-browser > span:nth-child(1)'))
       .then(result => theme = result)
       .then(() => this.app.client.getText('.sidebar-container h1'))
       .then(result => expect(result).to.equal(`Theme Browser (${theme})`))
-      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(9)'))
       .then(() => wait(1000))
-      .then(() => this.app.client.getText('.theme-browser > span:nth-child(3)'))
+      .then(() => this.app.client.getText('.theme-browser > span:nth-child(9)'))
       .then(result => theme = result)
       .then(() => this.app.client.getText('.sidebar-container h1'))
       .then(result => expect(result).to.equal(`Theme Browser (${theme})`));
@@ -199,14 +199,14 @@ describe('bterm launch', function() {
     return this.app.client.waitUntilWindowLoaded()
       .then(() => this.app.client.click('.menu-open'))
       .then(() => wait(2000))
-      .then(() => this.app.client.click('.theme-browser > span:nth-child(2)'))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(1)'))
       .then(() => wait(2000))
-      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
+      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(1)', 'style'))
       .then((style) => styleProp = style)
       .then(() => wait(2000))
-      .then(() => this.app.client.click('.theme-browser > span:nth-child(3)'))
+      .then(() => this.app.client.click('.theme-browser > span:nth-child(9)'))
       .then(() => wait(3000))
-      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(2)', 'style'))
+      .then(() => this.app.client.getAttribute('.theme-browser > span:nth-child(9)', 'style'))
       .then((style) => expect(style).to.not.equal(styleProp))
   });
 
@@ -377,23 +377,6 @@ describe('bterm launch', function() {
   });
 
   if (process.platform === 'win32') {
-    it('should start with clear terminal', () => {
-      let activeTab = null;
-      return this.app.client.waitUntilWindowLoaded()
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(4)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(5)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(6)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
-    });
-
     it('should clear the terminal', () => {
       let activeTab = null;
       return this.app.client.waitUntilWindowLoaded()
@@ -424,17 +407,6 @@ describe('bterm launch', function() {
     });
   }
   if (process.platform === 'darwin') {
-    it('should start with clear terminal', () => {
-      let activeTab = null;
-      return this.app.client.waitUntilWindowLoaded()
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(2)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
-        .then(() => this.app.client.getText('.xterm-rows div:nth-child(3)'))
-        .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
-    });
-
     it('should clear the terminal', () => {
       let activeTab = null;
       return this.app.client.waitUntilWindowLoaded()
@@ -598,24 +570,5 @@ it('should copy and paste the text', () => {
       .then(() => this.app.client.pause(1000))
       .then(() => this.app.electron.clipboard.readText())
       .then(res => expect(res).to.contain(testString))
-  });
-
-  // TODO: uncomment following two tests when `bash` will be default shell
-  xit('should show current directory', () => {
-    return this.app.client.waitUntilWindowLoaded()
-      .then(() => wait(1000))
-      .then(() => this.app.client.getText('.current-folder-text'))
-      .then(result => expect(result.replace(/~/, homedir())).to.equal(process.cwd()));
-  });
-
-  xit('should update current directory', () => {
-    return this.app.client.waitUntilWindowLoaded()
-      .then(() => wait(1000))
-      .then(() => this.app.client.keys('cd ..\r\n'))
-      .then(() => wait(1000))
-      .then(() => process.chdir('..'))
-      .then(() => wait(1000))
-      .then(() => this.app.client.getText('.current-folder-text'))
-      .then(result => expect(result.replace(/~/, homedir())).to.equal(process.cwd()));
   });
 });
