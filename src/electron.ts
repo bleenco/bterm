@@ -5,6 +5,14 @@ import menu from './app/menu';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 import { getExtraMargin, WindowPosition } from './utils';
 import { platform } from 'os';
+import { join } from 'path';
+
+if (process.argv.slice(1).some(val => val === '--serve')) {
+  require('electron-reload')(__dirname, {
+    electron: join(__dirname, '..', 'node_modules', '.bin', 'electron'),
+    hardResetMethod: 'exit'
+  });
+}
 
 let current = null;
 let windows = [];
