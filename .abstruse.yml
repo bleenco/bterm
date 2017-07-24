@@ -12,7 +12,7 @@ matrix:
 preinstall:
   - npm config set spin false
   - npm config set progress false
-  - apt-get -y install libfontconfig-dev
+  - sudo apt-get -y install libfontconfig-dev
 
 install:
   - npm install
