@@ -1,12 +1,12 @@
-let electron = require('electron');
-let { app, BrowserWindow, globalShortcut, ipcMain } = electron;
+const electron = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = electron;
 const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 import { getExtraMargin, WindowPosition } from './utils';
 import { platform } from 'os';
 
-let current: Electron.BrowserWindow = null;
+let current = null;
 let windows = [];
 let positionData: WindowPosition = null;
 
@@ -15,8 +15,8 @@ const mainWindowState = new WindowStateManager('mainWindow', {
   defaultHeight: 460
 });
 
-function createWindow(): Electron.BrowserWindow {
-  let win: Electron.BrowserWindow = new BrowserWindow({
+function createWindow(): any {
+  let win: any = new BrowserWindow({
     width: mainWindowState.width,
     height: mainWindowState.height,
     x: getPosition('width'),
@@ -73,25 +73,25 @@ app.on('ready', () => {
   });
 });
 
-app.on('browser-window-created', (e: Event, win: Electron.BrowserWindow) => {
+app.on('browser-window-created', (e: Event, win: any) => {
   handleWindowsOnStart(win);
   registerShortcuts(current);
 
   current.on('blur', () => unregisterShortcuts());
   current.on('focus', () => registerShortcuts(current));
   current.on('move', () => current.webContents.send('focusCurrent', true));
-  current.webContents.on('will-navigate', (ev: Electron.Event, url: string) => {
+  current.webContents.on('will-navigate', (ev: any, url: string) => {
     ev.preventDefault();
     current.webContents.send('navigate', url);
   });
 
-  current.webContents.on('new-window', (ev: Electron.Event, url: string) => {
+  current.webContents.on('new-window', (ev: any, url: string) => {
     ev.preventDefault();
     current.webContents.send('url-clicked', url);
   });
 });
 
-app.on('browser-window-focus', (e: Event, win: Electron.BrowserWindow) => {
+app.on('browser-window-focus', (e: Event, win: any) => {
   handleWindowsOnStart(win);
 });
 
@@ -116,7 +116,7 @@ function getPosition(attr: string) {
   return position;
 }
 
-function handleWindowsOnStart(win: Electron.BrowserWindow) {
+function handleWindowsOnStart(win: any) {
   current = win;
   if (!windows.filter(w => w.id === win.id).length) {
     windows.push(win);
@@ -133,7 +133,7 @@ function handleWindowsOnClose() {
   if (!windows.length) { setTimeout(() => process.exit(0), 5000); }
 }
 
-function registerShortcuts(win: Electron.BrowserWindow): void {
+function registerShortcuts(win: any): void {
   let keypressFunctions = {
     send: (key, value) => win.webContents.send(key, value),
     toggleDevTools: () => win.webContents.toggleDevTools(),

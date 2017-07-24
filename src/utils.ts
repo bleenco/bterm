@@ -1,5 +1,7 @@
 import * as https from 'https';
 
+declare var Promise: any;
+
 export function checkNewVersion(options: string): Promise<string> {
   return new Promise((resolve, reject) => {
     https.get(options, (resp) => {

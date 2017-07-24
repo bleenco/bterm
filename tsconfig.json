@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "es6"],
+    "lib": ["dom", "es2016"],
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -9,22 +9,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "outDir": "./lib",
+    "outDir": "./build",
     "rootDir": ".",
     "typeRoots": [
       "node_modules/@types"
     ],
     "skipLibCheck": true
   },
-  "files": [
-    "src/app/app.module.ts",
-    "src/main.aot.ts"
-  ],
-  "exclude": [
-    "src/main.ts"
-  ],
-  "angularCompilerOptions": {
-    "genDir": "./src/ngfactory",
-    "entryModule": "./src/app/app.module#AppModule"
-  }
+  "compileOnSave": false
 }
