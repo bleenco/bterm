@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "build",
+    "node_modules",
+    "electron.ts"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "silent": true
+  }
+}
