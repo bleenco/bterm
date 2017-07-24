@@ -4,7 +4,6 @@
   "description": "bterm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
-    "postinstall": "electron-rebuild",
     "clean": "rimraf dist build",
     "prestart": "npm run clean",
     "start": "webpack --display-error-details --progress --watch",
