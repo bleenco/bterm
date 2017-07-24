@@ -225,14 +225,14 @@ export class ConfigService {
     let defaultConfig = {
       'settings': {
         'font': {
-          'family': 'monaco, Menlo, \'DejaVu Sans Mono\', \'Lucida Console\', monospace',
+          'family': 'Monaco',
           'size': '13'
         },
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
-        'windowPadding': '20px 35px 10px 35px',
+        'windowPadding': '10px 15px',
         'clipboard_notice': false,
-        'theme_name': 'AtelierSulphurpool',
+        'theme_name': 'Atom',
         'scrollBufferSave': false,
         'shells': [ 'bash', 'zsh', 'sh', 'powershell', 'cmd', 'login', 'tcsh', 'csh', 'ash' ],
         'urlKey': 'shift'
