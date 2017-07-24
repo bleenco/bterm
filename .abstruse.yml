@@ -4,29 +4,25 @@ git:
   depth: 3
 
 matrix:
-  - node_js: "7"
+  - node_js: "8"
     env: SCRIPT=lint
-  - node_js: "7"
-    env: SCRIPT=test:e2e
-  - node_js: "6"
+  - node_js: "8"
     env: SCRIPT=test:e2e
 
 preinstall:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - ln -s ~/.yarn/bin/yarn /usr/local/bin
-  - yarn config set spin false
-  - yarn config set progress false
+  - npm config set spin false
+  - npm config set progress false
   - apt-get -y install libfontconfig-dev
 
 install:
-  - yarn
+  - npm install
 
 postinstall:
   - /etc/init.d/xvfb start
   - sleep 3
   - export DISPLAY=:99
   - fluxbox &
-  - yarn build
+  - npm run build:prod
 
 test:
   - if [[ "$SCRIPT" ]]; then npm run-script $SCRIPT; fi
