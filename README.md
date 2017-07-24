@@ -89,13 +89,14 @@ settings + click. for example <code>ctrl + click </code>.
 ```sh
 git clone https://github.com/bleenco/bterm.git
 npm install
-npm start
+npm start # wait for build to finish
+npm run electron
 ```
 
 ### To make a production build run
 
 ```sh
-npm run dist
+npm run build:prod
 ```
 
 ### Preview

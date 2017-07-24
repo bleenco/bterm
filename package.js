@@ -73,7 +73,7 @@ pack(platform, arch, (err, appPath) => {
 function pack(plat, arch, cb) {
   if (plat === 'darwin' && arch === 'ia32') return;
 
-  let icon = 'src/favicon';
+  let icon = 'assets/icon';
 
   if (icon) {
     DEFAULT_OPTS.icon = icon + (() => {

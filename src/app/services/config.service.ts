@@ -230,7 +230,7 @@ export class ConfigService {
         },
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
-        'windowPadding': '10px 15px',
+        'windowPadding': '10px 15px 5px 15px',
         'clipboard_notice': false,
         'theme_name': 'Atom',
         'scrollBufferSave': false,
@@ -239,11 +239,11 @@ export class ConfigService {
       },
       'style': {
         'background': '#090300',
-        'color': '#a5a2a2',
+        'color': '#FFFFFF',
         'cursor': '#F6C859',
         'top_bar_background': '#090300',
-        'top_bar_tab_color': '#4C4B4B',
-        'top_bar_tab_active_color': '#a5a2a2',
+        'top_bar_tab_color': '#FFFFFF',
+        'top_bar_tab_active_color': '#FFFFFF',
         'bottom_bar_background': '#090300',
         'colors': [
           '#090300',
