@@ -406,6 +406,7 @@ describe('bterm launch', function() {
         .then((result) => expect(result.replace(/ /g, '')).to.equal(''))
     });
   }
+
   if (process.platform === 'darwin') {
     it('should clear the terminal', () => {
       let activeTab = null;
@@ -442,7 +443,7 @@ describe('bterm launch', function() {
     it('should clear the terminal', () => {
       let activeTab = null;
       return this.app.client.waitUntilWindowLoaded()
-        .then(() => this.app.client.browserWindow.send('clearTab', true))
+        .then(() => this.app.client.keys('clear \n'))
         .then(() => wait(3000))
         .then(() => this.app.client.getText('.xterm-rows div:nth-child(1)'))
         .then((result) => expect(result.replace(/ /g, '')).to.not.equal(''))
