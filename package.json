@@ -1,7 +1,7 @@
 {
   "name": "bterm",
   "version": "1.0.0",
-  "description": "bterm - Cross-Platform Terminal",
+  "description": "bterm - Cross-Platform Terminal ",
   "main": "electron.js",
   "scripts": {
     "clean": "rimraf dist build",
