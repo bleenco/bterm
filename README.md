@@ -8,6 +8,10 @@
 Fully customisable cross-platform terminal.
 Runs everywhere. MacOS, Linux or Windows.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/1796022/28711498-0a70122a-7388-11e7-8ae4-c43b5cbf517a.png">
+</p>
+
 ## Download
 To download visit
 [http://bterm.bleenco.io](http://bterm.bleenco.io) click the right installer depending on
@@ -25,23 +29,14 @@ But as mentioned **bterm** is completely customizable.
 3. On second tab you can select font that you prefer.
 4. On third select the hot key to open urls inside **bterm**
 
-When you selected  your  settings open .bterm.json file for further configuration.
+When you selected your settings open .bterm.json file for further configuration.
 
-### bterm settings preview
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/26737218/7c9bf714-47c9-11e7-8f9e-6a0217c1fb11.png">
-</p>
 
 On Linux or MacOS  the .bterm.json is located in `~/.bterm.json`.
 On Windows you can find it inside `C:\Users\user\.bterm.json`.
 
 Inside **.bterm.json**, you can easily change font size, font color and other colors using standard
 html color codes.
-
-## bterm window preview
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/26737214/7ad80b70-47c9-11e7-899e-aaeae266d77e.png">
-</p>
 
 As you can see from the picture above bterm is pretty straight forward termial at
 first sight. Top bar is reserved for tabs.
@@ -98,12 +93,6 @@ npm run electron
 ```sh
 npm run build:prod
 ```
-
-### Preview
-
-<p align="center">
-  <img src="https://cloud.githubusercontent.com/assets/1796022/24828975/69b690f4-1c69-11e7-9ba2-814a5742e86b.png">
-</p>
 
 ### LICENCE
 
