@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { ConfigService, IShellDef } from '../../services/config.service';
-import { SlimScrollOptions } from 'ng2-slimscroll';
+import { SlimScrollOptions } from 'ngx-slimscroll';
 import { themes } from '../../themes';
 import { IFonts, IUrlKeys, SystemService } from '../../services/system.service';
 
@@ -18,7 +18,12 @@ export class WindowSidebarComponent implements OnInit {
   availableShells: IShellDef[];
   availableUrlKeys: IUrlKeys[];
 
-  constructor(private config: ConfigService, private _system: SystemService) {
+  constructor(
+    private config: ConfigService,
+    private _system: SystemService,
+    private renderer: Renderer,
+    private elementRef: ElementRef
+  ) {
     this.availableFonts = [];
     this.availableShells = [];
     this.availableUrlKeys = this._system.getUrlKeys();
@@ -38,6 +43,12 @@ export class WindowSidebarComponent implements OnInit {
     this.selectedTheme = this.config.config.settings['theme_name'];
     this._system.getFonts().then(f => this.availableFonts = f);
     this._system.getShells().then(s => this.availableShells = s);
+
+    setTimeout(() => {
+      [].forEach.call(this.elementRef.nativeElement.querySelectorAll('.theme-browser'), el => {
+        this.renderer.setElementStyle(el, 'height', document.body.clientHeight - 130 + 'px');
+      });
+    })
   }
 
   setFont(font: IFonts) { this.config.setFont(font); }

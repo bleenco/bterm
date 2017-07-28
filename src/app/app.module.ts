@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SlimScrollModule } from 'ng2-slimscroll';
+import { NgSlimScrollModule } from 'ngx-slimscroll/src/ngx-slimscroll/module/ngx-slimscroll.module';
 import { XtermServiceProvider } from './services/xterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
@@ -29,7 +29,7 @@ import { SystemServiceProvider } from './services/system.service';
     BrowserModule,
     CommonModule,
     FormsModule,
-    SlimScrollModule
+    NgSlimScrollModule
   ],
   providers: [
     ConfigServiceProvider,
