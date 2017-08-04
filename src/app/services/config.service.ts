@@ -296,29 +296,33 @@ export class ConfigService {
   }
 
   writePS1(): void {
-    const bashrcPath = join(os.homedir(), '.bashrc');
-    const contents = fs.readFileSync(bashrcPath).toString();
-    let found: boolean;
+    try {
+      const bashrcPath = join(os.homedir(), '.bashrc');
+      const contents = fs.readFileSync(bashrcPath).toString();
+      let found: boolean;
 
-    let splitted = contents.split('\n');
-    splitted = splitted.map(line => {
-      if (line.includes('PS1=') && !line.includes('\\[\\033]0;\\w\\007\\]')) {
-        found = true;
-        line = line.replace(/PS1=['"](.*)['"]/g, 'PS1="\\[\\033]0;\\w\\007\\]$1"');
+      let splitted = contents.split('\n');
+      splitted = splitted.map(line => {
+        if (line.includes('PS1=') && !line.includes('\\[\\033]0;\\w\\007\\]')) {
+          found = true;
+          line = line.replace(/PS1=['"](.*)['"]/g, 'PS1="\\[\\033]0;\\w\\007\\]$1"');
+        }
+
+        if (line.includes('\\[\\033]0;\\w\\007\\]')) {
+          found = true;
+        }
+
+        return line;
+      });
+
+      if (!found) {
+        splitted.push('PS1="\\[\\033]0;\\w\\007\\]> "');
       }
 
-      if (line.includes('\\[\\033]0;\\w\\007\\]')) {
-        found = true;
-      }
-
-      return line;
-    });
-
-    if (!found) {
-      splitted.push('PS1="\\[\\033]0;\\w\\007\\]> "');
+      fs.writeFileSync(bashrcPath, splitted.join('\n'), 'utf8');
+    } catch (e) {
+      console.log('.bashrc not found, ignoring...');
     }
-
-    fs.writeFileSync(bashrcPath, splitted.join('\n'), 'utf8');
   }
 }
 
