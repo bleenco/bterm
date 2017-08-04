@@ -564,11 +564,12 @@ it('should copy and paste the text', () => {
   it('should copy a link on click', () => {
     let testString: string = 'http://bleenco.com/';
     return this.app.client.waitUntilWindowLoaded()
+      .then(() => this.app.client.pause(2000))
       .then(() => this.app.client.keys(testString + '\r\n'))
       .then(() => wait(2000))
-      .then(() => this.app.client.pause(3000))
+      .then(() => this.app.client.pause(4000))
       .then(() => this.app.client.click('.terminal-instance a'))
-      .then(() => this.app.client.pause(1000))
+      .then(() => this.app.client.pause(4000))
       .then(() => this.app.electron.clipboard.readText())
       .then(res => expect(res).to.contain(testString))
   });
