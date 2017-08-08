@@ -52,7 +52,8 @@ module.exports = function (options, webpackOptions) {
       'node-pty': 'require("node-pty")',
       'font-manager': 'require("font-manager")',
       'child_process': 'require("child_process")',
-      'shelljs': 'require("shelljs")'
+      'shelljs': 'require("shelljs")',
+      'xterm': 'require("xterm")'
     }
   });
 
@@ -150,7 +151,7 @@ function getDevelopmentConfig() {
   return {
     module: {
       rules: [
-        { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader', exclude: [nodeModules] }
+        { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader', exclude: [ root('node_modules') ] }
       ]
     },
     plugins: [

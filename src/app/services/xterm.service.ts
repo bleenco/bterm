@@ -3,8 +3,8 @@ import { PTYService, Process } from './pty.service';
 import { ConfigService } from './config.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
-let XTerminal = require('xterm');
 import { platform } from 'os';
+import * as XTerminal from 'xterm';
 
 export interface Terminal {
   el: HTMLElement,
