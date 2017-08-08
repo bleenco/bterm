@@ -1,8 +1,6 @@
 # bterm
 
-[![CircleCI](https://circleci.com/gh/bleenco/bterm/tree/master.svg?style=svg)](https://circleci.com/gh/bleenco/bterm/tree/master)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/0dknthm6g9gq1nw2/branch/master?svg=true)](https://ci.appveyor.com/project/jkuri/bterm-l4yld/branch/master)
-
+[![AbstruseCI](https://abstruse.bleenco.io/badge/2)](https://abstruse.bleenco.io/repo/2)
 
 ## Overview
 Fully customisable cross-platform terminal.
