@@ -10,17 +10,16 @@
     "prestart:aot": "npm run clean",
     "start:aot": "webpack --display-error-details --progress --env.aot --watch",
     "electron": "npm run build:electron:main && electron ./build --serve",
-    "build:electron:main": "tsc ./src/electron.ts --outDir ./build && copyfiles package.json ./build && cd ./build && npm install --prod && cd .. && electron-rebuild -m build/",
+    "build:electron:main": "tsc ./src/electron.ts --outDir ./build && copyfiles package.json ./build && cd ./build && npm install --prod",
     "prebuild": "npm run clean",
     "build": "webpack --display-error-details --progress && npm run build:electron:main",
     "prebuild:prod": "npm run clean",
     "build:prod": "webpack --display-error-details --env.aot -p --progress && npm run build:electron:main",
-    "app:linux": "npm run build:prod && node package.js --asar --platform=linux --arch=x64",
-    "app:windows": "npm run build:prod && node package.js --asar --platform=win32 --arch=ia32",
-    "app:mac": "npm run build:prod && node package.js --asar --platform=darwin --arch=x64",
+    "app": "npm run build:prod && node package.js",
     "test": "karma start ./karma.conf.js",
     "test:e2e": "tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js",
-    "lint": "tslint src/**/*.ts"
+    "lint": "tslint src/**/*.ts",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -55,6 +54,7 @@
     "zone.js": "0.8.16"
   },
   "devDependencies": {
+    "7zip": "0.0.6",
     "@angular/compiler-cli": "^4.3.3",
     "@ngtools/webpack": "^1.5.5",
     "@types/chalk": "^0.4.31",
@@ -76,12 +76,9 @@
     "copyfiles": "^1.2.0",
     "css-loader": "^0.28.4",
     "electron": "^1.6.11",
-    "electron-installer-debian": "^0.5.2",
-    "electron-installer-dmg": "^0.2.1",
+    "electron-builder": "^19.20.1",
     "electron-packager": "^8.7.2",
-    "electron-rebuild": "^1.6.0",
     "electron-reload": "^1.2.1",
-    "electron-winstaller": "^2.6.3",
     "extract-text-webpack-plugin": "^3.0.0",
     "fs-extra": "^4.0.1",
     "html-webpack-plugin": "^2.30.1",

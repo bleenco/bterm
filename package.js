@@ -1,100 +1,43 @@
-"use strict";
+const path = require('path');
+const builder = require('electron-builder');
+const fs = require('fs');
+const chalk = require('chalk');
 
-var packager = require('electron-packager');
-const pkg = require('./package.json');
-const argv = require('minimist')(process.argv.slice(1));
-const { join } = require('path');
+const platform = builder.Platform;
 
-const appName = argv.name || pkg.name;
-const buildVersion = pkg.version || '1.0';
-const shouldUseAsar = argv.asar || false;
-const shouldBuildAll = argv.all || false;
-const arch = argv.arch || 'all';
-const platform = argv.platform || 'darwin';
-const winstaller = require('electron-winstaller');
-const debianinstaller = require('electron-installer-debian');
-const createdmg = require('electron-installer-dmg');
+let start = new Date();
+let pkgJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')));
 
-const DEFAULT_OPTS = {
-  dir: './build',
-  name: appName,
-  asar: shouldUseAsar,
-  buildVersion: buildVersion
-};
-
-
-pack(platform, arch, (err, appPath) => {
-  if (err) {
-    console.log(err);
-  } else {
-    appPath = appPath[0];
-    console.log('Application packaged successfuly!', appPath);
-    if (platform === 'win32') {
-      winstaller.createWindowsInstaller({
-        appDirectory: appPath,
-        outputDirectory: join(__dirname, 'dist'),
-        authors: pkg.author,
-        exe: pkg.name
-      }).then(() => {
-        console.log('Windows Installer created.');
-      });
-    } else if (platform === 'linux') {
-      debianinstaller({
-        src: appPath,
-        dest: join(__dirname, 'dist'),
-        arch: 'amd64'
-      }, err => {
-        if (err) {
-          console.error(err, err.stack);
-          process.exit(1);
-        }
-
-        console.log('Linux installer succesfully created.');
-      });
-    } else if (platform === 'darwin') {
-      createdmg({
-        overwrite: true,
-        name: pkg.name,
-        appPath: appPath + '/' + pkg.name + '.app',
-        out: join(__dirname, 'dist'),
-        icon: join(__dirname, 'assets', 'icon.icns')
-      }, err => {
-        if (err) {
-          console.error(err, err.stack);
-          process.exit(1);
-        }
-
-        console.log('MacOS Installer successfully created.');
-      })
+builder.build({
+  config: {
+    appId: pkgJson.name,
+    directories: {
+      buildResources: path.resolve(__dirname, 'node_modules'),
+      app: path.resolve(__dirname, 'build'),
+      output: path.resolve(__dirname, 'dist'),
+    },
+    compression: 'normal',
+    extraResources: [],
+    mac: {
+      icon: path.resolve(__dirname, 'assets/icon.icns')
+    },
+    dmg: {
+      icon: path.resolve(__dirname, 'assets/icon.icns')
+    },
+    nsis: {
+      installerIcon: path.resolve(__dirname, 'assets/icon.ico'),
+      installerHeaderIcon: path.resolve(__dirname, 'assets/icon.ico')
+    },
+    win: {
+      icon: path.resolve(__dirname, 'assets/icon.ico'),
+    },
+    linux: {
+      target: 'deb'
     }
   }
-});
-
-function pack(plat, arch, cb) {
-  if (plat === 'darwin' && arch === 'ia32') return;
-
-  let icon = 'assets/icon';
-
-  if (icon) {
-    DEFAULT_OPTS.icon = icon + (() => {
-      let extension = '.png';
-      if (plat === 'darwin') {
-        extension = '.icns';
-      } else if (plat === 'win32') {
-        extension = '.ico';
-      }
-    return extension;
-    })();
-  }
-
-  const opts = Object.assign({}, DEFAULT_OPTS, {
-    platform: plat,
-    arch,
-    prune: true,
-    overwrite: true,
-    all: shouldBuildAll,
-    out: `dist`
-  });
-
-  packager(opts, cb);
-}
+})
+.then(() => {
+  let time = new Date().getTime() - start.getTime();
+  console.log(`${chalk.green('✔')} Packaging successful in ${time}ms`);
+})
+.catch(err => console.error(err));
