@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist build",
     "prestart": "npm run clean",
-    "start": "webpack --display-error-details --progress --watch",
+    "start": "webpack --display-error-details --progress && concurrently \"webpack --display-error-details --progress --watch\" \"npm run electron\"",
     "prestart:aot": "npm run clean",
     "start:aot": "webpack --display-error-details --progress --env.aot --watch",
     "electron": "npm run build:electron:main && electron ./build --serve",
@@ -72,6 +72,7 @@
     "chokidar": "^1.7.0",
     "circular-dependency-plugin": "^3.0.0",
     "codelyzer": "^3.1.2",
+    "concurrently": "^3.5.0",
     "copy-webpack-plugin": "^4.0.1",
     "copyfiles": "^1.2.0",
     "css-loader": "^0.28.4",
