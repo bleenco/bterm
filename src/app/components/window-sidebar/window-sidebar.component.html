@@ -63,14 +63,14 @@
 
     <div *ngIf="menu === 'themes'">
       <h1>Theme Browser ({{ selectedTheme }})</h1>
-      <div class="theme-browser" slimScroll [options]="scrollOptions">
+      <div class="theme-browser" slimScroll [options]="scrollOptions" [scrollEvents]="scrollEvents">
         <span *ngFor="let theme of themeNames" (click)="previewTheme(theme)">{{ theme }}</span>
       </div>
     </div>
 
     <div *ngIf="menu === 'shell'">
       <h1>Shell</h1>
-      <div class="theme-browser" slimScroll [options]="scrollOptions">
+      <div class="theme-browser" slimScroll [options]="scrollOptions" [scrollEvents]="scrollEvents">
         <span *ngFor="let shell of availableShells" (click)="setShell(shell)">{{ shell }}</span>
         <span (click)="selectShell()">Browse System</span>
       </div>
@@ -78,14 +78,14 @@
 
     <div *ngIf="menu === 'font'">
       <h1>Font</h1>
-      <div class="theme-browser" slimScroll [options]="scrollOptions">
+      <div class="theme-browser" slimScroll [options]="scrollOptions" [scrollEvents]="scrollEvents">
         <span *ngFor="let font of availableFonts" (click)="setFont(font)">{{ font }}</span>
       </div>
     </div>
 
     <div *ngIf="menu === 'key'">
       <h1>URL Open Key</h1>
-      <div class="theme-browser" slimScroll [options]="scrollOptions">
+      <div class="theme-browser" slimScroll [options]="scrollOptions" [scrollEvents]="scrollEvents">
         <span *ngFor="let key of availableUrlKeys" (click)="setUrlKey(key)">{{ key }}</span>
       </div>
     </div>

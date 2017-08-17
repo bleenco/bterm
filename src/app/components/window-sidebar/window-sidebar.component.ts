@@ -1,6 +1,6 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef, HostListener, EventEmitter } from '@angular/core';
 import { ConfigService, IShellDef } from '../../services/config.service';
-import { SlimScrollOptions } from 'ngx-slimscroll';
+import { SlimScrollOptions, SlimScrollEvent } from 'ngx-slimscroll';
 import { themes } from '../../themes';
 import { IFonts, IUrlKeys, SystemService } from '../../services/system.service';
 const electron = require('electron');
@@ -19,6 +19,7 @@ export class WindowSidebarComponent implements OnInit {
   availableFonts: IFonts[];
   availableShells: IShellDef[];
   availableUrlKeys: IUrlKeys[];
+  scrollEvents: EventEmitter<SlimScrollEvent>;
 
   constructor(
     private config: ConfigService,
@@ -32,12 +33,15 @@ export class WindowSidebarComponent implements OnInit {
 
     this.menu = 'themes';
     this.scrollOptions = new SlimScrollOptions({
-      barBackground: '#666666',
-      gridBackground: '#666666',
+      barBackground: '#F2F2F2',
+      gridBackground: '#F2F2F2',
       barBorderRadius: '10',
       barWidth: '6',
-      gridWidth: '2'
+      gridWidth: '2',
+      alwaysVisible: true
     });
+
+    this.scrollEvents = new EventEmitter<SlimScrollEvent>();
   }
 
   ngOnInit() {
@@ -50,7 +54,9 @@ export class WindowSidebarComponent implements OnInit {
       [].forEach.call(this.elementRef.nativeElement.querySelectorAll('.theme-browser'), el => {
         this.renderer.setElementStyle(el, 'height', document.body.clientHeight - 130 + 'px');
       });
-    })
+    });
+
+    this.recalculateScrollbar();
   }
 
   setFont(font: IFonts) { this.config.setFont(font); }
@@ -86,5 +92,30 @@ export class WindowSidebarComponent implements OnInit {
 
     this.menu = menu;
     this.config.setSidebarConfig();
+
+    setTimeout(() => {
+      [].forEach.call(this.elementRef.nativeElement.querySelectorAll('.theme-browser'), el => {
+        this.renderer.setElementStyle(el, 'height', document.body.clientHeight - 130 + 'px');
+      });
+
+      this.recalculateScrollbar();
+    });
+  }
+
+  @HostListener('window:resize', ['$event']) private onResize(e) {
+    [].forEach.call(this.elementRef.nativeElement.querySelectorAll('.theme-browser'), el => {
+      this.renderer.setElementStyle(el, 'height', document.body.clientHeight - 130 + 'px');
+    });
+
+    this.recalculateScrollbar();
+  }
+
+  recalculateScrollbar(): void {
+    const event: SlimScrollEvent = {
+      type: 'recalculate',
+      easing: 'linear'
+    };
+
+    setTimeout(() => this.scrollEvents.emit(event));
   }
 }
