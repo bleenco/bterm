@@ -3,8 +3,7 @@
 [![AbstruseCI](https://abstruse.bleenco.io/badge/2)](https://abstruse.bleenco.io/repo/2)
 
 ## Overview
-Fully customisable cross-platform terminal.
-Runs everywhere. MacOS, Linux or Windows.
+Fully customisable cross-platform terminal that works and feels the same way everywhere: MacOS, Linux and Windows.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/1796022/28711498-0a70122a-7388-11e7-8ae4-c43b5cbf517a.png">
@@ -12,72 +11,34 @@ Runs everywhere. MacOS, Linux or Windows.
 
 ## Download
 To download visit
-[http://bterm.bleenco.io](http://bterm.bleenco.io) click the right installer depending on
-operating system you use.
+[http://bterm.bleenco.io](http://bterm.bleenco.io) and hit the right button to get your favourite OS installer.
 
-On initial run `~/.bterm.json` configuration file is created. If you need fix your font for example,
-check this file and update your configuration to fit your needs.
+On the first run `~/.bterm.json` (on Linux and MacOS) or `C:\Users\user\.bterm.json` (on Windows) configuration file is created. It contains the attributes in json format that define the layout of the terminal, i.e. changing the attribute `settings > fonts` will immediately update the type of fonts.
 
-## Configuration
-When installation is successfully completed and you first run bterm you end up with black and white window.
-But as mentioned **bterm** is completely customizable.
+## Settings and customization
+The default theme is a combination of black and white visuals. However, **bterm** is completely customizable, here's how to do it with very few clicks:
 
-1. Click the settings icon  bottom right corner.
-2. Click the first tab and you can choose the color theme that you like from the list
-3. On second tab you can select font that you prefer.
-4. On third select the hot key to open urls inside **bterm**
+1. Click the settings icon in bottom right corner.
+2. Choose the theme of your choice from the list in a first tab.
+3. Select your favourite font in a second tab.
+4. Select the hot key for opening urls when clicking inside of a **bterm** in a third tab.
 
-When you selected your settings open .bterm.json file for further configuration.
+The selected settings will automatically appear in `.bterm.json` configuration file where you can hack your terminals' visual settings further.
 
-
-On Linux or MacOS  the .bterm.json is located in `~/.bterm.json`.
-On Windows you can find it inside `C:\Users\user\.bterm.json`.
-
-Inside **.bterm.json**, you can easily change font size, font color and other colors using standard
-html color codes.
-
-As you can see from the picture above bterm is pretty straight forward termial at
-first sight. Top bar is reserved for tabs.
-Than is the main shell window.
-Bottom bar gives the user some very useful information about present working directory.
-If this directory is also git repository  you can find the branch name in botom right corner.
-And at the end is the settings button which opens the right settings menu.
-
-
-## Usage
-In short you can use bterm just like you are used to use your old terminal.
-**Bterm** offers some nice features:
-* On bottom bar you can at all times see which directory are you in.
-* If you are inside the directory which is git repository you can see the name of the branch
-you are in  on the bottom bar.
-* if bterm recognizes git and compatible shell (like bash or zsh) it shows  currently active branch too .
-
-### bterm for development:
-Inside of bterm you can use all development tools that you need for your work:
-* git - version control
-* text editors (vim, nano ...)
-* package managers like (npm, python-pip ...)
-* ssh for remote access
-
-And all the others.
-**Important** of course you need to install all tools mentioned above properly. All windows user
- we already know the process about adding dev tools to system path and adjusting
- the settings.
-
-### Keyboard shortcuts
-Shortcuts in **bterm** are similar as you already know them for instance
-<code>ctrl + t </code> for new tab or <code>ctrl + n </code> for new window.
-
-### Copy and Paste
-* To copy select text first then right-click on it and select Copy
-* To paste right click and select Paste.
-
-### Clicking links in bterm
-For opening links from bterm you simply used the hotkey that you can choose inside
-settings + click. for example <code>ctrl + click </code>.
+## Features
+In short, you can use bterm just like any other terminal. However, we augment the standard shell functionality with useful features for developers and researchers:
+* **Information on current directory**  
+  Your current directory path is being displayed at all times in a bottom bar.
+* **Name of the git branch**  
+  When working on your git repository, the name of your branch appears next to your shell input.
+* **Opening links with the click**  
+  Using hotkey + click for opening links from a console, i.e. `ctrl + click`.
+* **Generate links to files on drag and drop**  
+Drag the file into the bterm window and link to the file will automatically be pasted to your shell input.
 
 
 ## Hacking on bterm
+In order to run bterm locally in a development mode please use the following commands:
 
 ```sh
 git clone https://github.com/bleenco/bterm.git
@@ -86,11 +47,13 @@ npm start # wait for build to finish
 npm run electron
 ```
 
-### To make a production build run
+### Production build
+To generate bterm production build and installation package, run the following commands: 
 
 ```sh
-npm run build:prod
+npm run app
 ```
+The executable installation package can be found in `dist` folder.
 
 ### LICENCE
 
