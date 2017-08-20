@@ -33,9 +33,9 @@ export class GITService {
     return this.git.from(this.cwd).getStatus().then(status => !status.code ? this.parseStatus(status.value) : '?');
   }
 
-  get branch(): Promise<string> {
+  get branch(): Promise<string|null> {
     if (!this.cwd) { return Promise.resolve(null); }
-    return this.git.from(this.cwd).getBranch().then(branch => !branch.code ? branch.value : null);
+    return this.git.from(this.cwd).getBranch().then(branch => !branch.code ? branch.value : null).catch(err => '');
   }
 
   set dir(d: string) {
@@ -64,7 +64,7 @@ class GITHandler {
   }
 
   hasGitBin() {
-    let gitPath: string = which('git');
+    let gitPath: string = which('git') || '';
     if (gitPath.length >= 3) { this.gitBin = gitPath.toString(); }
   }
 
@@ -96,12 +96,12 @@ class GITHandler {
   }
 
   getBranch(): Promise<IGitResult> {
-    if (!this.check()) { return null; }
+    if (!this.check()) { return Promise.resolve(null); }
     return this.gitExec(['rev-parse', '--abbrev-ref',  'HEAD']);
   }
 
   getStatus(): Promise<IGitResult> {
-    if (!this.check()) { return null; }
+    if (!this.check()) { return Promise.resolve({ code: null, value: null }); }
     return this.gitExec(['status', '--porcelain']);
   }
 
