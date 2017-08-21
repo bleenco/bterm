@@ -5,13 +5,7 @@ import * as fs from 'fs';
 import { join } from 'path';
 import { CssBuilder } from '../../utils';
 import { IUrlKeys, IFonts } from './system.service';
-
-export interface IShellDef {
-  shell: string;
-  args: string[];
-  short?: string;
-  toString?: () => string;
-};
+import { execSync } from 'child_process';
 
 @Injectable()
 export class ConfigService {
@@ -21,15 +15,12 @@ export class ConfigService {
   watcher: any;
   css: CssBuilder;
   terminals: Terminal[];
-  defaultShell: IShellDef;
 
   constructor() {
-    this.defaultShell = null;
     this.terminals = [];
     this.css = new CssBuilder();
     this.homeDir = os.homedir();
     this.configPath = `${this.homeDir}/.bterm.json`;
-    let user = os.userInfo({ encoding: 'utf8' });
 
     if (!fs.existsSync(this.configPath)) {
       this.recovery();
@@ -37,22 +28,13 @@ export class ConfigService {
 
     this.writePS1();
     this.readConfig();
-    this.updateShell();
     this.setWatcher();
-
-    if (!this.shell) {
-      switch (os.platform()) {
-        case 'win32': this.shell = { shell: 'cmd.exe', args: [] }; break;
-        case 'darwin': this.shell = { shell: 'login', args: ['-fp', user.username] }; break;
-        case 'linux': this.shell = { shell: '/bin/bash', args: [] }; break;
-      }
-    }
   }
 
-  get shell(): IShellDef { return this.defaultShell; }
-  set shell(sh: IShellDef) { this.defaultShell = sh; }
-
-  setTerminals(terminals: Terminal[]) { this.terminals = terminals; this.decorateTerminals(); }
+  setTerminals(terminals: Terminal[]) {
+    this.terminals = terminals;
+    this.decorateTerminals();
+  }
 
   decorateTerminals() {
     this.terminals.forEach((term: Terminal) => {
@@ -71,9 +53,39 @@ export class ConfigService {
     });
   }
 
-  updateShell() {
-    if (this.config.settings.shell && this.config.settings.shell.shell && this.config.settings.shell.args) {
-      this.shell = this.config.settings['shell'];
+  getDefaultShell(): { shell: string, args: string } {
+    const cmdRegex = /cmd.exe/;
+    const shRegex = /sh$/;
+    let shell = null;
+    let args = null;
+
+    if (this.config.settings.shell) {
+      return this.config.settings.shell;
+    } else {
+      const exec = execSync('echo $SHELL', { encoding: 'utf8' }).toString();
+      if (exec) {
+        shell = exec.trim();
+      } else {
+        if (os.platform() === 'darwin') {
+          shell = process.env.SHELL || '/bin/bash';
+        } else if (os.platform() === 'win32') {
+          shell = process.env.SHELL || process.env.COMSPEC || 'cmd.exe';
+        } else {
+          shell = process.env.SHELL || '/bin/sh';
+        }
+      }
+
+      if (process.env.SHELL_EXECUTE_FLAGS) {
+        args = process.env.SHELL_EXECUTE_FLAGS;
+      } else if (shell.match(cmdRegex)) {
+        args = '/c';
+      } else if (shell.includes('zsh')) {
+        args = '';
+      } else if (shell.match(shRegex)) {
+        args = '-l -c';
+      }
+
+      return { shell: shell, args: args.split(' ').filter(Boolean) };
     }
   }
 
@@ -84,7 +96,6 @@ export class ConfigService {
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
     let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
-    this.updateShell();
     this.css.clear();
 
     this.config.style.colors.reverse().forEach( (color: string, index: number) => {
@@ -156,9 +167,11 @@ export class ConfigService {
     this.updateConfig();
   }
 
-  setShell(shell: IShellDef) {
-    if (this.config && this.config.settings) { this.config.settings['shell'] = shell; }
-    this.updateConfig();
+  setShell(shell: { shell: string, args: string[] }) {
+    if (this.config && this.config.settings) {
+      this.config.settings.shell = shell;
+      this.updateConfig();
+    }
   }
 
   setUrlKey(urlkey: IUrlKeys) {

@@ -71,8 +71,7 @@
     <div *ngIf="menu === 'shell'">
       <h1>Shell</h1>
       <div class="theme-browser" slimScroll [options]="scrollOptions" [scrollEvents]="scrollEvents">
-        <span *ngFor="let shell of availableShells" (click)="setShell(shell)">{{ shell }}</span>
-        <span (click)="selectShell()">Browse System</span>
+        <span *ngFor="let shell of availableShells" (click)="setShell(shell)">{{ shell.shell }}</span>
       </div>
     </div>
 

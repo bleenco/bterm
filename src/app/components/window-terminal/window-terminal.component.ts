@@ -51,8 +51,6 @@ export class WindowTerminalComponent implements OnInit {
 
       clipboard.writeText(url);
     });
-
-
   }
 
   initMenu() {

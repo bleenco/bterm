@@ -60,11 +60,11 @@ export class WindowBottomComponent implements OnInit {
           if (dir) {
             dir = dir.replace(/~/, homedir());
             if (existsSync(dir)) {
-              // process.chdir(dir);
               this.currentDir = dir;
               this._git.dir = this.currentDir;
               this._git.branch.then(res => this.currentBranch = res);
               this._git.status.then(res => this.currentStatus = res);
+              this.xterm.cwd = dir;
             }
           }
         }
