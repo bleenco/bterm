@@ -6,6 +6,7 @@ import { join } from 'path';
 import { CssBuilder } from '../../utils';
 import { IUrlKeys, IFonts } from './system.service';
 import { execSync } from 'child_process';
+import { which } from 'shelljs';
 
 @Injectable()
 export class ConfigService {
@@ -63,13 +64,18 @@ export class ConfigService {
       return this.config.settings.shell;
     } else {
       const exec = execSync('echo $SHELL', { encoding: 'utf8' }).toString();
-      if (exec) {
+      if (exec && exec.includes('bin')) {
         shell = exec.trim();
       } else {
         if (os.platform() === 'darwin') {
           shell = process.env.SHELL || '/bin/bash';
         } else if (os.platform() === 'win32') {
-          shell = process.env.SHELL || process.env.COMSPEC || 'cmd.exe';
+          const bashPath: any = which('bash');
+          if (bashPath.code === 0 && bashPath.stdout) {
+            shell = bashPath.stdout;
+          } else {
+            shell = process.env.SHELL || process.env.COMSPEC || 'cmd.exe';
+          }
         } else {
           shell = process.env.SHELL || '/bin/sh';
         }
@@ -77,8 +83,6 @@ export class ConfigService {
 
       if (process.env.SHELL_EXECUTE_FLAGS) {
         args = process.env.SHELL_EXECUTE_FLAGS;
-      } else if (shell.match(cmdRegex)) {
-        args = '/c';
       } else {
         args = '';
       }
