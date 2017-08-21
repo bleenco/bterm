@@ -573,4 +573,22 @@ it('should copy and paste the text', () => {
       .then(res => expect(res).to.contain(testString))
   });
 
+  it('should open a new tab in current working directory', () => {
+    let firstFolder = null;
+    return this.app.client.waitUntilWindowLoaded()
+      .then(() => wait(1000))
+      .then(() => this.app.client.keys('ls -d */\r\n'))
+      .then(() => wait(1000))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then(folders => folders.split('\n')[1].split('   ')[0])
+      .then(folder => firstFolder = folder)
+      .then(() => this.app.client.keys('cd ' + firstFolder + '\r\n'))
+      .then(() => this.app.client.browserWindow.send('newTab', true))
+      .then(() => wait(2000))
+      .then(() => this.app.client.keys('pwd\r\n'))
+      .then(() => this.app.client.getText('.terminal-instance'))
+      .then(pwd => pwd[1].split('\n')[1].trim())
+      .then(pwd => expect(pwd.endsWith(firstFolder)));
+  });
+
 });
