@@ -7,17 +7,8 @@ $vdark: #333333
 $white: #FFFFFF
 $black: #000000
 
-html, body
-  width: 100%
-  height: 100%
-
-body
-  border: 1px solid transparent
-  position: relative
-  font-family: Monaco, monospace
-
-
 @import '../../node_modules/bulma/sass/base/minireset'
+@import 'fonts'
 @import 'app-root'
 @import 'window-top'
 @import 'window-terminal'
@@ -25,3 +16,12 @@ body
 @import 'window-sidebar'
 @import 'window-notification'
 @import 'dropdown'
+
+html, body
+  width: 100%
+  height: 100%
+
+body
+  border: 1px solid transparent
+  position: relative
+  font-family: $font-family-roboto-mono
