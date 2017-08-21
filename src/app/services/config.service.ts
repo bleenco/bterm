@@ -79,10 +79,8 @@ export class ConfigService {
         args = process.env.SHELL_EXECUTE_FLAGS;
       } else if (shell.match(cmdRegex)) {
         args = '/c';
-      } else if (shell.includes('zsh')) {
+      } else {
         args = '';
-      } else if (shell.match(shRegex)) {
-        args = '-l -c';
       }
 
       return { shell: shell, args: args.split(' ').filter(Boolean) };
@@ -98,8 +96,8 @@ export class ConfigService {
 
     this.css.clear();
 
-    this.config.style.colors.reverse().forEach( (color: string, index: number) => {
-      this.css.add(`.xterm-color-${index + 1}`, `color: ${color};`);
+    this.config.style.colors.forEach( (color: string, index: number) => {
+      this.css.add(`.xterm-color-${index}`, `color: ${color} !important;`);
     });
 
     if (!this.config.settings.urlKey) { this.config.settings['urlKey'] = 'shift'; }
@@ -239,7 +237,7 @@ export class ConfigService {
       'settings': {
         'font': {
           'family': 'Monaco',
-          'size': '13'
+          'size': '12'
         },
         'font_smoothing': 'subpixel-antialiased',
         'cursor_blink': false,
@@ -251,30 +249,30 @@ export class ConfigService {
         'urlKey': 'shift'
       },
       'style': {
-        'background': '#090300',
-        'color': '#FFFFFF',
-        'cursor': '#F6C859',
-        'top_bar_background': '#090300',
-        'top_bar_tab_color': '#FFFFFF',
-        'top_bar_tab_active_color': '#FFFFFF',
-        'bottom_bar_background': '#090300',
+        'background': '#1d1f21',
+        'color': '#c5c8c6',
+        'cursor': '#c5c8c6',
+        'top_bar_background': '#1d1f21',
+        'top_bar_tab_color': '#c5c8c6',
+        'top_bar_tab_active_color': '#1d1f21',
+        'bottom_bar_background': '#1d1f21',
         'colors': [
-          '#090300',
-          '#db2d20',
-          '#01a252',
-          '#fded02',
-          '#01a0e4',
-          '#a16a94',
-          '#b5e4f4',
-          '#a5a2a2',
-          '#5c5855',
-          '#db2d20',
-          '#01a252',
-          '#fded02',
-          '#01a0e4',
-          '#a16a94',
-          '#b5e4f4',
-          '#f7f7f7'
+          '#282a2e',
+          '#a54242',
+          '#8c9440',
+          '#de935f',
+          '#5f819d',
+          '#85678f',
+          '#5e8d87',
+          '#707880',
+          '#373b41',
+          '#cc6666',
+          '#b5bd68',
+          '#f0c674',
+          '#81a2be',
+          '#b294bb',
+          '#8abeb7',
+          '#c5c8c6'
         ]
       },
       updateServer: {
