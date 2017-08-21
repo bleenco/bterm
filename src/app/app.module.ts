@@ -6,7 +6,6 @@ import { NgSlimScrollModule } from 'ngx-slimscroll/src/ngx-slimscroll/module/ngx
 import { XtermServiceProvider } from './services/xterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
-import { SearchServiceProvider } from './services/search.service';
 import { GITServiceProvider } from './services/git.service';
 import { AppComponent } from './app.component';
 import { WindowTopComponent } from './components/window-top';
@@ -35,7 +34,6 @@ import { SystemServiceProvider } from './services/system.service';
     ConfigServiceProvider,
     XtermServiceProvider,
     PTYServiceProvider,
-    SearchServiceProvider,
     GITServiceProvider,
     SystemServiceProvider
   ],

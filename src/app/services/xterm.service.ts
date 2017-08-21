@@ -5,6 +5,7 @@ let electron = require('electron');
 let { ipcRenderer } = electron;
 import { platform, homedir } from 'os';
 import * as XTerminal from 'xterm';
+import { Subject } from 'rxjs';
 
 export interface Terminal {
   el: HTMLElement,
@@ -29,6 +30,7 @@ export class XtermService {
   outputEvents: EventEmitter<{ action: string, data: number | null }>;
   titleEvents: EventEmitter<{ index: number, title: string }>;
   resizeEvents: EventEmitter<IResizeGeom>;
+  search: Subject<{ type: string, term: string}>;
   currentIndex: number;
   osPlatform: string;
   cwd: string;
@@ -42,7 +44,22 @@ export class XtermService {
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
     this.titleEvents = new EventEmitter<{ index: number, title: string }>();
     this.resizeEvents = new EventEmitter<IResizeGeom>();
+    this.search = new Subject<{ type: string, term: string }>();
     this.osPlatform = platform();
+
+    this.search
+      .filter(x => x.type === 'typing')
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(term => {
+        this.terminals[this.currentIndex].term.findNext(term.term);
+      });
+
+    this.search
+      .filter(x => x.type === 'immediate')
+      .subscribe(term => {
+        this.terminals[this.currentIndex].term.findNext(term.term);
+      });
   }
 
   create(): void {
@@ -55,6 +72,7 @@ export class XtermService {
     this.terminals.forEach((term: Terminal) => term.active = false);
 
     XTerminal.loadAddon('fit');
+    XTerminal.loadAddon('search');
     const terminal: Terminal = {
       el: el,
       storage: null,
@@ -76,7 +94,6 @@ export class XtermService {
       this.currentIndex = this.terminals.length - 1;
       this.focusCurrent();
     });
-
 
     setTimeout(() => terminal.term.open(terminal.el, true));
   }

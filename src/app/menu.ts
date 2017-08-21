@@ -42,7 +42,8 @@ let template = [
       {role: 'zoomout'},
       {type: 'separator'},
       { label: 'Tab Left', accelerator: 'CommandOrControl+Shift+Left', selector: 'Left' },
-      { label: 'Tab Right', accelerator: 'CommandOrControl+Shift+Right', selector: 'Right' }
+      { label: 'Tab Right', accelerator: 'CommandOrControl+Shift+Right', selector: 'Right' },
+      { label: 'Search', accelerator: 'CommandOrControl+F', selector: 'Search' }
     ]
   },
   {

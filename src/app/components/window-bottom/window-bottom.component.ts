@@ -1,44 +1,36 @@
-import { Component, Inject, NgZone, OnInit } from '@angular/core';
+import { Component, Inject, NgZone, OnInit, Renderer, ElementRef } from '@angular/core';
 import { XtermService } from '../../services/xterm.service';
-import { SearchService } from '../../services/search.service';
 import { platform } from 'os';
 import { GITService, TGitStatus } from '../../services/git.service';
 import { existsSync } from 'fs';
 import { homedir } from 'os';
-let { remote } = require('electron');
+const { remote, ipcRenderer } = require('electron');
 
 export class ISearchForm {
   query: string
 };
-
-export class SearchForm implements ISearchForm {
-  query: string;
-
-  constructor(obj?: ISearchForm) {
-    this.query = obj && obj.query != null ? obj.query : '';
-  }
-}
 
 @Component({
   selector: 'window-bottom',
   templateUrl: 'window-bottom.component.html'
 })
 export class WindowBottomComponent implements OnInit {
-  searchForm: SearchForm;
   currentDir: string;
   currentProcess: string;
   currentBranch: string;
   currentStatus: TGitStatus;
+  keyword: string;
+  searchVisible: boolean;
 
   constructor(
     @Inject(NgZone) private zone: NgZone,
-    @Inject(SearchService) private search: SearchService,
     @Inject(XtermService) private xterm: XtermService,
-    @Inject(GITService) private _git: GITService
+    @Inject(GITService) private _git: GITService,
+    @Inject(Renderer) private renderer: Renderer,
+    @Inject(ElementRef) private el: ElementRef
   ) { }
 
   ngOnInit() {
-    this.searchForm = new SearchForm();
     this.xterm.titleEvents.subscribe(event => {
       if (event.title === ':') {
         this.currentDir = null;
@@ -70,15 +62,33 @@ export class WindowBottomComponent implements OnInit {
         }
       });
     });
+
+    ipcRenderer.on('search', () => {
+      this.searchVisible = true;
+      setTimeout(() => {
+        this.renderer.invokeElementMethod(this.el.nativeElement.querySelector('.search-input'), 'focus', []);
+      }, 300);
+    });
   }
 
-  showDir() { remote.shell.showItemInFolder(this.currentDir); }
+  showDir(): void {
+    remote.shell.showItemInFolder(this.currentDir);
+  }
 
-  queryChanged() {
-    if (this.searchForm.query.length > 2) {
-      this.search.searchQuery(this.searchForm.query);
-    } else {
-      this.search.reset();
+  search(): void {
+    this.xterm.search.next({ type: 'typing', term: this.keyword });
+  }
+
+  onKeyUp(e: KeyboardEvent): void {
+    if (e.keyCode === 13) {
+      this.xterm.search.next({ type: 'immediate', term: this.keyword });
+    } else if (e.keyCode === 27) {
+      if (this.keyword !== '') {
+        this.keyword = '';
+      } else {
+        this.searchVisible = false;
+        this.xterm.focusCurrent();
+      }
     }
   }
 }

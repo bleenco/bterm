@@ -59,16 +59,27 @@
           letter-spacing: 1px
           transition: all 0.5s
 
-  .search-input
-    background: $black
-    outline: none
-    font-size: 14px
-    width: 300px
-    display: block
-    margin: 0 auto
-    border: 1px solid $white
-    padding: 10px 15px
+  .search-container
+    background: transparent
+    width: 150px
+    display: flex
+    align-items: center
     border-radius: 4px
-    position: absolute
-    left: calc(50% - 150px)
-    bottom: 5px
+
+    svg
+      width: 15px
+      height: 15px
+      margin: 0 5px 0 5px
+
+    .search-input
+      width: 120px
+      padding: 7px 15px 7px 0
+      outline: none
+      background: transparent
+      border: none
+      font-size: 13px
+      font-weight: 300
+
+      &::-webkit-input-placeholder
+        color: $white
+
