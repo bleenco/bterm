@@ -4,6 +4,7 @@
   display: flex
   align-items: center
   justify-content: space-between
+  position: relative
 
   .window-bottom-container__left
     height: 40px
@@ -31,14 +32,6 @@
     align-items: center
     justify-content: center
 
-    .current-process-text
-      font-size: 8px
-      font-weight: 100
-      color: #a5a2a2
-      margin-left: -10px
-      letter-spacing: 1px
-      transition: all 0.5s
-
   .window-bottom-container__right
     display: flex
     flex: 1
@@ -65,3 +58,17 @@
           margin-left: -10px
           letter-spacing: 1px
           transition: all 0.5s
+
+  .search-input
+    background: $black
+    outline: none
+    font-size: 14px
+    width: 300px
+    display: block
+    margin: 0 auto
+    border: 1px solid $white
+    padding: 10px 15px
+    border-radius: 4px
+    position: absolute
+    left: calc(50% - 150px)
+    bottom: 5px
