@@ -236,14 +236,14 @@ export class ConfigService {
     let defaultConfig = {
       'settings': {
         'font': {
-          'family': 'Monaco',
+          'family': 'RobotoMono',
           'size': '12'
         },
-        'font_smoothing': 'subpixel-antialiased',
+        'font_smoothing': 'antialiased',
         'cursor_blink': false,
-        'windowPadding': '10px 15px 5px 15px',
+        'windowPadding': '10px 10px 0px 10px',
         'clipboard_notice': false,
-        'theme_name': 'Atom',
+        'theme_name': 'bterm default',
         'scrollBufferSave': false,
         'shells': [ 'bash', 'zsh', 'sh', 'powershell', 'cmd', 'login', 'tcsh', 'csh', 'ash' ],
         'urlKey': 'shift'

@@ -35,7 +35,7 @@ module.exports = function (options, webpackOptions) {
       ]
     },
     plugins: [
-      new copy([{ context: './src/assets/public', from: '**/*' }])
+      new copy([{ context: root('src/assets/public'), from: '**/*' }])
     ],
     externals: {
       'electron': 'require("electron")',
@@ -181,7 +181,7 @@ function getDevelopmentConfig() {
 function getStylesConfig() {
   return {
     plugins: [
-      new extract('css/[name].css')
+      new extract('[name].css')
     ],
     module: {
       rules: [
