@@ -1,4 +1,31 @@
 export let themes = {
+  'bterm default': {
+    'background': '#1d1f21',
+    'color': '#c5c8c6',
+    'cursor': '#c5c8c6',
+    'top_bar_background': '#1d1f21',
+    'top_bar_tab_color': '#c5c8c6',
+    'top_bar_tab_active_color': '#1d1f21',
+    'bottom_bar_background': '#1d1f21',
+    'colors': [
+      '#282a2e',
+      '#a54242',
+      '#8c9440',
+      '#de935f',
+      '#5f819d',
+      '#85678f',
+      '#5e8d87',
+      '#707880',
+      '#373b41',
+      '#cc6666',
+      '#b5bd68',
+      '#f0c674',
+      '#81a2be',
+      '#b294bb',
+      '#8abeb7',
+      '#c5c8c6'
+    ]
+  },
   '3024 Day': {
     'background': '#f7f7f7',
     'color': '#4a4543',
@@ -866,7 +893,7 @@ export let themes = {
   'Dracula': {
     'background': '#282a36',
     'color': '#f8f8f2',
-    'cursor': '#50fa7b',
+    'cursor': '#f8f8f2',
     'top_bar_background': '#282a36',
     'top_bar_tab_color': '#282a36',
     'top_bar_tab_active_color': '#a5a2a2',

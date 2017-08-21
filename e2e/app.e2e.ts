@@ -573,14 +573,4 @@ it('should copy and paste the text', () => {
       .then(res => expect(res).to.contain(testString))
   });
 
-  it('should have select custom shell option last', () => {
-    return this.app.client.waitUntilWindowLoaded()
-      .then(() => this.app.client.click('.menu-open'))
-      .then(() => wait(2000))
-      .then(() => this.app.client.click('.sidebar-menu-icons > .shell'))
-      .then(() => wait(2000))
-      .then(() => this.app.client.getText('.theme-browser > span:last-child'))
-      .then((text: any) => expect(text).to.be.equal('Browse System'))
-  });
-
 });
