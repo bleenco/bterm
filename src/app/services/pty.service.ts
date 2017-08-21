@@ -22,13 +22,17 @@ export class PTYService {
     this.processes = [];
   }
 
-  create(): Process {
-    let ps: Process = {
-      pty: pty.spawn(this._config.shell.shell, this._config.shell.args, {
+  create(cwd = os.homedir()): Process {
+    const defaultShell = this._config.getDefaultShell();
+    const shell = defaultShell.shell;
+    const args = defaultShell.args;
+
+    const ps: Process = {
+      pty: pty.spawn(shell, args, {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
-        cwd: process.cwd() || os.homedir()
+        cwd: cwd
       }),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),

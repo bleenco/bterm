@@ -3,7 +3,7 @@ import { PTYService, Process } from './pty.service';
 import { ConfigService } from './config.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
-import { platform } from 'os';
+import { platform, homedir } from 'os';
 import * as XTerminal from 'xterm';
 
 export interface Terminal {
@@ -31,6 +31,7 @@ export class XtermService {
   resizeEvents: EventEmitter<IResizeGeom>;
   currentIndex: number;
   osPlatform: string;
+  cwd: string;
 
   constructor(
     @Inject(PTYService) private pty: PTYService,
@@ -45,19 +46,19 @@ export class XtermService {
   }
 
   create(): void {
-    let doc: HTMLDocument = document;
-    let container: HTMLElement = doc.querySelector('.window-terminal-container') as HTMLElement;
-    let el: HTMLElement = doc.createElement('div');
+    const doc: HTMLDocument = document;
+    const container: HTMLElement = doc.querySelector('.window-terminal-container') as HTMLElement;
+    const el: HTMLElement = doc.createElement('div');
     el.classList.add('terminal-instance');
     container.appendChild(el);
 
     this.terminals.forEach((term: Terminal) => term.active = false);
 
     XTerminal.loadAddon('fit');
-    let terminal: Terminal = {
+    const terminal: Terminal = {
       el: el,
       storage: null,
-      term: new XTerminal({ scrollback: 1000 }),
+      term: new XTerminal({ scrollback: 10000 }),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
       active: true,
@@ -107,8 +108,14 @@ export class XtermService {
   }
 
   initializeProcess(terminal: Terminal): void {
-    terminal.ps = this.pty.create();
-    terminal.ps.output.subscribe((str: string) => { terminal.term.write(str); terminal.term.fit(); });
+    const cwd = this.cwd || homedir();
+    terminal.ps = this.pty.create(cwd);
+
+    terminal.ps.output.subscribe((str: string) => {
+      terminal.term.write(str);
+      terminal.term.fit();
+    });
+
     terminal.ps.exit.subscribe((code: boolean) => {
       let el = terminal.el;
       let index = this.terminals.findIndex((term: Terminal) => term === terminal);
@@ -145,7 +152,7 @@ export class XtermService {
   }
 
   fitTerminal() {
-    this.terminals.forEach( (terminal: Terminal) => { terminal.term.fit(); });
+    this.terminals.forEach((terminal: Terminal) => terminal.term.fit());
     this.focusCurrent();
   }
 

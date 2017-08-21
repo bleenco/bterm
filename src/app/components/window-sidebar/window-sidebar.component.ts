@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer, ElementRef, HostListener, EventEmitter } from '@angular/core';
-import { ConfigService, IShellDef } from '../../services/config.service';
+import { ConfigService } from '../../services/config.service';
 import { SlimScrollOptions, SlimScrollEvent } from 'ngx-slimscroll';
 import { themes } from '../../themes';
 import { IFonts, IUrlKeys, SystemService } from '../../services/system.service';
@@ -17,7 +17,7 @@ export class WindowSidebarComponent implements OnInit {
   themeNames: string[];
   selectedTheme: string;
   availableFonts: IFonts[];
-  availableShells: IShellDef[];
+  availableShells: { shell: string, args: string[] }[];
   availableUrlKeys: IUrlKeys[];
   scrollEvents: EventEmitter<SlimScrollEvent>;
 
@@ -60,15 +60,8 @@ export class WindowSidebarComponent implements OnInit {
   }
 
   setFont(font: IFonts) { this.config.setFont(font); }
-  setShell(shell: IShellDef) { this.config.setShell(shell); }
+  setShell(shell: { shell: string, args: string[] }) { this.config.setShell(shell); }
   setUrlKey(key: IUrlKeys) { this.config.setUrlKey(key); }
-
-  selectShell() {
-    dialog.showOpenDialog(electron.remote.getCurrentWindow(), (fn: string[]) => {
-      if (!fn || !fn.length) { return; }
-      this.setShell({ args: [], shell: fn[0] });
-    });
-  }
 
   previewTheme(theme: string): void {
     let styles = { style: themes[theme] };

@@ -1,5 +1,5 @@
 import { Injectable, Inject, Provider } from '@angular/core';
-import { ConfigService, IShellDef } from './config.service';
+import { ConfigService } from './config.service';
 import * as path from 'path';
 
 let fontManager = require('font-manager');
@@ -18,7 +18,7 @@ export interface IUrlKeys {
 @Injectable()
 export class SystemService {
   fonts: IFonts[];
-  shells: IShellDef[];
+  shells: { shell: string, args: string[] }[];
 
   constructor(@Inject(ConfigService) private _config: ConfigService) {
     this.fonts = [];
@@ -37,21 +37,18 @@ export class SystemService {
     });
   }
 
-  getShells(): Promise<IShellDef[]> {
+  getShells(): Promise<{ shell: string, args: string[] }[]> {
     if (this.shells.length) { return Promise.resolve(this.shells); }
 
-    return new Promise<IShellDef[]>(resolve =>  {
-      if (!this._config.config.settings.shells) { resolve ([]); }
+    return new Promise(resolve =>  {
+      if (!this._config.config.settings.shells) {
+        resolve([]);
+      }
 
       this._config.config.settings.shells.forEach((s: string) => {
-        let foundShell: any = which(s);
+        const foundShell: any = which(s);
         if (foundShell) {
-          this.shells.push({
-            shell: foundShell.toString(),
-            args: [],
-            short: path.basename(foundShell.toString()),
-            toString: function() { return this.short }
-          });
+          this.shells.push({ shell: foundShell.toString(), args: [] });
         }
       });
 
