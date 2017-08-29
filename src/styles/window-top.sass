@@ -1,8 +1,9 @@
 .window-top-container
   display: flex
   width: 100%
-  height: 40px
+  height: 35px
   background: $background
+  align-items: center
   -webkit-user-select: none
 
   &.is-draggable
@@ -10,7 +11,7 @@
 
   .window-top-container__left
     width: 70px
-    height: 40px
+    height: 35px
     display: flex
     align-items: center
     justify-content: center
@@ -34,10 +35,10 @@
         display: flex
         justify-content: center
         align-items: center
+        cursor: pointer
 
         span
           visibility: hidden
-          cursor: default
 
         &.close
           background: #EC695E
@@ -58,8 +59,8 @@
           span
             display: none
 
-    .icons:hover .icon span
-      visibility: visible
+    // .icons:hover .icon span
+    //   visibility: visible
 
 
   .window-top-container__center
@@ -71,12 +72,13 @@
       display: flex
       justify-content: center
       align-items: center
-      border-left: 1px solid #333
-      border-right: 1px solid #333
-      border-bottom: 1px solid #333
+      border-left: 1px solid #1E2B36
+      border-right: 1px solid #1E2B36
+      border-bottom: none
       margin-left: -1px
       min-width: 0px
       position: relative
+      height: 35px
 
       &:first-child
         border-left: none
