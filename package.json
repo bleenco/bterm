@@ -19,7 +19,10 @@
     "test": "karma start ./karma.conf.js",
     "test:e2e": "tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js",
     "lint": "tslint src/**/*.ts",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder --dir",
+    "predist": "npm run build:prod",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -41,6 +44,8 @@
     "@angular/platform-browser-dynamic": "^4.3.6",
     "@angular/router": "^4.3.6",
     "bulma": "^0.5.1",
+    "electron-log": "^2.2.7",
+    "electron-updater": "^2.8.7",
     "electron-window-state-manager": "^0.3.2",
     "font-manager": "^0.2.2",
     "ngx-slimscroll": "^3.3.3",
@@ -76,7 +81,7 @@
     "copyfiles": "^1.2.0",
     "css-loader": "^0.28.5",
     "electron": "^1.7.5",
-    "electron-builder": "^19.26.0",
+    "electron-builder": "^19.26.3",
     "electron-packager": "^9.0.0",
     "electron-reload": "^1.2.1",
     "extract-text-webpack-plugin": "^3.0.0",

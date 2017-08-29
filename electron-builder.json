@@ -1,0 +1,26 @@
+{
+  "appId": "bterm",
+  "directories": {
+    "buildResources": "./node_modules",
+    "app": "./build",
+    "output": "./dist"
+  },
+  "compression": "normal",
+  "extraResources": [],
+  "mac": {
+    "icon": "./assets/icon.icns"
+  },
+  "dmg": {
+    "icon": "./assets/icon.icns"
+  },
+  "nsis": {
+    "installerIcon": "./assets/icon.ico",
+    "installerHeaderIcon": "./assets/icon.ico"
+  },
+  "win": {
+    "icon": "./assets/icon.ico"
+  },
+  "linux": {
+    "target": "deb"
+  }
+}

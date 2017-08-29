@@ -6,6 +6,7 @@ import { keyboardShortcuts } from './keyboard-shortcuts';
 import { getExtraMargin, WindowPosition } from './utils';
 import { platform } from 'os';
 import { join } from 'path';
+import AppUpdater from './app-updater';
 
 if (process.argv.slice(1).some(val => val === '--serve')) {
   require('electron-reload')(__dirname, {
@@ -79,6 +80,8 @@ app.on('ready', () => {
   ipcMain.on('closeApp', () => {
     handleWindowsOnClose();
   });
+
+  const updater = new AppUpdater();
 });
 
 app.on('browser-window-created', (e: Event, win: any) => {
