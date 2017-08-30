@@ -1,12 +1,13 @@
 import { BrowserWindow as BrowserWindowElectron } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as os from 'os';
+const isDev = require('electron-is-dev');
 
 export default class AppUpdater {
   constructor() {
 
     const platform = os.platform();
-    if (platform === 'linux') {
+    if (platform === 'linux' || isDev) {
       return;
     }
 
