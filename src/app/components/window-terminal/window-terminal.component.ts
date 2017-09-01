@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, Inject, HostListener } from '@angular/c
 let electron = require('electron');
 let { ipcRenderer, clipboard, remote } = electron;
 let { Menu, MenuItem, dialog } = remote;
-import { XtermService, Terminal } from '../../services/xterm.service';
+import { HtermService, Terminal } from '../../services/hterm.service';
 import { ConfigService } from '../../services/config.service';
 import { EOL } from 'os';
 import { writeFile } from 'fs';
@@ -18,27 +18,27 @@ export class WindowTerminalComponent implements OnInit {
   selectionTimeout: any;
 
   constructor(
-    @Inject(XtermService) private xterm: XtermService,
+    @Inject(HtermService) private hterm: HtermService,
     @Inject(ConfigService) private config: ConfigService
   ) {}
 
   ngOnInit() {
-    this.xterm.create();
+    this.hterm.create();
     setTimeout(() => this.config.setConfig());
     this.ctrlKey = false;
 
-    ipcRenderer.on('newTab', () => this.xterm.create());
-    ipcRenderer.on('closeTab', () => this.xterm.deleteTab());
-    ipcRenderer.on('clearTab', () => this.xterm.clearTab());
-    ipcRenderer.on('switchTab', (ev, data) => this.xterm.switchTab(data));
-    ipcRenderer.on('tabLeft', () => this.xterm.switchPrev());
-    ipcRenderer.on('tabRight', () => this.xterm.switchNext());
-    ipcRenderer.on('focusCurrent', () => this.xterm.focusCurrent());
+    ipcRenderer.on('newTab', () => this.hterm.create());
+    ipcRenderer.on('closeTab', () => this.hterm.deleteTab());
+    ipcRenderer.on('clearTab', () => this.hterm.clearTab());
+    ipcRenderer.on('switchTab', (ev, data) => this.hterm.switchTab(data));
+    ipcRenderer.on('tabLeft', () => this.hterm.switchPrev());
+    ipcRenderer.on('tabRight', () => this.hterm.switchNext());
+    ipcRenderer.on('focusCurrent', () => this.hterm.focusCurrent());
 
     ipcRenderer.on('paste', () => this.paste());
     ipcRenderer.on('copy', () => this.copy());
     ipcRenderer.on('navigate', (ev, url) => {
-      this.xterm.terminals[this.xterm.currentIndex].output.emit(url);
+      this.hterm.terminals[this.hterm.currentIndex].output.emit(url);
     });
     this.initMenu();
 
@@ -78,7 +78,7 @@ export class WindowTerminalComponent implements OnInit {
   }
 
   paste(): void {
-    this.xterm.terminals[this.xterm.currentIndex].output.emit(clipboard.readText());
+    this.hterm.terminals[this.hterm.currentIndex].output.emit(clipboard.readText());
   }
 
   saveBuffer(): void {
@@ -101,7 +101,7 @@ export class WindowTerminalComponent implements OnInit {
   contextMenu(ev: any) { this.popup(ev); }
 
   @HostListener('window:resize', ['$event'])
-  windowResized(ev: any) { this.xterm.fitTerminal(); }
+  windowResized(ev: any) {  }
 
   @HostListener('document:click', ['$event'])
   clickListener(ev: any) {

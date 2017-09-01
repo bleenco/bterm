@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
-import { XtermService } from '../../services/xterm.service';
+import { HtermService } from '../../services/hterm.service';
 import { SearchService } from '../../services/search.service';
 import { platform } from 'os';
 import { GITService, TGitStatus } from '../../services/git.service';
@@ -33,13 +33,13 @@ export class WindowBottomComponent implements OnInit {
   constructor(
     @Inject(NgZone) private zone: NgZone,
     @Inject(SearchService) private search: SearchService,
-    @Inject(XtermService) private xterm: XtermService,
+    @Inject(HtermService) private hterm: HtermService,
     @Inject(GITService) private _git: GITService
   ) { }
 
   ngOnInit() {
     this.searchForm = new SearchForm();
-    this.xterm.titleEvents.subscribe(event => {
+    this.hterm.titleEvents.subscribe(event => {
       if (event.title === ':') {
         this.currentDir = null;
         this._git.dir = null;
@@ -49,12 +49,12 @@ export class WindowBottomComponent implements OnInit {
       }
 
       this.zone.run(() => {
-        if (this.xterm.terminals[event.index] && event.index === this.xterm.currentIndex) {
+        if (this.hterm.terminals[event.index] && event.index === this.hterm.currentIndex) {
           let dir;
-          if (this.xterm.terminals[event.index].title.indexOf(':') !== -1) {
-            dir = this.xterm.terminals[event.index].title.split(':')[1].trim();
-          } else if (this.xterm.terminals[event.index].title.indexOf('~') !== -1) {
-            dir = this.xterm.terminals[event.index].title.trim();
+          if (this.hterm.terminals[event.index].title.indexOf(':') !== -1) {
+            dir = this.hterm.terminals[event.index].title.split(':')[1].trim();
+          } else if (this.hterm.terminals[event.index].title.indexOf('~') !== -1) {
+            dir = this.hterm.terminals[event.index].title.trim();
           }
 
           if (dir) {
@@ -64,7 +64,7 @@ export class WindowBottomComponent implements OnInit {
               this._git.dir = this.currentDir;
               this._git.branch.then(res => this.currentBranch = res);
               this._git.status.then(res => this.currentStatus = res);
-              this.xterm.cwd = dir;
+              this.hterm.cwd = dir;
             }
           }
         }
