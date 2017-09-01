@@ -88,7 +88,7 @@ export class WindowTerminalComponent implements OnInit {
     let lines: NodeList = parent.querySelectorAll('div');
     let lineBuffer: string[] = [].map.call(lines, (line: Node) => line.textContent).filter(line => line.length);
 
-    dialog.showSaveDialog(remote.getCurrentWindow(), (fn) => {
+    dialog.showSaveDialog(remote.getCurrentWindow(), {}, (fn) => {
       if (!fn) { return; }
 
       writeFile(fn, lineBuffer.join(EOL), (err) => {

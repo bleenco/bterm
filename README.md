@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1796022/29952997-394c61f6-8ecd-11e7-8962-25ebe788b89c.png" width="200">
+  <img src="https://user-images.githubusercontent.com/1796022/29961176-01c586d6-8eff-11e7-8ea0-77128fc7ebd0.png" width="200">
 </p>
 
 # bterm
