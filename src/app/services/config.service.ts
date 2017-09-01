@@ -1,5 +1,5 @@
 import { Injectable, Provider } from '@angular/core';
-import { Terminal } from './xterm.service';
+import { Terminal } from './hterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
 import { join } from 'path';
@@ -48,7 +48,6 @@ export class ConfigService {
       }
 
       setTimeout(() => {
-        term.term.fit();
         if (term.active) { term.term.focus(); }
       });
     });
@@ -109,10 +108,6 @@ export class ConfigService {
     this.css.add('html', `background: ${this.config.style.background} !important;`);
     this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
     this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
-    this.css.add('.xterm-rows',
-      `color: ${this.config.style.color}; font-family: '${this.config.settings.font.family}';`
-      + ` font-size: ${this.config.settings.font.size}px;`
-    );
     this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
     this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
     this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
