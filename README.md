@@ -1,13 +1,13 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/1796022/29952997-394c61f6-8ecd-11e7-8962-25ebe788b89c.png" width="200">
+</p>
+
 # bterm
 
 [![AbstruseCI](https://abstruse.bleenco.io/badge/2)](https://abstruse.bleenco.io/repo/2)
 
 ## Overview
 Fully customisable cross-platform terminal that works and feels the same way everywhere: MacOS, Linux and Windows.
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/1796022/28711498-0a70122a-7388-11e7-8ae4-c43b5cbf517a.png">
-</p>
 
 ## Download
 To download visit
@@ -27,13 +27,13 @@ The selected settings will automatically appear in `.bterm.json` configuration f
 
 ## Features
 In short, you can use bterm just like any other terminal. However, we augment the standard shell functionality with useful features for developers and researchers:
-* **Information on current directory**  
+* **Information on current directory**
   Your current directory path is being displayed at all times in a bottom bar.
-* **Name of the git branch**  
+* **Name of the git branch**
   When working on your git repository, the name of your branch appears next to your shell input.
-* **Opening links with the click**  
+* **Opening links with the click**
   Using hotkey + click for opening links from a console, i.e. `ctrl + click`.
-* **Generate links to files on drag and drop**  
+* **Generate links to files on drag and drop**
 Drag the file into the bterm window and link to the file will automatically be pasted to your shell input.
 
 
@@ -48,7 +48,7 @@ npm run electron
 ```
 
 ### Production build
-To generate bterm production build and installation package, run the following commands: 
+To generate bterm production build and installation package, run the following commands:
 
 ```sh
 npm run app
