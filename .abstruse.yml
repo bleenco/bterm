@@ -1,15 +1,12 @@
 language: node_js
 
-git:
-  depth: 3
-
 matrix:
   - node_js: "8"
     env: SCRIPT=lint
   - node_js: "8"
     env: SCRIPT=test:e2e
 
-preinstall:
+before_install:
   - npm config set spin false
   - npm config set progress false
   - sudo apt-get -y install libfontconfig-dev
@@ -17,12 +14,12 @@ preinstall:
 install:
   - npm install
 
-postinstall:
+before_script:
   - export DISPLAY=:99
   - sudo /etc/init.d/xvfb start
   - sleep 3
   - sudo /etc/init.d/openbox start
   - npm run build:prod
 
-test:
+script:
   - if [[ "$SCRIPT" ]]; then npm run-script $SCRIPT; fi
