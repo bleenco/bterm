@@ -4,6 +4,7 @@
   display: flex
   align-items: center
   justify-content: space-between
+  position: relative
 
   .window-bottom-container__left
     height: 40px
@@ -31,14 +32,6 @@
     align-items: center
     justify-content: center
 
-    .current-process-text
-      font-size: 8px
-      font-weight: 100
-      color: #a5a2a2
-      margin-left: -10px
-      letter-spacing: 1px
-      transition: all 0.5s
-
   .window-bottom-container__right
     display: flex
     flex: 1
@@ -65,3 +58,28 @@
           margin-left: -10px
           letter-spacing: 1px
           transition: all 0.5s
+
+  .search-container
+    background: transparent
+    width: 150px
+    display: flex
+    align-items: center
+    border-radius: 4px
+
+    svg
+      width: 15px
+      height: 15px
+      margin: 0 5px 0 5px
+
+    .search-input
+      width: 120px
+      padding: 7px 15px 7px 0
+      outline: none
+      background: transparent
+      border: none
+      font-size: 13px
+      font-weight: 300
+
+      &::-webkit-input-placeholder
+        color: $white
+

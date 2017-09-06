@@ -9,8 +9,7 @@
       {{ currentDir }}
     </span>
   </div>
-  <div class="window-bottom-container__center">
-  </div>
+  <div class="window-bottom-container__center"></div>
   <div class="window-bottom-container__right">
     <div class="git-output" *ngIf="currentBranch">
       <div class="git-branch">
@@ -21,6 +20,16 @@
           {{ currentBranch }} {{ currentStatus }}
         </span>
       </div>
+    </div>
+    <div class="search-container" *ngIf="searchVisible">
+      <svg width="84px" height="84px" viewBox="0 0 84 84" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g transform="translate(-8.000000, 0.000000)" fill-rule="nonzero" fill="#FFFFFF">
+            <path d="M73.986,33.08 C73.986,24.277 70.566,16.01 64.357,9.802 C58.139,3.583 49.873,0.158 41.079,0.158 C32.287,0.158 24.019,3.583 17.802,9.802 C11.583,16.02 8.158,24.287 8.158,33.08 C8.158,41.872 11.583,50.14 17.801,56.359 C24.018,62.577 32.284,66.002 41.079,66.002 C49.872,66.002 58.14,62.577 64.357,56.359 C70.566,50.151 73.986,41.884 73.986,33.08 Z M56.581,48.582 C52.44,52.722 46.935,55.002 41.079,55.002 C35.225,55.002 29.72,52.722 25.579,48.582 C21.438,44.44 19.158,38.936 19.158,33.08 C19.158,27.226 21.438,21.721 25.579,17.579 C29.719,13.438 35.223,11.158 41.079,11.158 C46.935,11.158 52.44,13.438 56.58,17.579 C65.126,26.126 65.127,40.034 56.581,48.582 Z M90.23,74.453 L73.454,57.678 C72.452,56.675 71.034,56.101 69.565,56.101 C68.096,56.101 66.678,56.675 65.676,57.678 C63.531,59.823 63.531,63.311 65.676,65.455 L82.453,82.23 C83.492,83.269 84.873,83.841 86.342,83.841 C87.811,83.841 89.192,83.269 90.232,82.229 C91.27,81.19 91.841,79.809 91.841,78.341 C91.841,76.872 91.269,75.491 90.23,74.453 Z" id="Shape"></path>
+          </g>
+        </g>
+      </svg>
+      <input type="text" placeholder="Search ..." name="keyword" [(ngModel)]="keyword" (ngModelChange)="search($event)" (keyup)="onKeyUp($event)" class="search-input theme-fg-color">
     </div>
   </div>
 </div>
