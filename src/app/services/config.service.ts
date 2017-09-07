@@ -48,6 +48,13 @@ export class ConfigService {
         el.classList.remove('active');
       }
 
+      term.term.prefs_.set('font-family', this.config.settings.font.family);
+      term.term.prefs_.set('font-size', this.config.settings.font.size);
+      term.term.prefs_.set('background-color', 'transparent');
+      term.term.prefs_.set('foreground-color', this.config.style.color);
+      term.term.prefs_.set('cursor-color', this.config.style.cursor);
+      term.term.prefs_.set('color-palette-overrides', this.config.style.colors);
+
       setTimeout(() => {
         if (term.active) { term.term.focus(); }
       });
@@ -111,6 +118,17 @@ export class ConfigService {
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
       title.style.color = this.config.style.color;
     });
+
+    this.css.clear();
+    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
+    this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
+    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
+    this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
+    this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-fg', `background-color: ${this.config.style.color} !important;`);
+    this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
+    this.css.inject();
 
     setTimeout(() => {
       let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;

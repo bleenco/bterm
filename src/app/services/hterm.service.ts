@@ -89,11 +89,7 @@ export class HtermService {
     terminal.term.prefs_.set('background-color', 'transparent');
     terminal.term.prefs_.set('user-css', 'app.css');
 
-    this.applyTerminalStyles();
     terminal.term.decorate(el);
-
-    el.style.background = this.config.config.style.background;
-
     terminal.term.onTerminalReady = () => {
       this.initializeInstance(terminal, el);
       this.initializeProcess(terminal);
@@ -178,6 +174,7 @@ export class HtermService {
       }
     };
 
+    this.config.setTerminals(this.terminals);
     this.focusCurrent();
   }
 
@@ -242,17 +239,6 @@ export class HtermService {
     setTimeout(() => this.terminals[this.currentIndex].term.focus());
   }
 
-  applyTerminalStyles(): void {
-    this.config.readConfig();
-    this.terminals.forEach(terminal => {
-      terminal.term.prefs_.set('font-family', this.config.config.settings.font.family);
-      terminal.term.prefs_.set('font-size', this.config.config.settings.font.size);
-      terminal.term.prefs_.set('background-color', this.config.config.style.background);
-      terminal.term.prefs_.set('foreground-color', this.config.config.style.color);
-      terminal.term.prefs_.set('cursor-color', this.config.config.style.cursor);
-      terminal.term.prefs_.set('color-palette-overrides', this.config.config.style.colors);
-    });
-  }
 }
 
 export let HtermServiceProvider: Provider = {
