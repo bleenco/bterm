@@ -1,4 +1,5 @@
 import { Injectable, Provider, EventEmitter, Inject, NgZone } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { PTYService, Process } from './pty.service';
 import { ConfigService } from './config.service';
 let electron = require('electron');
@@ -36,7 +37,8 @@ export class HtermService {
   constructor(
     @Inject(PTYService) private pty: PTYService,
     @Inject(NgZone) private zone: NgZone,
-    @Inject(ConfigService) private _config: ConfigService
+    @Inject(DOCUMENT) private document: any,
+    @Inject(ConfigService) private config: ConfigService
   ) {
     this.terminals = [];
     this.outputEvents = new EventEmitter<{ action: string, data: number | null }>();
@@ -49,13 +51,16 @@ export class HtermService {
   }
 
   create(): void {
-    const doc: HTMLDocument = document;
+    const doc: HTMLDocument = this.document;
     const container: HTMLElement = doc.querySelector('.window-terminal-container') as HTMLElement;
     const el: HTMLElement = doc.createElement('div');
-    el.classList.add('terminal-instance');
+    el.classList.add('terminal-instance', 'active');
     container.appendChild(el);
 
-    this.terminals.forEach((term: Terminal) => term.active = false);
+    this.terminals.forEach((term: Terminal) => {
+      term.active = false
+      term.el.classList.remove('active');
+    });
 
     const terminal: Terminal = {
       el: el,
@@ -68,8 +73,9 @@ export class HtermService {
       dir: ''
     };
 
+    this.terminals.push(terminal);
+
     terminal.term.prefs_.storage.clear();
-    terminal.term.decorate(el);
     terminal.term.prefs_.set('audible-bell-sound', '');
     terminal.term.prefs_.set('font-smoothing', 'subpixel-antialiased');
     terminal.term.prefs_.set('enable-bold', false);
@@ -81,16 +87,23 @@ export class HtermService {
     terminal.term.prefs_.set('scrollbar-visible', false);
     terminal.term.prefs_.set('enable-clipboard-notice', false);
     terminal.term.prefs_.set('background-color', 'transparent');
+    terminal.term.prefs_.set('user-css', 'app.css');
+
+    this.applyTerminalStyles();
+    terminal.term.decorate(el);
+
+    el.style.background = this.config.config.style.background;
 
     terminal.term.onTerminalReady = () => {
       this.initializeInstance(terminal, el);
       this.initializeProcess(terminal);
     }
 
-    this.terminals.push(terminal);
     this.outputEvents.emit({ action: 'created', data: null });
     this.currentIndex = this.terminals.length - 1;
     this.focusCurrent();
+
+    setTimeout(() => window.dispatchEvent(new Event('resize')));
   }
 
   deleteTab(): void {
@@ -147,6 +160,7 @@ export class HtermService {
         let idx = (index - 1 > -1) ? index - 1 : 0;
         this.terminals[idx].active = true;
         this.terminals[idx].el.focus();
+        this.terminals[idx].el.classList.add('active');
         this.outputEvents.emit({ action: 'closed', data: idx });
         this.currentIndex = idx;
       }
@@ -154,8 +168,7 @@ export class HtermService {
 
     terminal.output.subscribe((str: string) => terminal.ps.input.emit(str));
 
-/*
-    terminal.term.on('title', (title: string) => {
+    terminal.term.setWindowTitle = (title: string) => {
       title = title.trim();
       let index = this.terminals.findIndex(t => t.term === terminal.term);
 
@@ -163,7 +176,7 @@ export class HtermService {
         this.terminals[index].title = title;
         this.titleEvents.emit({ index: index, title: title });
       }
-    });*/
+    };
 
     this.focusCurrent();
   }
@@ -203,8 +216,12 @@ export class HtermService {
 
   switchTab(index: number): void {
     if (index > this.terminals.length - 1) { return; }
-    this.terminals.forEach((term: Terminal) => term.active = false);
+    this.terminals.forEach((term: Terminal) => {
+      term.active = false
+      term.el.classList.remove('active');
+    });
     this.terminals[index].active = true;
+    this.terminals[index].el.classList.add('active');
     this.outputEvents.emit({ action: 'switch', data: index });
     this.currentIndex = index;
     this.focusCurrent();
@@ -222,9 +239,20 @@ export class HtermService {
   }
 
   focusCurrent(): void {
-    // setTimeout(() => this.terminals[this.currentIndex].term.focus());
+    setTimeout(() => this.terminals[this.currentIndex].term.focus());
   }
 
+  applyTerminalStyles(): void {
+    this.config.readConfig();
+    this.terminals.forEach(terminal => {
+      terminal.term.prefs_.set('font-family', this.config.config.settings.font.family);
+      terminal.term.prefs_.set('font-size', this.config.config.settings.font.size);
+      terminal.term.prefs_.set('background-color', this.config.config.style.background);
+      terminal.term.prefs_.set('foreground-color', this.config.config.style.color);
+      terminal.term.prefs_.set('cursor-color', this.config.config.style.cursor);
+      terminal.term.prefs_.set('color-palette-overrides', this.config.config.style.colors);
+    });
+  }
 }
 
 export let HtermServiceProvider: Provider = {

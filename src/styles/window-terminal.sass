@@ -5,12 +5,11 @@
   overflow: hidden
   background: transparent
   color: $color
-  padding: 20px 30px
-  font-family: $font-family-roboto-mono
 
   .window-terminal-container
     position: relative
     flex: 1
+    overflow: hidden
 
     .terminal-instance
       position: absolute
@@ -20,17 +19,3 @@
 
       &.active
         display: block
-
-      .terminal
-        background-color: rgba(0,0,0,0)
-        color: inherit
-        font-family: inherit
-        font-feature-settings: "liga" 0
-        position: inherit
-        font-family: $font-family-roboto-mono
-
-        .xterm-viewport
-          overflow: hidden
-          background-color: rgba(0,0,0,0)
-          color: inherit
-          font-family: inherit
