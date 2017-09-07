@@ -1,4 +1,5 @@
-import { Injectable, Provider } from '@angular/core';
+import { Injectable, Provider, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Terminal } from './hterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
@@ -17,7 +18,7 @@ export class ConfigService {
   css: CssBuilder;
   terminals: Terminal[];
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: any) {
     this.terminals = [];
     this.css = new CssBuilder();
     this.homeDir = os.homedir();
@@ -92,37 +93,16 @@ export class ConfigService {
 
   setConfig(): void {
     let doc: HTMLElement = document.documentElement;
-    let terminal: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
+    let term: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
     let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
-    this.css.clear();
-
-    this.config.style.colors.forEach( (color: string, index: number) => {
-      this.css.add(`.xterm-color-${index}`, `color: ${color} !important;`);
-    });
-
-    if (!this.config.settings.urlKey) { this.config.settings['urlKey'] = 'shift'; }
-
-    this.css.add('html', `background: ${this.config.style.background} !important;`);
-    this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
-    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
-    this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
-    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
-    this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
-    this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
-    this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
-    this.css.add('.theme-fg', `background-color: ${this.config.style.color} !important;`);
-    this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
-
-    this.css.inject();
-
-    terminal.style.padding = this.config.settings.windowPadding;
+    term.style.padding = this.config.settings.windowPadding;
 
     doc.style.fontFamily = this.config.settings.font.family;
     doc.style.fontSize = this.config.settings.font.size + 'px';
-    terminal.style.background = this.config.style.background;
+    term.style.background = this.config.style.background;
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;

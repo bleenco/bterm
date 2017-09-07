@@ -3,7 +3,6 @@ let electron = require('electron');
 let { ipcRenderer, clipboard, remote } = electron;
 let { Menu, MenuItem, dialog } = remote;
 import { HtermService, Terminal } from '../../services/hterm.service';
-import { ConfigService } from '../../services/config.service';
 import { EOL } from 'os';
 import { writeFile } from 'fs';
 
@@ -17,14 +16,10 @@ export class WindowTerminalComponent implements OnInit {
   ctrlKey: boolean;
   selectionTimeout: any;
 
-  constructor(
-    @Inject(HtermService) private hterm: HtermService,
-    @Inject(ConfigService) private config: ConfigService
-  ) {}
+  constructor(@Inject(HtermService) private hterm: HtermService) {}
 
   ngOnInit() {
     this.hterm.create();
-    setTimeout(() => this.config.setConfig());
     this.ctrlKey = false;
 
     ipcRenderer.on('newTab', () => this.hterm.create());
@@ -57,10 +52,6 @@ export class WindowTerminalComponent implements OnInit {
     this.ctxMenu = new Menu();
     this.ctxMenu.append(new MenuItem({ label: 'Copy', click: () => this.copy() }));
     this.ctxMenu.append(new MenuItem({ label: 'Paste', click: () => this.paste() }));
-
-    if (this.config.config.settings.scrollBufferSave) {
-      this.ctxMenu.append(new MenuItem({ label: 'Save Screen Buffer', click: () => this.saveBuffer() }));
-    }
   }
 
   popup = (ev: any) => {
@@ -99,18 +90,6 @@ export class WindowTerminalComponent implements OnInit {
 
   @HostListener('document:contextmenu', ['$event'])
   contextMenu(ev: any) { this.popup(ev); }
-
-  @HostListener('window:resize', ['$event'])
-  windowResized(ev: any) {  }
-
-  @HostListener('document:click', ['$event'])
-  clickListener(ev: any) {
-    if (ev.ctrlKey && this.config.config.settings.urlKey === 'ctrl') { this.ctrlKey = true; return; }
-    if (ev.metaKey && this.config.config.settings.urlKey === 'meta') { this.ctrlKey = true; return; }
-    if (ev.shiftKey && this.config.config.settings.urlKey === 'shift') { this.ctrlKey = true; return; }
-    this.ctrlKey = false;
-  }
-
 
   @HostListener('document:selectionchange', ['$event'])
   autoCopy(ev: any) {
