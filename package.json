@@ -14,7 +14,7 @@
     "prebuild": "npm run clean",
     "build": "webpack --display-error-details --progress && npm run build:electron:main",
     "prebuild:prod": "npm run clean",
-    "build:prod": "webpack --display-error-details --env.aot -p --progress && npm run build:electron:main",
+    "build:prod": "webpack --display-error-details --env.aot -p && npm run build:electron:main",
     "app": "npm run build:prod && node package.js",
     "test": "karma start ./karma.conf.js",
     "test:e2e": "tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js",
