@@ -53,7 +53,7 @@ module.exports = function (options, webpackOptions) {
       'font-manager': 'require("font-manager")',
       'child_process': 'require("child_process")',
       'shelljs': 'require("shelljs")',
-      'xterm': 'require("xterm")'
+      'hterm-bundle': 'require("hterm-bundle")'
     }
   });
 
