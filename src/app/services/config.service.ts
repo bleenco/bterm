@@ -1,5 +1,6 @@
-import { Injectable, Provider } from '@angular/core';
-import { Terminal } from './xterm.service';
+import { Injectable, Provider, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Terminal } from './hterm.service';
 import * as os from 'os';
 import * as fs from 'fs';
 import { join } from 'path';
@@ -17,7 +18,7 @@ export class ConfigService {
   css: CssBuilder;
   terminals: Terminal[];
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: any) {
     this.terminals = [];
     this.css = new CssBuilder();
     this.homeDir = os.homedir();
@@ -47,8 +48,14 @@ export class ConfigService {
         el.classList.remove('active');
       }
 
+      term.term.prefs_.set('font-family', this.config.settings.font.family);
+      term.term.prefs_.set('font-size', this.config.settings.font.size);
+      term.term.prefs_.set('background-color', 'transparent');
+      term.term.prefs_.set('foreground-color', this.config.style.color);
+      term.term.prefs_.set('cursor-color', this.config.style.cursor);
+      term.term.prefs_.set('color-palette-overrides', this.config.style.colors);
+
       setTimeout(() => {
-        term.term.fit();
         if (term.active) { term.term.focus(); }
       });
     });
@@ -93,41 +100,16 @@ export class ConfigService {
 
   setConfig(): void {
     let doc: HTMLElement = document.documentElement;
-    let terminal: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
+    let term: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
     let sidebar: HTMLElement = doc.querySelector('.sidebar') as HTMLElement;
 
-    this.css.clear();
-
-    this.config.style.colors.forEach( (color: string, index: number) => {
-      this.css.add(`.xterm-color-${index}`, `color: ${color} !important;`);
-    });
-
-    if (!this.config.settings.urlKey) { this.config.settings['urlKey'] = 'shift'; }
-
-    this.css.add('html', `background: ${this.config.style.background} !important;`);
-    this.css.add('.terminal-cursor', `background: ${this.config.style.cursor} !important; color: ${this.config.style.cursor} !important;`);
-    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
-    this.css.add('.xterm-rows',
-      `color: ${this.config.style.color}; font-family: '${this.config.settings.font.family}';`
-      + ` font-size: ${this.config.settings.font.size}px;`
-    );
-    this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
-    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
-    this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
-    this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
-    this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
-    this.css.add('.theme-fg', `background-color: ${this.config.style.color} !important;`);
-    this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
-
-    this.css.inject();
-
-    terminal.style.padding = this.config.settings.windowPadding;
+    term.style.padding = this.config.settings.windowPadding;
 
     doc.style.fontFamily = this.config.settings.font.family;
     doc.style.fontSize = this.config.settings.font.size + 'px';
-    terminal.style.background = this.config.style.background;
+    term.style.background = this.config.style.background;
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;
@@ -136,6 +118,17 @@ export class ConfigService {
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
       title.style.color = this.config.style.color;
     });
+
+    this.css.clear();
+    this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
+    this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
+    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
+    this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
+    this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
+    this.css.add('.theme-fg', `background-color: ${this.config.style.color} !important;`);
+    this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
+    this.css.inject();
 
     setTimeout(() => {
       let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;

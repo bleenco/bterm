@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone, OnInit, HostListener } from '@angular/core';
-import { XtermService } from '../../services/xterm.service';
+import { HtermService } from '../../services/hterm.service';
 import { ConfigService } from '../../services/config.service';
 let electron = require('electron');
 let remote = require('electron').remote;
@@ -29,12 +29,12 @@ export class WindowTopComponent implements OnInit {
   isDisabled: boolean;
 
   constructor(
-    @Inject(XtermService) private xterm: XtermService,
+    @Inject(HtermService) private hterm: HtermService,
     @Inject(ConfigService) private config: ConfigService,
     @Inject(NgZone) private zone: NgZone) {
     this.tabs = [];
     this.isDarwin = platform() === 'darwin';
-    xterm.outputEvents.subscribe((event: any) => {
+    hterm.outputEvents.subscribe((event: any) => {
       if (event.action === 'created') {
         this.tabs.forEach((tab: Tab) => tab.active = false);
         this.zone.run(() => {
@@ -60,7 +60,7 @@ export class WindowTopComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.xterm.titleEvents.subscribe(data => {
+    this.hterm.titleEvents.subscribe(data => {
       if (typeof this.tabs[data.index] !== 'undefined') {
         this.tabs[data.index].title = this.parseTitle(data.title);
       }
@@ -72,11 +72,11 @@ export class WindowTopComponent implements OnInit {
   switchTab(e: MouseEvent, index: number): void {
     e.preventDefault();
 
-    if (this.xterm.currentIndex === index) {
+    if (this.hterm.currentIndex === index) {
       return;
     }
 
-    this.xterm.switchTab(index);
+    this.hterm.switchTab(index);
     this.tabs.forEach((tab: Tab) => tab.active = false);
     this.tabs[index].active = true;
     this.config.setConfig();
@@ -111,7 +111,7 @@ export class WindowTopComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
 
-    this.xterm.deleteTabByIndex(index);
+    this.hterm.deleteTabByIndex(index);
   }
 
   minimize(): void { ipcRenderer.send('minimize'); }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSlimScrollModule } from 'ngx-slimscroll/src/ngx-slimscroll/module/ngx-slimscroll.module';
-import { XtermServiceProvider } from './services/xterm.service';
+import { HtermServiceProvider } from './services/hterm.service';
 import { PTYServiceProvider } from './services/pty.service';
 import { ConfigServiceProvider } from './services/config.service';
 import { SearchServiceProvider } from './services/search.service';
@@ -33,7 +33,7 @@ import { SystemServiceProvider } from './services/system.service';
   ],
   providers: [
     ConfigServiceProvider,
-    XtermServiceProvider,
+    HtermServiceProvider,
     PTYServiceProvider,
     SearchServiceProvider,
     GITServiceProvider,

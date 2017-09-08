@@ -14,7 +14,7 @@
     "prebuild": "npm run clean",
     "build": "webpack --display-error-details --progress && npm run build:electron:main",
     "prebuild:prod": "npm run clean",
-    "build:prod": "webpack --display-error-details --env.aot -p --progress && npm run build:electron:main",
+    "build:prod": "webpack --display-error-details --env.aot -p && npm run build:electron:main",
     "app": "npm run build:prod && node package.js",
     "test": "karma start ./karma.conf.js",
     "test:e2e": "tsc -p e2e && xvfb-maybe mocha e2e/out/app.e2e.js",
@@ -47,6 +47,7 @@
     "electron-updater": "^2.8.7",
     "electron-window-state-manager": "^0.3.2",
     "font-manager": "^0.2.2",
+    "hterm-bundle": "^0.3.0",
     "ngx-slimscroll": "^3.3.3",
     "node-notifier": "^5.1.2",
     "node-pty": "^0.7.0",
@@ -54,7 +55,6 @@
     "rxjs": "5.4.3",
     "semver": "^5.4.1",
     "shelljs": "^0.7.8",
-    "xterm": "2.9.2",
     "zone.js": "0.8.17"
   },
   "devDependencies": {

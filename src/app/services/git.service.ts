@@ -1,5 +1,4 @@
 import { Injectable, Inject, Provider } from '@angular/core';
-import { ConfigService } from './config.service';
 import * as os from 'os';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
@@ -16,7 +15,7 @@ export class GITService {
   cwd: string;
   git: GITHandler;
 
-  constructor(@Inject(ConfigService) private _config: ConfigService) {
+  constructor() {
     this.git = new GITHandler();
     this.cwd = null;
   }
