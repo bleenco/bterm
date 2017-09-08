@@ -2,8 +2,8 @@ import { Injectable, Provider, EventEmitter, Inject, NgZone } from '@angular/cor
 import { DOCUMENT } from '@angular/common';
 import { PTYService, Process } from './pty.service';
 import { ConfigService } from './config.service';
-let electron = require('electron');
-let { ipcRenderer } = electron;
+const electron = require('electron');
+const { ipcRenderer, webFrame } = electron;
 import { platform, homedir } from 'os';
 import * as hterm from 'hterm-bundle';
 
@@ -73,8 +73,6 @@ export class HtermService {
       dir: ''
     };
 
-    this.terminals.push(terminal);
-
     terminal.term.prefs_.storage.clear();
     terminal.term.prefs_.set('audible-bell-sound', '');
     terminal.term.prefs_.set('font-smoothing', 'subpixel-antialiased');
@@ -88,18 +86,21 @@ export class HtermService {
     terminal.term.prefs_.set('enable-clipboard-notice', false);
     terminal.term.prefs_.set('background-color', 'transparent');
     terminal.term.prefs_.set('user-css', 'app.css');
-
     terminal.term.decorate(el);
+
     terminal.term.onTerminalReady = () => {
       this.initializeInstance(terminal, el);
       this.initializeProcess(terminal);
+
+      setTimeout(() => terminal.term.setFontSize('12'), 100);
     }
 
+    this.terminals.push(terminal);
     this.outputEvents.emit({ action: 'created', data: null });
     this.currentIndex = this.terminals.length - 1;
     this.focusCurrent();
 
-    setTimeout(() => window.dispatchEvent(new Event('resize')));
+    webFrame.setZoomFactor(1);
   }
 
   deleteTab(): void {
