@@ -1,6 +1,6 @@
 {
   "name": "bterm",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "bterm - Cross-Platform Terminal",
   "main": "electron.js",
   "scripts": {
