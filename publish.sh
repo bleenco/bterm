@@ -6,4 +6,4 @@ if [ -z "$GH_TOKEN" ]; then
 fi
 
 # This will build, package and upload the app to GitHub.
-npm run build:prod && ./node_modules/.bin/build --config electron-builder.json --win --mac --publish always
+npm run build:prod && ./node_modules/.bin/build --config electron-builder.json --mac --publish always
