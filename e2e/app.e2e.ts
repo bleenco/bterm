@@ -54,7 +54,7 @@ describe('bterm launch', function() {
       .then(result => expect(result).to.be.false);
   });
 
-  it('should minimize the application after click on minimize', () => {
+  xit('should minimize the application after click on minimize', () => {
     return app.client.waitUntilWindowLoaded()
       .then(() => app.client.click('.minimize'))
       .then(() => wait(1000))
