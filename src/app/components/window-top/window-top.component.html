@@ -1,4 +1,4 @@
-<div class="window-top-container" (dblclick)="tabMaximize()" [ngClass]="{ 'is-draggable': isDarwin }">
+<div class="window-top-container" [ngClass]="{ 'is-draggable': isDarwin }">
   <div class="window-top-container__left" [ngClass]="{ 'bordered': tabs.length > 1 && !tabs[0].active }">
     <div class="icons">
       <span class="icon close" (click)="close()">

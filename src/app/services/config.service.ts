@@ -100,6 +100,7 @@ export class ConfigService {
 
   setConfig(): void {
     let doc: HTMLElement = document.documentElement;
+    let container: HTMLElement = doc.querySelector('.app-root-container') as HTMLElement;
     let term: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
@@ -113,6 +114,8 @@ export class ConfigService {
     topBar.style.background = this.config.style['top_bar_background'];
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;
+
+    container.style.border = `1px solid ${this.config.style.background}`;
 
     topBar.style.font =  this.config.settings.font.family;
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
@@ -130,22 +133,20 @@ export class ConfigService {
     this.css.add('.theme-fg-fill', `fill: ${this.config.style.color} !important;`);
     this.css.inject();
 
-    setTimeout(() => {
-      let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;
-      let folderText = bottomBar.querySelector('.current-folder-text') as HTMLElement;
+    let folderIcon = bottomBar.querySelector('.icon-folder > svg > path') as SVGPathElement;
+    let folderText = bottomBar.querySelector('.current-folder-text') as HTMLElement;
 
-      if (folderIcon) {
-        folderIcon.style.fill = this.config.style.color;
-        folderIcon.style.stroke = this.config.style.color;
-        folderIcon.style.strokeWidth = '1';
-      }
+    if (folderIcon) {
+      folderIcon.style.fill = this.config.style.color;
+      folderIcon.style.stroke = this.config.style.color;
+      folderIcon.style.strokeWidth = '1';
+    }
 
-      if (folderText) {
-        folderText.style.color = this.config.style.color;
-      }
+    if (folderText) {
+      folderText.style.color = this.config.style.color;
+    }
 
-      this.setSidebarConfig();
-    }, 1000);
+    this.setSidebarConfig();
 
     this.decorateTerminals();
   }
