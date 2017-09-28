@@ -1,6 +1,5 @@
 const electron = require('electron');
 const { app, BrowserWindow, globalShortcut, ipcMain } = electron;
-const WindowStateManager = require('electron-window-state-manager');
 import menu from './app/menu';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 import { getExtraMargin, WindowPosition } from './utils';
@@ -17,22 +16,14 @@ if (process.argv.slice(1).some(val => val === '--serve')) {
 
 let current = null;
 let windows = [];
-let positionData: WindowPosition = null;
-
-const mainWindowState = new WindowStateManager('mainWindow', {
-  defaultWidth: 600,
-  defaultHeight: 460
-});
 
 function createWindow(): any {
   let win: any = new BrowserWindow({
-    width: mainWindowState.width,
-    height: mainWindowState.height,
-    x: getPosition('width'),
-    y: getPosition('height'),
+    width: 800,
+    height: 600,
     frame: false,
     show: false,
-    backgroundColor: '#000000'
+    backgroundColor: 'transparent'
   });
 
   win.setMenu(null);
@@ -44,14 +35,6 @@ function createWindow(): any {
 }
 
 app.on('ready', () => {
-  positionData = {
-    screenSize: electron.screen.getPrimaryDisplay().workAreaSize,
-    widthLines: 0,
-    heightLines: 0,
-    width: mainWindowState.x,
-    height: mainWindowState.y
-  }
-
   let m = menu();
   let win = createWindow();
   win.setMenu(m);
@@ -112,21 +95,6 @@ app.on('activate', () => {
   }
 });
 
-function getPosition(attr: string) {
-  let attrLines = attr + 'Lines';
-  let isHeight = attr === 'height';
-  let extraMargin = getExtraMargin(process.platform, positionData[attrLines], positionData[attr], isHeight);
-  let position = positionData[attrLines] * 40 + (positionData[attr] + extraMargin);
-  let bound = position + mainWindowState.height;
-  if (bound > positionData.screenSize[attr]) {
-    positionData[attrLines] = positionData[attr] = 0;
-    positionData[attr] = getExtraMargin(process.platform, positionData[attrLines], positionData[attr], isHeight);
-  } else {
-    positionData[attrLines]++;
-  }
-  return position;
-}
-
 function handleWindowsOnStart(win: any) {
   current = win;
   if (!windows.filter(w => w.id === win.id).length) {
@@ -136,7 +104,6 @@ function handleWindowsOnStart(win: any) {
 
 function handleWindowsOnClose() {
   unregisterShortcuts();
-  mainWindowState.saveState(current);
   windows = windows.filter(w => w.id !== current.id);
   current.close();
   current = windows[windows.length - 1] || null;

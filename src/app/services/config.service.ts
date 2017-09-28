@@ -100,7 +100,6 @@ export class ConfigService {
 
   setConfig(): void {
     let doc: HTMLElement = document.documentElement;
-    let container: HTMLElement = doc.querySelector('.app-root-container') as HTMLElement;
     let term: HTMLElement = doc.querySelector('.window-terminal') as HTMLElement;
     let topBar: HTMLElement = doc.querySelector('.window-top-container') as HTMLElement;
     let bottomBar: HTMLElement = doc.querySelector('.window-bottom-container') as HTMLElement;
@@ -115,8 +114,6 @@ export class ConfigService {
     bottomBar.style.background = this.config.style['bottom_bar_background'];
     sidebar.style.background = this.config.style.background;
 
-    container.style.border = `1px solid ${this.config.style.background}`;
-
     topBar.style.font =  this.config.settings.font.family;
     [].forEach.call(topBar.querySelectorAll('.title'), title => {
       title.style.color = this.config.style.color;
@@ -125,7 +122,7 @@ export class ConfigService {
     this.css.clear();
     this.css.add('.terminal-instance .active', `font-size: ${this.config.settings.font.size}px !important;`);
     this.css.add('.close-tab-fill', `fill: ${this.config.style.color} !important;`);
-    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.colors[3]} !important;`);
+    this.css.add('.close-tab-fill:hover', `fill: ${this.config.style.color} !important;`);
     this.css.add('.theme-fg-color', `color: ${this.config.style.color} !important;`);
     this.css.add('.theme-bg-color', `color: ${this.config.style.background} !important;`);
     this.css.add('.theme-bg', `background-color: ${this.config.style.background} !important;`);
@@ -147,7 +144,6 @@ export class ConfigService {
     }
 
     this.setSidebarConfig();
-
     this.decorateTerminals();
   }
 
@@ -191,6 +187,8 @@ export class ConfigService {
       if (sideBarHeading) {
         sideBarHeading.style.color = this.config.style.color;
       }
+
+      sidebar.style['border-color'] = this.config.style.color;
 
       setTimeout(() => {
         let themeBrowser = sidebar.querySelector('.theme-browser') as HTMLElement;
