@@ -167,7 +167,7 @@ describe('bterm launch', function() {
     // TODO: This is not valid when using zsh or fish shell
   });
 
-  it('should open the right menu', () => {
+  xit('should open the right menu', () => {
     return app.client.waitUntilWindowLoaded()
       .then(() => app.client.click('.menu-open'))
       .then(() => wait(1000))
