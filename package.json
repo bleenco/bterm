@@ -21,7 +21,8 @@
     "lint": "tslint src/**/*.ts",
     "pack": "electron-builder --dir",
     "predist": "npm run build:prod",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "preinstall": "./preinstall.sh"
   },
   "repository": {
     "type": "git",

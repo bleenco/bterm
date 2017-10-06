@@ -32,7 +32,9 @@ builder.build({
       icon: path.resolve(__dirname, 'assets/icon.ico'),
     },
     linux: {
-      target: 'deb'
+      target: 'deb',
+      category: 'development',
+      icon: path.resolve(__dirname, 'assets')
     }
   }
 })
