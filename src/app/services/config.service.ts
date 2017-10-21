@@ -54,6 +54,7 @@ export class ConfigService {
       term.term.prefs_.set('foreground-color', this.config.style.color);
       term.term.prefs_.set('cursor-color', this.config.style.cursor);
       term.term.prefs_.set('color-palette-overrides', this.config.style.colors);
+      term.term.setFontSize(this.config.settings.font.size);
 
       setTimeout(() => {
         if (term.active) { term.term.focus(); }

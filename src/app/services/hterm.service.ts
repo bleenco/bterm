@@ -91,8 +91,6 @@ export class HtermService {
     terminal.term.onTerminalReady = () => {
       this.initializeInstance(terminal, el);
       this.initializeProcess(terminal);
-
-      setTimeout(() => terminal.term.setFontSize('12'), 100);
     }
 
     this.terminals.push(terminal);
