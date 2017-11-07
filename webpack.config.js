@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-const AoTPlugin = require('@ngtools/webpack').AotPlugin;
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const html = require('html-webpack-plugin');
@@ -101,36 +101,17 @@ module.exports = function (options, webpackOptions) {
     config = webpackMerge({}, config, getStylesConfig());
   }
 
-  if (options.aot) {
-    console.log(`Running build with AoT compilation...`)
-
-    config = webpackMerge({}, config, {
-      module: {
-        rules: [{ test: /\.ts$/, loader: '@ngtools/webpack' }]
-      },
-      plugins: [
-        new AoTPlugin({
-          mainPath: root('src/main.ts'),
-          exclude: [],
-          tsConfigPath: root('src/tsconfig.app.json')
-        })
-      ]
-    });
-  } else {
-    config = webpackMerge({}, config, {
-      module: {
-        rules: [{ test: /\.ts$/, loader: '@ngtools/webpack' }]
-      },
-      plugins: [
-        new AoTPlugin({
-          mainPath: 'main.ts',
-          exclude: [],
-          tsConfigPath: root('src/tsconfig.app.json'),
-          skipCodeGeneration: true
-        })
-      ]
-    });
-  }
+  config = webpackMerge({}, config, {
+    module: {
+      rules: [{ test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/, loader: '@ngtools/webpack' }]
+    },
+    plugins: [
+      new AngularCompilerPlugin({
+        tsConfigPath: root('src/tsconfig.app.json'),
+        entryModule: 'src/app/app.module#AppModule'
+      })
+    ]
+  });
 
   return config;
 }

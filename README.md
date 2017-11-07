@@ -4,7 +4,7 @@
 
 # bterm
 
-[![AbstruseCI](https://abstruse.bleenco.io/badge/2)](https://abstruse.bleenco.io/repo/2)
+[![AbstruseCI](https://ci.bleenco.io/badge/2)](https://ci.bleenco.io/repo/2)
 
 ## Overview
 Fully customisable cross-platform terminal that works and feels the same way everywhere: MacOS, Linux and Windows.
