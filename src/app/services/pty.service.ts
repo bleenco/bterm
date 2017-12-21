@@ -1,7 +1,9 @@
 import { Injectable, Provider, EventEmitter, Inject } from '@angular/core';
 import { ConfigService } from './config.service';
 import * as os from 'os';
-let pty = require('node-pty');
+const electron = require('electron');
+const app = electron.app || electron.remote.app;
+const pty = require('node-pty');
 
 export interface Process {
   pty: any,
@@ -26,13 +28,19 @@ export class PTYService {
     const defaultShell = this._config.getDefaultShell();
     const shell = defaultShell.shell;
     const args = defaultShell.args;
+    const env = Object.assign({}, process.env, {
+      LANG: app.getLocale().replace('-', '_') + '.UTF-8',
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      TERM_PROGRAM: 'bterm'
+    });
 
     const ps: Process = {
       pty: pty.spawn(shell, args, {
-        name: 'xterm-256color',
         cols: 80,
         rows: 30,
-        cwd: cwd
+        cwd: cwd,
+        env: env
       }),
       input: new EventEmitter<string>(),
       output: new EventEmitter<string>(),
