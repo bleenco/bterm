@@ -30,9 +30,7 @@ function createWindow() {
     width,
     height,
     center: true,
-    frame: false,
-    vibrancy: 'light',
-    titleBarStyle: 'hiddenInset'
+    frame: false
   });
 
   win.loadURL(url.format({

@@ -10,11 +10,13 @@ import { WindowService } from './providers/window.service';
 
 import { AppComponent } from './app.component';
 import { TerminalComponent } from './components/terminal/terminal.component';
+import { TitleBarComponent } from './components/title-bar/title-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TerminalComponent
+    TerminalComponent,
+    TitleBarComponent
   ],
   imports: [
     BrowserModule

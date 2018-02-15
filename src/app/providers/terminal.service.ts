@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/filter';
 import * as os from 'os';
 import { spawn } from 'node-pty';
 import { Terminal, ITheme } from 'xterm';
@@ -16,6 +17,13 @@ export interface PtyProcessType {
   onData: Observable<string>;
   write: Subject<string>;
   writeSub: Subscription;
+}
+
+export interface TerminalType {
+  ptyProcess: PtyProcess;
+  term: Terminal;
+  title: string;
+  subscriptions: Subscription[];
 }
 
 class PtyProcess implements PtyProcessType {
@@ -40,11 +48,12 @@ class PtyProcess implements PtyProcessType {
 
 @Injectable()
 export class TerminalService {
-  processes: PtyProcess[];
+  terminals: TerminalType[];
+  currentIndex: number;
   lightTheme: ITheme;
 
   constructor(public windowService: WindowService) {
-    this.processes = [];
+    this.terminals = [];
     Terminal.applyAddon(fit);
     this.lightTheme = {
       foreground: '#000000',
@@ -72,21 +81,46 @@ export class TerminalService {
   }
 
   create(el: HTMLMainElement): void {
-    const term = new Terminal();
-    term.open(el);
-    term.setOption('fontFamily', 'Monaco');
-    term.setOption('fontSize', 12);
-    term.setOption('theme', this.lightTheme);
+    const terminal: TerminalType = {
+      ptyProcess: new PtyProcess(),
+      term: new Terminal(),
+      title: 'Shell',
+      subscriptions: []
+    };
 
-    term.focus();
-    const proc = new PtyProcess();
-    this.processes.push(proc);
+    this.terminals.push(terminal);
+    this.currentIndex = this.terminals.length;
 
-    proc.onData.subscribe(data => term.write(data));
-    term.on('key', (key: string, e: KeyboardEvent) => proc.write.next(key));
-    term.on('resize', sizeData => proc.process.resize(sizeData.cols, sizeData.rows));
-    this.windowService.size.subscribe(size => {
-      (<any>term).fit();
-    });
+    terminal.term.open(el);
+    terminal.term.setOption('fontFamily', 'Monaco');
+    terminal.term.setOption('fontSize', 12);
+    terminal.term.setOption('theme', this.lightTheme);
+    terminal.term.focus();
+
+    terminal.subscriptions.push(terminal.ptyProcess.onData.subscribe(data => {
+      terminal.term.write(data);
+    }));
+    terminal.subscriptions.push(
+      Observable.fromEvent(terminal.term, 'title')
+        .filter((x, i) => i % 2 === 0)
+        .subscribe((title: string) => {
+          terminal.title = title;
+        })
+    );
+    terminal.subscriptions.push(
+      Observable.fromEvent(terminal.term, 'key').subscribe((key: string) => {
+        terminal.ptyProcess.write.next(key);
+      })
+    );
+    terminal.subscriptions.push(
+      Observable.fromEvent(terminal.term, 'resize').subscribe((sizeData: any) => {
+        terminal.ptyProcess.process.resize(sizeData.cols, sizeData.rows);
+      })
+    );
+    terminal.subscriptions.push(
+      this.windowService.size.subscribe(size => {
+        (<any>terminal.term).fit();
+      })
+    );
   }
 }
