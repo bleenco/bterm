@@ -1,4 +1,5 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { getMenu } from './src/app/menu';
 import * as path from 'path';
 
 let win, serve;
@@ -11,7 +12,7 @@ if (serve) {
   });
 }
 
-function createWindow() {
+function createWindow(): BrowserWindow {
   const electronScreen = screen;
   const display = electronScreen.getPrimaryDisplay();
 
@@ -30,8 +31,11 @@ function createWindow() {
     width,
     height,
     center: true,
-    frame: false
+    frame: false,
+    show: false
   });
+
+  win.setMenu(getMenu());
 
   win.loadURL(url.format({
     protocol: 'file:',
@@ -43,12 +47,30 @@ function createWindow() {
     // win.webContents.openDevTools();
   }
 
-  win.on('closed', () => {
-    win = null;
-  });
+  win.once('ready-to-show', () => win.show());
+  win.on('closed', () => win = null);
+  win.on('move', event => win.webContents.send('move', event));
+
+  return win;
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  const appWindow = createWindow();
+
+  ipcMain.on('minimize', () => appWindow.minimize());
+  ipcMain.on('tabMaximize', () => appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize());
+  ipcMain.on('maximize', () => {
+    const isMac = process.platform === 'darwin'
+    if (isMac) {
+      appWindow.setFullScreen(!appWindow.isFullScreen());
+    } else {
+      appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize();
+    }
+  });
+  ipcMain.on('close', () => appWindow.close());
+  ipcMain.on('closeApp', () => appWindow.close());
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();

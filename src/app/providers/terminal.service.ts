@@ -3,16 +3,16 @@ import { WindowService } from './window.service';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/filter';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { timer } from 'rxjs/observable/timer';
+import { map, share, filter, debounce } from 'rxjs/operators';
 import * as os from 'os';
 import { spawn } from 'node-pty';
 import { Terminal, ITheme } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import { execSync } from 'child_process';
 import { which } from 'shelljs';
+import { ipcRenderer } from 'electron';
 
 export interface PtyProcessType {
   shell: { shell: string, args: string[] };
@@ -46,7 +46,7 @@ class PtyProcess implements PtyProcessType {
       cwd: process.env.HOME
     });
 
-    this.onData = Observable.fromEvent(this.process, 'data').map(x => x.toString()).share();
+    this.onData = Observable.fromEvent(this.process, 'data').map(x => x.toString()).pipe(share());
     this.write = new Subject<string>();
     this.writeSub = this.write.map(input => this.process.write(input)).subscribe();
   }
@@ -89,6 +89,8 @@ export class TerminalService {
   constructor(public windowService: WindowService) {
     this.terminals = [];
     Terminal.applyAddon(fit);
+    this.initIpcListeners();
+
     this.lightTheme = {
       foreground: '#000000',
       background: '#ffffff',
@@ -138,6 +140,12 @@ export class TerminalService {
     };
   }
 
+  initIpcListeners(): void {
+    Observable.fromEvent(ipcRenderer, 'move')
+      .pipe(debounce(() => timer(100)))
+      .subscribe(event => this.focusCurrentTab());
+  }
+
   create(el: HTMLMainElement): void {
     const terminal: TerminalType = {
       ptyProcess: new PtyProcess(),
@@ -147,7 +155,7 @@ export class TerminalService {
     };
 
     this.terminals.push(terminal);
-    this.currentIndex = this.terminals.length;
+    this.currentIndex = this.terminals.length - 1;
 
     terminal.term.open(el);
     terminal.term.setOption('fontFamily', 'Monaco');
@@ -160,7 +168,7 @@ export class TerminalService {
     }));
     terminal.subscriptions.push(
       Observable.fromEvent(terminal.term, 'title')
-        .filter((x, i) => i % 2 === 0)
+        .pipe(filter((x, i) => i % 2 === 0))
         .subscribe((title: string) => {
           terminal.title = title;
         })
@@ -180,5 +188,10 @@ export class TerminalService {
         (<any>terminal.term).fit();
       })
     );
+  }
+
+  focusCurrentTab(): void {
+    const terminal = this.terminals[this.currentIndex];
+    terminal.term.focus();
   }
 }
