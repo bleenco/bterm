@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { WindowService } from './window.service';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -23,6 +23,7 @@ export interface PtyProcessType {
 }
 
 export interface TerminalType {
+  el: HTMLElement;
   ptyProcess: PtyProcess;
   term: Terminal;
   title: string;
@@ -85,11 +86,12 @@ export class TerminalService {
   currentIndex: number;
   lightTheme: ITheme;
   darkTheme: ITheme;
+  events: EventEmitter<{ type: string, index: number }>;
 
   constructor(public windowService: WindowService) {
     this.terminals = [];
     Terminal.applyAddon(fit);
-    this.initIpcListeners();
+    this.events = new EventEmitter<{ type: string, index: number }>();
 
     this.lightTheme = {
       foreground: '#000000',
@@ -140,14 +142,14 @@ export class TerminalService {
     };
   }
 
-  initIpcListeners(): void {
-    Observable.fromEvent(ipcRenderer, 'move')
-      .pipe(debounce(() => timer(100)))
-      .subscribe(event => this.focusCurrentTab());
-  }
-
   create(el: HTMLMainElement): void {
+    const doc: HTMLDocument = document;
+    const element = doc.createElement('div');
+    element.classList.add('terminal-instance');
+    el.appendChild(element);
+
     const terminal: TerminalType = {
+      el: element,
       ptyProcess: new PtyProcess(),
       term: new Terminal(),
       title: 'Shell',
@@ -157,11 +159,11 @@ export class TerminalService {
     this.terminals.push(terminal);
     this.currentIndex = this.terminals.length - 1;
 
-    terminal.term.open(el);
+    terminal.term.open(element);
     terminal.term.setOption('fontFamily', 'Monaco');
     terminal.term.setOption('fontSize', 12);
     terminal.term.setOption('theme', this.darkTheme);
-    terminal.term.focus();
+    this.focusCurrentTab();
 
     terminal.subscriptions.push(terminal.ptyProcess.onData.subscribe(data => {
       terminal.term.write(data);
@@ -190,8 +192,16 @@ export class TerminalService {
     );
   }
 
+  focusTab(i: number): void {
+    const terminal = this.terminals[i];
+    this.currentIndex = i;
+    this.events.emit({ type: 'focusTab', index: i });
+    terminal.term.focus();
+  }
+
   focusCurrentTab(): void {
     const terminal = this.terminals[this.currentIndex];
+    this.events.emit({ type: 'focusTab', index: this.currentIndex });
     terminal.term.focus();
   }
 }

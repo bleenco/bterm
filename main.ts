@@ -1,5 +1,6 @@
-import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron';
 import { getMenu } from './src/app/menu';
+import { keyboardShortcuts } from './src/app/keyboard-shortcuts';
 import * as path from 'path';
 
 let win, serve;
@@ -11,6 +12,41 @@ if (serve) {
   require('electron-reload')(__dirname, {
   });
 }
+
+app.on('ready', () => {
+  const appWindow = createWindow();
+
+  ipcMain.on('minimize', () => appWindow.minimize());
+  ipcMain.on('tabMaximize', () => appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize());
+  ipcMain.on('maximize', () => {
+    const isMac = process.platform === 'darwin'
+    if (isMac) {
+      appWindow.setFullScreen(!appWindow.isFullScreen());
+    } else {
+      appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize();
+    }
+  });
+  ipcMain.on('close', () => {
+    unregisterShortcuts();
+    appWindow.close();
+  });
+  ipcMain.on('closeApp', () => {
+    unregisterShortcuts();
+    appWindow.close();
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (win === null) {
+    createWindow();
+  }
+});
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
@@ -47,38 +83,33 @@ function createWindow(): BrowserWindow {
     // win.webContents.openDevTools();
   }
 
+  registerShortcuts(win);
+
   win.once('ready-to-show', () => win.show());
+  win.on('blur', () => unregisterShortcuts());
+  win.on('focus', () => registerShortcuts(win));
   win.on('closed', () => win = null);
   win.on('move', event => win.webContents.send('move', event));
 
   return win;
 }
 
-app.on('ready', () => {
-  const appWindow = createWindow();
+function registerShortcuts(window: any): void {
+  const keypressFunctions = {
+    send: (key, value) => window.webContents.send(key, value),
+    toggleDevTools: () => window.webContents.toggleDevTools(),
+    createWindow: () => createWindow()
+  };
 
-  ipcMain.on('minimize', () => appWindow.minimize());
-  ipcMain.on('tabMaximize', () => appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize());
-  ipcMain.on('maximize', () => {
-    const isMac = process.platform === 'darwin'
-    if (isMac) {
-      appWindow.setFullScreen(!appWindow.isFullScreen());
-    } else {
-      appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize();
-    }
+  keyboardShortcuts.forEach(shortcut => {
+    globalShortcut.register(shortcut.keypress, () => {
+      keypressFunctions[shortcut.sctype](shortcut.sckey, shortcut.scvalue);
+    });
   });
-  ipcMain.on('close', () => appWindow.close());
-  ipcMain.on('closeApp', () => appWindow.close());
-});
+}
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (win === null) {
-    createWindow();
-  }
-});
+function unregisterShortcuts(): void {
+  keyboardShortcuts.forEach(shortcut => {
+    globalShortcut.unregister(shortcut.keypress);
+  });
+}

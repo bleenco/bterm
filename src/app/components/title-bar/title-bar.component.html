@@ -1,6 +1,6 @@
 <div class="header">
   <div class="tabs">
-    <div class="tab" *ngFor="let tab of terminalService.terminals; let i = index;">
+    <div class="tab" *ngFor="let tab of terminalService.terminals; let i = index;" (click)="terminalService.focusTab(i)">
       {{ tab.title }}
     </div>
   </div>
