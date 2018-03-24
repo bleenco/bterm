@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { TerminalService } from '../../providers/terminal.service';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, clipboard } from 'electron';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -69,6 +69,26 @@ export class TerminalComponent implements OnInit, OnDestroy {
       Observable.fromEvent(ipcRenderer, 'leave-full-screen')
         .subscribe(() => this.terminalService.focusCurrentTab())
     );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'tabLeft')
+        .subscribe(() => this.previousTab())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'tabRight')
+        .subscribe(() => this.nextTab())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'paste')
+        .subscribe(() => this.paste())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'copy')
+        .subscribe(() => this.copy())
+    );
   }
 
   initTerminalEvents(): void {
@@ -96,6 +116,55 @@ export class TerminalComponent implements OnInit, OnDestroy {
     [].forEach.call(elements, el => this.renderer.setStyle(el, 'display', 'none'));
     this.renderer.setStyle(elements[i], 'display', 'block');
     (<any>this.terminalService.terminals[i].term).fit();
+  }
+
+  previousTab(): void {
+    if (this.terminalService.terminals.length === 1) {
+      return;
+    }
+
+    const currentIndex = this.terminalService.currentIndex;
+    let index = null;
+    if (currentIndex - 1 < 0) {
+      index = this.terminalService.terminals.length - 1;
+    } else {
+      index = currentIndex - 1;
+    }
+
+    this.terminalService.currentIndex = index;
+    this.setActiveTab(index);
+    this.terminalService.focusTab(index);
+  }
+
+  nextTab(): void {
+    if (this.terminalService.terminals.length === 1) {
+      return;
+    }
+
+    const currentIndex = this.terminalService.currentIndex;
+    let index = null;
+    if (currentIndex + 1 > this.terminalService.terminals.length - 1) {
+      index = 0;
+    } else {
+      index = currentIndex + 1;
+    }
+
+    this.terminalService.currentIndex = index;
+    this.setActiveTab(index);
+    this.terminalService.focusTab(index);
+  }
+
+  paste(): void {
+    this.terminalService.terminals[this.terminalService.currentIndex].ptyProcess.write.next(clipboard.readText());
+  }
+
+  copy(): void {
+    const term = this.terminalService.terminals[this.terminalService.currentIndex].term;
+    if (term.hasSelection()) {
+      const selection = term.getSelection();
+      clipboard.writeText(selection);
+      term.clearSelection();
+    }
   }
 
 }
