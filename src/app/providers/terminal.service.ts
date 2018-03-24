@@ -42,17 +42,10 @@ class PtyProcess implements PtyProcessType {
 
   constructor() {
     this.shell = this.getDefaultShell();
-    const envVars = Object.assign({}, process.env, {
-      TERM: 'xterm-256color',
-      COLORTERM: 'truecolor',
-      TERM_PROGRAM: 'bterm'
-    });
-
     this.process = spawn(this.shell.shell, this.shell.args, {
       cols: 80,
       rows: 30,
-      cwd: os.homedir(),
-      env: envVars
+      cwd: os.homedir()
     });
 
     const decoder = new StringDecoder('utf8');
@@ -170,7 +163,7 @@ export class TerminalService {
     this.currentIndex = this.terminals.length - 1;
 
     terminal.term.open(element);
-    terminal.term.setOption('fontFamily', 'Monaco, Menlo, monospace');
+    terminal.term.setOption('fontFamily', 'Monaco, Menlo, \'DejaVu Sans Mono\', \'Ubuntu Mono\', monospace');
     terminal.term.setOption('fontSize', 12);
     terminal.term.setOption('theme', this.darkTheme);
     this.focusCurrentTab();
@@ -186,8 +179,17 @@ export class TerminalService {
     }));
     terminal.subscriptions.push(
       Observable.fromEvent(terminal.term, 'title')
-        .pipe(filter((x, i) => i % 2 === 0))
+        .pipe(filter((x: string, i) => {
+          if (terminal.ptyProcess.shell.shell.endsWith('zsh')) {
+            return i % 2 === 0;
+          } else if (terminal.ptyProcess.shell.shell.endsWith('bash')) {
+            return x.startsWith('~') ? false : true;
+          } else {
+            return true;
+          }
+        }))
         .subscribe((title: string) => {
+          console.log(title);
           terminal.title = title;
         })
     );
