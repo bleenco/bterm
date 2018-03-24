@@ -4,7 +4,8 @@ import { ConfigService } from './config.service';
 let electron = require('electron');
 let { ipcRenderer } = electron;
 import { platform, homedir } from 'os';
-import * as XTerminal from 'xterm';
+import { Terminal as XTerminal } from 'xterm';
+import * as fit from 'xterm/lib/addons/fit/fit';
 
 export interface Terminal {
   el: HTMLElement,
@@ -54,7 +55,7 @@ export class XtermService {
 
     this.terminals.forEach((term: Terminal) => term.active = false);
 
-    XTerminal.loadAddon('fit');
+    XTerminal.applyAddon(fit);
     const terminal: Terminal = {
       el: el,
       storage: null,
@@ -78,7 +79,7 @@ export class XtermService {
     });
 
 
-    setTimeout(() => terminal.term.open(terminal.el, true));
+    setTimeout(() => terminal.term.open(terminal.el));
   }
 
   deleteTab(): void {

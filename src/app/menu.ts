@@ -1,5 +1,4 @@
-let electron = require('electron');
-let { Menu, dialog, ipcMain, app } = electron;
+import { Menu, dialog, ipcMain, app } from 'electron';
 
 let template = [
   {
@@ -64,7 +63,7 @@ let template = [
 ];
 
 export default function() {
-  let menu = Menu.buildFromTemplate(template as any);
+  const menu = Menu.buildFromTemplate(template as any);
   Menu.setApplicationMenu(menu);
 
   return menu;
