@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { TerminalService } from '../../providers/terminal.service';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -39,14 +39,29 @@ export class TerminalComponent implements OnInit {
 
   initTerminalEvents(): void {
     this.terminalService.events.subscribe(event => {
+      const elements = this.el.querySelectorAll('.terminal-instance');
       if (event.type === 'focusTab') {
-        console.log(event.index);
-        const elements = this.el.querySelectorAll('.terminal-instance');
-        [].forEach.call(elements, el => this.renderer.setStyle(el, 'display', 'none'));
-        this.renderer.setStyle(this.terminalService.terminals[event.index].el, 'display', 'block');
-        (<any>this.terminalService.terminals[event.index].term).fit();
+        this.setActiveTab(event.index);
+      } else if (event.type === 'destroy') {
+        const element = elements[event.index];
+        this.renderer.removeChild(element.parentElement, element);
+        this.terminalService.terminals = this.terminalService.terminals.filter(t => t.el !== element);
+        const index = this.el.querySelectorAll('.terminal-instance').length - 1;
+        if (index > -1) {
+          this.setActiveTab(index);
+          this.terminalService.focusTab(index);
+        } else {
+          ipcRenderer.send('close', remote.getCurrentWindow().id);
+        }
       }
     });
+  }
+
+  setActiveTab(i: number): void {
+    const elements = this.el.querySelectorAll('.terminal-instance');
+    [].forEach.call(elements, el => this.renderer.setStyle(el, 'display', 'none'));
+    this.renderer.setStyle(elements[i], 'display', 'block');
+    (<any>this.terminalService.terminals[i].term).fit();
   }
 
 }

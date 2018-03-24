@@ -223,7 +223,8 @@ module.exports = {
     "util": "require('util')",
     "zlib": "require('zlib')",
     "node-pty": "require('node-pty')",
-    "xterm": "require('xterm')"
+    "xterm": "require('xterm')",
+    "shelljs": "require('shelljs')"
   },
   "resolve": {
     "extensions": [

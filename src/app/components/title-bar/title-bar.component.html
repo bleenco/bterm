@@ -1,7 +1,15 @@
 <div class="header">
   <div class="tabs">
-    <div class="tab" *ngFor="let tab of terminalService.terminals; let i = index;" (click)="terminalService.focusTab(i)">
-      {{ tab.title }}
+    <div class="tab" *ngFor="let tab of terminalService.terminals; let i = index;" (click)="terminalService.focusTab(i)" [class.is-active]="terminalService.currentIndex === i">
+      <svg width="81px" height="81px" viewBox="0 0 81 81" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" (click)="closeTab(i)">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="noun_753355_cc" transform="translate(-10.000000, 0.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <path d="M86.9,17.8 C91,13.7 91,7.1 86.9,3 C82.9,-1 76.2,-1 72.2,3.1 L50,25.2 L27.8,3.1 C23.8,-1 17.1,-1 13.1,3.1 C9.1,7.2 9,13.8 13.1,17.9 L35.2,40 L13.1,62.2 C9,66.2 9,72.9 13.1,76.9 C17.2,81 23.8,81 27.9,76.9 L50,54.8 L72.2,77 C76.3,81.1 82.9,81.1 87,77 C91.1,72.9 91.1,66.3 87,62.2 L64.8,40 L86.9,17.8 Z"
+              id="Shape"></path>
+          </g>
+        </g>
+      </svg>
+      <span class="title">{{ tab.title }}</span>
     </div>
   </div>
 </div>

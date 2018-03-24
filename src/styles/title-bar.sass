@@ -6,19 +6,51 @@
   -webkit-user-select: none
   border-top-left-radius: 4px
   border-top-right-radius: 4px
-  display: flex
-  align-items: center
 
   .tabs
     display: flex
-    flex: 1
 
     .tab
-      flex: 1
-      display: flex
-      justify-content: center
-      align-items: center
-      margin-left: -1px
+      width: 100%
       min-width: 0
+      margin-left: -1px
       position: relative
       height: 36px
+      border: 1px solid #333
+      border-top: none
+      transition: border 200ms ease-in
+
+      &:first-child
+        border-left: none
+
+      &:last-child
+        border-right: none
+
+      &.is-active
+        border-color: transparent
+
+      svg
+        width: 15px
+        height: 15px
+        position: absolute
+        top: 10.5px
+        left: 10px
+        cursor: pointer
+        opacity: 0
+        transition: opacity 150ms ease-in 300ms
+
+      .title
+        display: block
+        text-align: center
+        width: calc(100%)
+        height: 100%
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+        padding: 10px 25px
+
+      &:hover
+
+        svg
+          opacity: 1
+

@@ -1,6 +1,6 @@
 {
   "name": "bterm",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "bterm",
   "author": "Bleenco OSS Team <oss@bleenco.com>",
   "main": "main.js",
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "node-pty": "^0.7.4",
+    "shelljs": "^0.8.1",
     "xterm": "^3.1.0"
   },
   "devDependencies": {
@@ -54,8 +55,8 @@
     "cross-env": "5.1.3",
     "css-loader": "0.28.9",
     "cssnano": "3.10.0",
-    "electron": "1.8.2",
-    "electron-builder": "19.56.0",
+    "electron": "1.8.4",
+    "electron-builder": "20.6.2",
     "electron-rebuild": "^1.7.3",
     "electron-reload": "1.2.2",
     "enhanced-resolve": "4.0.0-beta.4",
@@ -84,7 +85,6 @@
     "rxjs": "5.5.6",
     "sass-loader": "6.0.6",
     "script-loader": "0.7.2",
-    "shelljs": "^0.8.1",
     "source-map-loader": "0.2.3",
     "style-loader": "0.20.1",
     "stylus-loader": "3.0.1",

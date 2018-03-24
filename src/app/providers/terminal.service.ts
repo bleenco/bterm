@@ -13,6 +13,7 @@ import * as fit from 'xterm/lib/addons/fit/fit';
 import { execSync } from 'child_process';
 import { which } from 'shelljs';
 import { ipcRenderer } from 'electron';
+import { StringDecoder } from 'string_decoder';
 
 export interface PtyProcessType {
   shell: { shell: string, args: string[] };
@@ -34,20 +35,30 @@ class PtyProcess implements PtyProcessType {
   shell: { shell: string, args: string[] };
   process: any;
   onData: Observable<string>;
+  onError: Observable<string>;
+  onExit: Observable<any>;
   write: Subject<string>;
   writeSub: Subscription;
 
   constructor() {
     this.shell = this.getDefaultShell();
-
-    this.process = spawn(this.shell.shell, this.shell.args, {
-      name: 'xterm-color',
-      cols: 120,
-      rows: 30,
-      cwd: process.env.HOME
+    const envVars = Object.assign({}, process.env, {
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      TERM_PROGRAM: 'bterm'
     });
 
-    this.onData = Observable.fromEvent(this.process, 'data').map(x => x.toString()).pipe(share());
+    this.process = spawn(this.shell.shell, this.shell.args, {
+      cols: 100,
+      rows: 40,
+      cwd: os.homedir(),
+      env: envVars
+    });
+
+    const decoder = new StringDecoder('utf8');
+    this.onData = Observable.fromEvent(this.process, 'data').map((x: Buffer) => decoder.write(x)).pipe(share());
+    this.onError = Observable.fromEvent(this.process, 'error').map(x => x.toString()).pipe(share());
+    this.onExit = Observable.fromEvent(this.process, 'exit').pipe(share());
     this.write = new Subject<string>();
     this.writeSub = this.write.map(input => this.process.write(input)).subscribe();
   }
@@ -74,8 +85,7 @@ class PtyProcess implements PtyProcessType {
       }
     }
 
-    const args = process.env.SHELL_EXECUTE_FLAGS || '';
-
+    const args = process.env.SHELL_EXECUTE_FLAGS || '--login';
     return { shell: shell, args: args.split(' ').filter(Boolean) };
   }
 }
@@ -120,8 +130,8 @@ export class TerminalService {
     this.darkTheme = {
       foreground: '#F8F8F2',
       background: '#090E15',
-      cursor: '#f1fa8c',
-      cursorAccent: '#f1fa8c',
+      cursor: '#bd93f9',
+      cursorAccent: '#bd93f9',
       selection: 'rgba(241, 250, 140, 0.3)',
       black: '#090E15',
       red: '#ff5555',
@@ -160,13 +170,19 @@ export class TerminalService {
     this.currentIndex = this.terminals.length - 1;
 
     terminal.term.open(element);
-    terminal.term.setOption('fontFamily', 'Monaco');
+    terminal.term.setOption('fontFamily', 'Monaco, Menlo, monospace');
     terminal.term.setOption('fontSize', 12);
     terminal.term.setOption('theme', this.darkTheme);
     this.focusCurrentTab();
 
     terminal.subscriptions.push(terminal.ptyProcess.onData.subscribe(data => {
       terminal.term.write(data);
+    }));
+    terminal.subscriptions.push(terminal.ptyProcess.onError.subscribe(data => {
+      this.destroy();
+    }));
+    terminal.subscriptions.push(terminal.ptyProcess.onExit.subscribe((exitCode) => {
+      this.destroy();
     }));
     terminal.subscriptions.push(
       Observable.fromEvent(terminal.term, 'title')
@@ -203,5 +219,13 @@ export class TerminalService {
     const terminal = this.terminals[this.currentIndex];
     this.events.emit({ type: 'focusTab', index: this.currentIndex });
     terminal.term.focus();
+  }
+
+  destroy(i?: number): void {
+    const index = typeof i === 'undefined' ? this.currentIndex : i;
+    const terminal = this.terminals[index];
+    terminal.subscriptions.forEach(sub => sub.unsubscribe());
+    terminal.ptyProcess.process.kill();
+    this.events.emit({ type: 'destroy', index: index });
   }
 }

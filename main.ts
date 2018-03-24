@@ -2,11 +2,13 @@ import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron';
 import { getMenu } from './src/app/menu';
 import { keyboardShortcuts } from './src/app/keyboard-shortcuts';
 import * as path from 'path';
-
-let win, serve;
-const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
 import * as url from 'url';
+
+const args = process.argv.slice(1);
+const serve = args.some(val => val === '--serve');
+
+let currentWindow: BrowserWindow = null;
+let windows: BrowserWindow[] = [];
 
 if (serve) {
   require('electron-reload')(__dirname, {
@@ -14,26 +16,7 @@ if (serve) {
 }
 
 app.on('ready', () => {
-  const appWindow = createWindow();
-
-  ipcMain.on('minimize', () => appWindow.minimize());
-  ipcMain.on('tabMaximize', () => appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize());
-  ipcMain.on('maximize', () => {
-    const isMac = process.platform === 'darwin'
-    if (isMac) {
-      appWindow.setFullScreen(!appWindow.isFullScreen());
-    } else {
-      appWindow.isMaximized() ? appWindow.unmaximize() : appWindow.maximize();
-    }
-  });
-  ipcMain.on('close', () => {
-    unregisterShortcuts();
-    appWindow.close();
-  });
-  ipcMain.on('closeApp', () => {
-    unregisterShortcuts();
-    appWindow.close();
-  });
+  createWindow();
 });
 
 app.on('window-all-closed', () => {
@@ -43,32 +26,37 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (win === null) {
+  if (!currentWindow) {
     createWindow();
   }
 });
 
-function createWindow(): BrowserWindow {
+ipcMain.on('minimize', () => currentWindow.minimize());
+ipcMain.on('tabMaximize', () => currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize());
+ipcMain.on('maximize', () => {
+  const isMac = process.platform === 'darwin'
+  if (isMac) {
+    currentWindow.setFullScreen(!currentWindow.isFullScreen());
+  } else {
+    currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize();
+  }
+});
+ipcMain.on('close', (ev, id) => {
+  currentWindow.close();
+});
+
+function createWindow(): void {
   const electronScreen = screen;
-  const display = electronScreen.getPrimaryDisplay();
+  const width = 800;
+  const height = 600;
 
-  let width = Math.floor(display.workAreaSize.width * 0.7);
-  let height = Math.floor(display.workAreaSize.height * 0.7);
-
-  if (width > 1440) {
-    width = 1440;
-  }
-
-  if (height > 900) {
-    height = 900;
-  }
-
-  win = new BrowserWindow({
+  const win = new BrowserWindow({
     width,
     height,
     center: true,
     frame: false,
-    show: false
+    show: false,
+    transparent: true
   });
 
   win.setMenu(getMenu());
@@ -76,7 +64,7 @@ function createWindow(): BrowserWindow {
   win.loadURL(url.format({
     protocol: 'file:',
     pathname: path.join(__dirname, '/index.html'),
-    slashes:  true
+    slashes: true
   }));
 
   if (serve) {
@@ -86,12 +74,22 @@ function createWindow(): BrowserWindow {
   registerShortcuts(win);
 
   win.once('ready-to-show', () => win.show());
-  win.on('blur', () => unregisterShortcuts());
-  win.on('focus', () => registerShortcuts(win));
-  win.on('closed', () => win = null);
+  win.on('blur', () => {
+    currentWindow = null;
+    unregisterShortcuts();
+  });
+  win.on('focus', () => {
+    currentWindow = win;
+    registerShortcuts(win);
+  });
   win.on('move', event => win.webContents.send('move', event));
+  win.on('close', () => {
+    windows = windows.filter(w => w.id !== currentWindow.id);
+    currentWindow = null;
+    unregisterShortcuts();
+  });
 
-  return win;
+  windows.push(win);
 }
 
 function registerShortcuts(window: any): void {

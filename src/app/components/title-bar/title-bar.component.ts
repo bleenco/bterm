@@ -12,4 +12,7 @@ export class TitleBarComponent implements OnInit {
   ngOnInit() {
   }
 
+  closeTab(index: number): void {
+    this.terminalService.destroy(index);
+  }
 }

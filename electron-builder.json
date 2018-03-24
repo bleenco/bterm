@@ -1,20 +1,21 @@
 {
-  "productName": "angular-electron",
+  "productName": "bterm",
   "directories": {
     "app": "dist",
     "output": "app-builds"
   },
   "win": {
-    "icon": "dist/favicon",
+    "icon": "dist",
     "target": [
       "portable"
     ]
   },
   "mac": {
-    "icon": "dist/favicon",
+    "icon": "dist",
     "target": [
       "dmg"
-    ]
+    ],
+    "identity": null
   },
   "linux": {
     "icon": "dist",
