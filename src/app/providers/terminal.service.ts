@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { WindowService } from './window.service';
+import { ConfigService } from './config.service';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -87,62 +88,12 @@ class PtyProcess implements PtyProcessType {
 export class TerminalService {
   terminals: TerminalType[];
   currentIndex: number;
-  lightTheme: ITheme;
-  darkTheme: ITheme;
   events: EventEmitter<{ type: string, index: number }>;
 
   constructor(public windowService: WindowService) {
     this.terminals = [];
     Terminal.applyAddon(fit);
     this.events = new EventEmitter<{ type: string, index: number }>();
-
-    this.lightTheme = {
-      foreground: '#000000',
-      background: '#ffffff',
-      cursor: '#000000',
-      cursorAccent: '#000000',
-      selection: 'rgba(0, 0, 0, 0.1)',
-      black: '#000000',
-      red: '#de3e35',
-      green: '#3f953a',
-      yellow: '#d2b67c',
-      blue: '#2f5af3',
-      magenta: '#950095',
-      cyan: '#3f953a',
-      white: '#bbbbbb',
-      brightBlack: '#000000',
-      brightRed: '#de3e35',
-      brightGreen: '#3f953a',
-      brightYellow: '#d2b67c',
-      brightBlue: '#2f5af3',
-      brightMagenta: '#a00095',
-      brightCyan: '#3f953a',
-      brightWhite: '#ffffff'
-    };
-
-    this.darkTheme = {
-      foreground: '#F8F8F2',
-      background: '#090E15',
-      cursor: '#bd93f9',
-      cursorAccent: '#bd93f9',
-      selection: 'rgba(241, 250, 140, 0.3)',
-      black: '#090E15',
-      red: '#ff5555',
-      green: '#50fa7b',
-      yellow: '#f1fa8c',
-      blue: '#96ECFD',
-      magenta: '#bd93f9',
-      cyan: '#8be9fd',
-      white: '#ffffff',
-      brightBlack: '#090E15',
-      brightRed: '#ff5555',
-      brightGreen: '#50fa7b',
-      brightYellow: '#f1fa8c',
-      brightBlue: '#96ECFD',
-      brightMagenta: '#bd93f9',
-      brightCyan: '#8be9fd',
-      brightWhite: '#ffffff'
-    };
   }
 
   create(el: HTMLMainElement): void {
@@ -163,9 +114,7 @@ export class TerminalService {
     this.currentIndex = this.terminals.length - 1;
 
     terminal.term.open(element);
-    terminal.term.setOption('fontFamily', 'Monaco, Menlo, \'DejaVu Sans Mono\', \'Ubuntu Mono\', monospace');
-    terminal.term.setOption('fontSize', 12);
-    terminal.term.setOption('theme', this.darkTheme);
+    this.events.next({ type: 'create', index: null });
     this.focusCurrentTab();
 
     terminal.subscriptions.push(terminal.ptyProcess.onData.subscribe(data => {
@@ -189,7 +138,6 @@ export class TerminalService {
           }
         }))
         .subscribe((title: string) => {
-          console.log(title);
           terminal.title = title;
         })
     );
