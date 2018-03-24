@@ -1,4 +1,9 @@
 <div class="header">
+  <div class="window-buttons">
+    <span class="circle-button close" (click)="closeWindow()"></span>
+    <span class="circle-button minimize" (click)="minimizeWindow()"></span>
+    <span class="circle-button maximize" (click)="maximizeWindow()"></span>
+  </div>
   <div class="tabs">
     <div class="tab" *ngFor="let tab of terminalService.terminals; let i = index;" (click)="terminalService.focusTab(i)" [class.is-active]="terminalService.currentIndex === i">
       <svg width="81px" height="81px" viewBox="0 0 81 81" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" (click)="closeTab(i)">

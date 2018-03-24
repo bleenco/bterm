@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { TerminalService } from '../../providers/terminal.service';
 import { ipcRenderer, remote } from 'electron';
 import { Observable } from 'rxjs/Observable';
@@ -12,8 +12,9 @@ import { debounce } from 'rxjs/operators';
   templateUrl: './terminal.component.html',
   styleUrls: ['./terminal.component.sass']
 })
-export class TerminalComponent implements OnInit {
+export class TerminalComponent implements OnInit, OnDestroy {
   el: HTMLMainElement;
+  subs: Subscription[] = [];
 
   constructor(
     public elementRef: ElementRef,
@@ -28,13 +29,46 @@ export class TerminalComponent implements OnInit {
     this.terminalService.create(this.el);
   }
 
-  initIpcListeners(): void {
-    Observable.fromEvent(ipcRenderer, 'move')
-      .pipe(debounce(() => timer(100)))
-      .subscribe(event => this.terminalService.focusCurrentTab());
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
 
-    Observable.fromEvent(ipcRenderer, 'newTab')
-      .subscribe(() => this.terminalService.create(this.el));
+  initIpcListeners(): void {
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'move')
+        .pipe(debounce(() => timer(100)))
+        .subscribe(event => this.terminalService.focusCurrentTab())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'newTab')
+        .subscribe(() => this.terminalService.create(this.el))
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'resize')
+        .subscribe(() => {
+          this.terminalService.terminals.forEach(terminal => {
+            (<any>terminal.term).fit();
+            terminal.term.focus();
+          });
+        })
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'restore')
+        .subscribe(() => this.terminalService.focusCurrentTab())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'enter-full-screen')
+        .subscribe(() => this.terminalService.focusCurrentTab())
+    );
+
+    this.subs.push(
+      Observable.fromEvent(ipcRenderer, 'leave-full-screen')
+        .subscribe(() => this.terminalService.focusCurrentTab())
+    );
   }
 
   initTerminalEvents(): void {

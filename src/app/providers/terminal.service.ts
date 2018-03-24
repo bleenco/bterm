@@ -49,8 +49,8 @@ class PtyProcess implements PtyProcessType {
     });
 
     this.process = spawn(this.shell.shell, this.shell.args, {
-      cols: 100,
-      rows: 40,
+      cols: 80,
+      rows: 30,
       cwd: os.homedir(),
       env: envVars
     });
@@ -227,5 +227,14 @@ export class TerminalService {
     terminal.subscriptions.forEach(sub => sub.unsubscribe());
     terminal.ptyProcess.process.kill();
     this.events.emit({ type: 'destroy', index: index });
+  }
+
+  destroyAll(): void {
+    this.terminals.forEach((term, index) => {
+      const terminal = this.terminals[index];
+      terminal.subscriptions.forEach(sub => sub.unsubscribe());
+      terminal.ptyProcess.process.kill();
+      this.events.emit({ type: 'destroy', index: index });
+    });
   }
 }

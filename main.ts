@@ -47,8 +47,8 @@ ipcMain.on('close', (ev, id) => {
 
 function createWindow(): void {
   const electronScreen = screen;
-  const width = 800;
-  const height = 600;
+  const width = 640;
+  const height = 480;
 
   const win = new BrowserWindow({
     width,
@@ -88,6 +88,10 @@ function createWindow(): void {
     currentWindow = null;
     unregisterShortcuts();
   });
+  win.on('resize', event => win.webContents.send('resize', event));
+  win.on('restore', event => win.webContents.send('restore', event));
+  win.on('enter-full-screen', event => win.webContents.send('enter-full-screen', event));
+  win.on('leave-full-screen', event => win.webContents.send('leave-full-screen', event));
 
   windows.push(win);
 }
