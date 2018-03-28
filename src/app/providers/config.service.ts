@@ -123,7 +123,7 @@ export class ConfigService {
       fontFamily: btermConfig.fontFamily,
       fontSize: btermConfig.fontSize,
       borderColor: btermConfig.borderColor,
-      colors: Object.assign({}, btermConfig.baseTheme === 'light' ? this.lightTheme : this.darkTheme, btermConfig.themeOverrides);
+      colors: Object.assign({}, btermConfig.baseTheme === 'light' ? this.lightTheme : this.darkTheme, btermConfig.themeOverrides)
     }
 
     this.configEvents.emit(parsedConfig);

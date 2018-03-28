@@ -153,6 +153,7 @@ export class TerminalService {
     );
     terminal.subscriptions.push(
       this.windowService.size.subscribe(size => {
+        terminal.ptyProcess.process.resize(terminal.term.cols, terminal.term.rows);
         (<any>terminal.term).fit();
       })
     );
@@ -169,6 +170,7 @@ export class TerminalService {
     const terminal = this.terminals[this.currentIndex];
     this.events.emit({ type: 'focusTab', index: this.currentIndex });
     terminal.term.focus();
+    (<any>terminal.term).fit();
   }
 
   destroy(i?: number): void {
