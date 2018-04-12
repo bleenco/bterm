@@ -22,7 +22,8 @@
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
     "electron:mac": "npm run build:prod && npx electron-builder build --mac",
     "test": "npm run build:prod && npm run e2e",
-    "e2e": "tsc -p e2e/tsconfig.e2e.json && jasmine e2e/out/*.js",
+    "pree2e": "tsc -p e2e/tsconfig.e2e.json",
+    "e2e": "jasmine e2e/out/*.js",
     "postinstall": "electron-rebuild"
   },
   "dependencies": {
