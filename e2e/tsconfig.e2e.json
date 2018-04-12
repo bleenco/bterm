@@ -1,9 +1,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/e2e",
+    "outDir": "./out",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "types":[
       "jasmine",
       "node"

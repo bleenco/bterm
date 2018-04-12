@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /app-builds
+/e2e/out
 
 # dependencies
 /node_modules
