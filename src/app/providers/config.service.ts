@@ -92,7 +92,7 @@ export class ConfigService {
       magenta: '#bd93f9',
       cyan: '#8be9fd',
       white: '#ffffff',
-      brightBlack: '#090E15',
+      brightBlack: '#666666',
       brightRed: '#ff5555',
       brightGreen: '#50fa7b',
       brightYellow: '#f1fa8c',
