@@ -1,6 +1,13 @@
 import { Menu, dialog, ipcMain, app } from 'electron';
 
-let template = [
+export function getMenu(): Menu {
+  const menu = Menu.buildFromTemplate(template as any);
+  Menu.setApplicationMenu(menu);
+
+  return menu;
+}
+
+const template = [
   {
     label: app.getName(),
     submenu: [
@@ -61,10 +68,3 @@ let template = [
     ]
   }
 ];
-
-export default function() {
-  const menu = Menu.buildFromTemplate(template as any);
-  Menu.setApplicationMenu(menu);
-
-  return menu;
-}

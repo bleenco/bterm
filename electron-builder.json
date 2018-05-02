@@ -1,26 +1,26 @@
 {
-  "appId": "bterm",
+  "productName": "bterm",
   "directories": {
-    "buildResources": "./node_modules",
-    "app": "./build",
-    "output": "./dist"
-  },
-  "compression": "normal",
-  "extraResources": [],
-  "mac": {
-    "icon": "./assets/icon.icns"
-  },
-  "dmg": {
-    "icon": "./assets/icon.icns"
-  },
-  "nsis": {
-    "installerIcon": "./assets/icon.ico",
-    "installerHeaderIcon": "./assets/icon.ico"
+    "app": "dist",
+    "output": "app-builds"
   },
   "win": {
-    "icon": "./assets/icon.ico"
+    "icon": "dist",
+    "target": [
+      "nsis"
+    ]
+  },
+  "mac": {
+    "icon": "dist",
+    "target": [
+      "dmg"
+    ],
+    "identity": null
   },
   "linux": {
-    "target": "deb"
+    "icon": "dist",
+    "target": [
+      "deb"
+    ]
   }
 }

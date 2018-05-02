@@ -1,20 +1,33 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "lib": ["dom", "es2016"],
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
+    "sourceMap": true,
     "declaration": false,
-    "removeComments": true,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "rootDir": ".",
+    "allowJs": false,
+    "target": "es5",
+    "paths": {
+      "environments": [
+        "./environments"
+      ]
+    },
+    "types": [
+      "node",
+      "jasmine"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
-    "skipLibCheck": true
+    "lib": [
+      "es2016",
+      "dom"
+    ]
   },
-  "compileOnSave": false
+  "exclude": [
+    "node_modules"
+  ]
 }

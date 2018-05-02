@@ -1,25 +1,13 @@
 @charset 'utf8'
 
-$background: #1d1f21
-$color: #f8f8f2
-$dark: #666666
-$vdark: #333333
-$white: #FFFFFF
-$black: #000000
-
-@import '../../node_modules/bulma/sass/base/minireset'
-@import 'app-root'
-@import 'window-top'
-@import 'window-terminal'
-@import 'window-bottom'
-@import 'window-sidebar'
-@import 'window-notification'
-@import 'dropdown'
+@import 'fonts'
+@import 'reset'
+@import 'title-bar'
+@import 'terminal'
+@import '../../node_modules/xterm/dist/xterm.css'
 
 html, body
-  width: 100%
   height: 100%
-
-body
-  position: relative
-  font-family: Menlo, monospace
+  width: 100%
+  font-family: Monaco, Menlo, 'DejaVu Sans Mono', 'Ubuntu Mono', monospace
+  font-size: 12px
