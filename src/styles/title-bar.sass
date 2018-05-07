@@ -2,10 +2,12 @@
   height: 36px
   width: 100%
   position: relative
-  -webkit-app-region: drag
-  -webkit-user-select: none
   border-top-left-radius: 4px
   border-top-right-radius: 4px
+
+  &.is-draggable
+    -webkit-app-region: drag
+    -webkit-user-select: none
 
   .tabs
     display: flex
@@ -63,6 +65,10 @@
     left: 10px
     top: 12px
     z-index: 10
+    display: none
+
+    &.is-enabled
+      display: inline
 
     .circle-button
       width: 12px

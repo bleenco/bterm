@@ -3,9 +3,12 @@ import { getMenu } from './src/app/menu';
 import { keyboardShortcuts } from './src/app/keyboard-shortcuts';
 import * as path from 'path';
 import * as url from 'url';
+import { platform } from 'os';
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
+const os = platform();
+const showFrame = os === 'darwin' ? false : true;
 
 let currentWindow: BrowserWindow = null;
 let windows: BrowserWindow[] = [];
@@ -54,7 +57,7 @@ function createWindow(): void {
     width,
     height,
     center: true,
-    frame: false,
+    frame: showFrame,
     show: false,
     transparent: true
   });
