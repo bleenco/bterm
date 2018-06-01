@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const { NoEmitOnErrorsPlugin, SourceMapDevToolPlugin, DefinePlugin, NamedModulesPlugin } = require('webpack');
-const { BaseHrefWebpackPlugin, NamedLazyChunksWebpackPlugin, InsertConcatAssetsWebpackPlugin } = require('@angular/cli/plugins/webpack');
+const { BaseHrefWebpackPlugin, NamedLazyChunksWebpackPlugin, ScriptsWebpackPlugin } = require('@angular/cli/plugins/webpack');
 const { CommonsChunkPlugin } = require('webpack').optimize;
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const ConcatPlugin = require('webpack-concat-plugin');
@@ -54,9 +54,11 @@ function getPlugins() {
       "fileName": "[name].bundle.js",
       "filesToConcat": scripts
     }));
-    plugins.push(new InsertConcatAssetsWebpackPlugin([
-      "scripts"
-    ]));
+    plugins.push(new ScriptsWebpackPlugin({
+      name: "scripts",
+	  sourceMap: true,
+	  scripts: scripts
+  }));
   }
 
   plugins.push(new CopyWebpackPlugin([
