@@ -7,7 +7,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const { NoEmitOnErrorsPlugin, SourceMapDevToolPlugin, DefinePlugin, NamedModulesPlugin } = require('webpack');
-const { BaseHrefWebpackPlugin, NamedLazyChunksWebpackPlugin, ScriptsWebpackPlugin } = require('@angular/cli/plugins/webpack');
+const {ScriptsWebpackPlugin } = require('@angular/cli/plugins/webpack');
+const AngularNamedLazyChunksWebpackPlugin = require('angular-named-lazy-chunks-webpack-plugin');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const { CommonsChunkPlugin } = require('webpack').optimize;
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const ConcatPlugin = require('webpack-concat-plugin');
