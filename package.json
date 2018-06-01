@@ -29,7 +29,8 @@
   "dependencies": {
     "node-pty": "^0.7.4",
     "shelljs": "^0.8.1",
-    "xterm": "^3.3.0"
+    "xterm": "^3.3.0",
+    "yarn": "^1.7.0"
   },
   "devDependencies": {
     "@angular/cli": "6.1.0-beta.0",
@@ -90,7 +91,8 @@
     "webpack": "4.10.2",
     "webpack-concat-plugin": "3.0.0-beta.0",
     "webpack-dev-server": "3.1.4",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "@angular-devkit/build-angular": "~0.7.0-beta.0"
   },
   "license": "MIT"
 }
