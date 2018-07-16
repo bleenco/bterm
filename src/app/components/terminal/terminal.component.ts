@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { TerminalService } from '../../providers/terminal.service';
 import { ipcRenderer, remote, clipboard } from 'electron';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { timer } from 'rxjs/observable/timer';
+import { Observable, Subscription, fromEvent, timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 
 @Component({
@@ -35,18 +32,18 @@ export class TerminalComponent implements OnInit, OnDestroy {
 
   initIpcListeners(): void {
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'move')
+      fromEvent(ipcRenderer, 'move')
         .pipe(debounce(() => timer(100)))
         .subscribe(event => this.terminalService.focusCurrentTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'newTab')
+      fromEvent(ipcRenderer, 'newTab')
         .subscribe(() => this.terminalService.create(this.el))
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'resize')
+      fromEvent(ipcRenderer, 'resize')
         .subscribe(() => {
           this.terminalService.terminals.forEach(terminal => {
             (<any>terminal.term).fit();
@@ -56,37 +53,37 @@ export class TerminalComponent implements OnInit, OnDestroy {
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'restore')
+      fromEvent(ipcRenderer, 'restore')
         .subscribe(() => this.terminalService.focusCurrentTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'enter-full-screen')
+      fromEvent(ipcRenderer, 'enter-full-screen')
         .subscribe(() => this.terminalService.focusCurrentTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'leave-full-screen')
+      fromEvent(ipcRenderer, 'leave-full-screen')
         .subscribe(() => this.terminalService.focusCurrentTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'tabLeft')
+      fromEvent(ipcRenderer, 'tabLeft')
         .subscribe(() => this.previousTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'tabRight')
+      fromEvent(ipcRenderer, 'tabRight')
         .subscribe(() => this.nextTab())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'paste')
+      fromEvent(ipcRenderer, 'paste')
         .subscribe(() => this.paste())
     );
 
     this.subs.push(
-      Observable.fromEvent(ipcRenderer, 'copy')
+      fromEvent(ipcRenderer, 'copy')
         .subscribe(() => this.copy())
     );
   }
@@ -115,6 +112,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
     const elements = this.el.querySelectorAll('.terminal-instance');
     [].forEach.call(elements, el => this.renderer.setStyle(el, 'display', 'none'));
     this.renderer.setStyle(elements[i], 'display', 'block');
+    (<any>this.terminalService.terminals[i].term).focus();
     (<any>this.terminalService.terminals[i].term).fit();
   }
 

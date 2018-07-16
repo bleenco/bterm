@@ -6,6 +6,7 @@
 /out-tsc
 /app-builds
 /e2e/out
+main.js
 
 # dependencies
 /node_modules

@@ -49,7 +49,6 @@ ipcMain.on('close', (ev, id) => {
 });
 
 function createWindow(): void {
-  const electronScreen = screen;
   const width = 640;
   const height = 480;
 
@@ -71,7 +70,16 @@ function createWindow(): void {
   }));
 
   if (serve) {
-    // win.webContents.openDevTools();
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    win.loadURL('http://localhost:4200');
+  } else {
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, 'dist/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   }
 
   registerShortcuts(win);

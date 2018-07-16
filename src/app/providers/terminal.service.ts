@@ -1,14 +1,14 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { WindowService } from './window.service';
-import { Observable, Subject, Subscription, fromEvent, timer } from 'rxjs';
+import { Observable, Subject, Subscription, fromEvent } from 'rxjs';
 import { share, filter, map } from 'rxjs/operators';
 import * as os from 'os';
-import { spawn } from 'node-pty';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import { execSync } from 'child_process';
 import { which } from 'shelljs';
 import { StringDecoder } from 'string_decoder';
+const spawn = window.require('node-pty').spawn;
 
 export interface PtyProcessType {
   shell: { shell: string, args: string[] };
@@ -44,11 +44,11 @@ class PtyProcess implements PtyProcessType {
     });
 
     const decoder = new StringDecoder('utf8');
-    this.onData = fromEvent(this.process, 'data').pipe(map((x: Buffer) => decoder.write(x), share()));
+    this.onData = fromEvent(this.process, 'data').pipe(map((x: Buffer) => decoder.write(x)), share());
     this.onError = fromEvent(this.process, 'error').pipe(map(x => x.toString()), share());
     this.onExit = fromEvent(this.process, 'exit').pipe(share());
     this.write = new Subject<string>();
-    this.writeSub = this.write.pipe(map(input => this.process.write(input))).subscribe();
+    this.writeSub = this.write.pipe(map(input => this.process.write(input[0]))).subscribe();
   }
 
   getDefaultShell(): { shell: string, args: string[] } {
@@ -122,15 +122,6 @@ export class TerminalService {
     }));
     terminal.subscriptions.push(
       fromEvent(terminal.term, 'title')
-        .pipe(filter((x: string, i) => {
-          if (terminal.ptyProcess.shell.shell.endsWith('zsh')) {
-            return i % 2 === 0;
-          } else if (terminal.ptyProcess.shell.shell.endsWith('bash')) {
-            return x.startsWith('~') ? false : true;
-          } else {
-            return true;
-          }
-        }))
         .subscribe((title: string) => {
           terminal.title = title;
         })
