@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-electron": {
+    "bterm": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -18,7 +18,13 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/favicon.ico",
+              "src/favicon.png",
+              "src/favicon.icns",
+              "src/favicon.256x256.png",
+              "src/favicon.512x512.png",
+              "src/favicon.1024x1024.png"
             ],
             "styles": [
               "src/styles/app.sass"
@@ -26,7 +32,33 @@
             "scripts": []
           },
           "configurations": {
-            "prod": {
+            "dev": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -39,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "bterm:build"
           },
           "configurations": {
             "prod": {
-              "browserTarget": "angular-electron:build:prod"
+              "browserTarget": "bterm:build:prod"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "bterm:build"
           }
         },
         "test": {
@@ -82,7 +114,7 @@
         }
       }
     },
-    "angular-electron-e2e": {
+    "bterm-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -91,7 +123,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "angular-electron:serve"
+            "devServerTarget": "bterm:serve"
           }
         },
         "lint": {
@@ -106,7 +138,7 @@
       }
     }
   },
-  "defaultProject": "angular-electron",
+  "defaultProject": "bterm",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

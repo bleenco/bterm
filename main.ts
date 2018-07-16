@@ -1,6 +1,6 @@
-import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron';
-import { getMenu } from './src/app/menu';
-import { keyboardShortcuts } from './src/app/keyboard-shortcuts';
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import { getMenu } from './menu';
+import { keyboardShortcuts } from './keyboard-shortcuts';
 import * as path from 'path';
 import * as url from 'url';
 import { platform } from 'os';
@@ -37,7 +37,7 @@ app.on('activate', () => {
 ipcMain.on('minimize', () => currentWindow.minimize());
 ipcMain.on('tabMaximize', () => currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize());
 ipcMain.on('maximize', () => {
-  const isMac = process.platform === 'darwin'
+  const isMac = process.platform === 'darwin';
   if (isMac) {
     currentWindow.setFullScreen(!currentWindow.isFullScreen());
   } else {

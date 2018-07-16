@@ -1,4 +1,4 @@
-import { Menu, dialog, ipcMain, app } from 'electron';
+import { Menu, app } from 'electron';
 
 export function getMenu(): Menu {
   const menu = Menu.buildFromTemplate(template as any);

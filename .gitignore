@@ -7,6 +7,8 @@
 /app-builds
 /e2e/out
 main.js
+menu.js
+keyboard-shortcuts.js
 
 # dependencies
 /node_modules

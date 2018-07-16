@@ -48,7 +48,7 @@ class PtyProcess implements PtyProcessType {
     this.onError = fromEvent(this.process, 'error').pipe(map(x => x.toString()), share());
     this.onExit = fromEvent(this.process, 'exit').pipe(share());
     this.write = new Subject<string>();
-    this.writeSub = this.write.pipe(map(input => this.process.write(input[0]))).subscribe();
+    this.writeSub = this.write.pipe(map(input => this.process.write(input))).subscribe();
   }
 
   getDefaultShell(): { shell: string, args: string[] } {
@@ -127,7 +127,7 @@ export class TerminalService {
         })
     );
     terminal.subscriptions.push(
-      fromEvent(terminal.term, 'key').subscribe((key: string) => {
+      fromEvent(terminal.term, 'data').subscribe((key: string) => {
         terminal.ptyProcess.write.next(key);
       })
     );
