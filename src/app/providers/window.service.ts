@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
+import { BehaviorSubject, fromEvent } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 
 export interface WindowSize {
   width: number;
@@ -16,9 +13,11 @@ export class WindowService {
 
   constructor() {
     this.size = new BehaviorSubject<WindowSize>(this.getWindowSize());
-    Observable.fromEvent(window, 'resize')
-      .map((): WindowSize => this.getWindowSize())
-      .distinctUntilChanged()
+    fromEvent(window, 'resize')
+      .pipe(
+        map((): WindowSize => this.getWindowSize()),
+        distinctUntilChanged()
+      )
       .subscribe(this.size);
   }
 

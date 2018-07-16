@@ -1,19 +1,13 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { WindowService } from './window.service';
-import { ConfigService } from './config.service';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { timer } from 'rxjs/observable/timer';
-import { map, share, filter, debounce } from 'rxjs/operators';
+import { Observable, Subject, Subscription, fromEvent, timer } from 'rxjs';
+import { share, filter, map } from 'rxjs/operators';
 import * as os from 'os';
 import { spawn } from 'node-pty';
-import { Terminal, ITheme } from 'xterm';
+import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import { execSync } from 'child_process';
 import { which } from 'shelljs';
-import { ipcRenderer } from 'electron';
 import { StringDecoder } from 'string_decoder';
 
 export interface PtyProcessType {
@@ -50,11 +44,11 @@ class PtyProcess implements PtyProcessType {
     });
 
     const decoder = new StringDecoder('utf8');
-    this.onData = Observable.fromEvent(this.process, 'data').map((x: Buffer) => decoder.write(x)).pipe(share());
-    this.onError = Observable.fromEvent(this.process, 'error').map(x => x.toString()).pipe(share());
-    this.onExit = Observable.fromEvent(this.process, 'exit').pipe(share());
+    this.onData = fromEvent(this.process, 'data').pipe(map((x: Buffer) => decoder.write(x), share()));
+    this.onError = fromEvent(this.process, 'error').pipe(map(x => x.toString()), share());
+    this.onExit = fromEvent(this.process, 'exit').pipe(share());
     this.write = new Subject<string>();
-    this.writeSub = this.write.map(input => this.process.write(input)).subscribe();
+    this.writeSub = this.write.pipe(map(input => this.process.write(input))).subscribe();
   }
 
   getDefaultShell(): { shell: string, args: string[] } {
@@ -127,7 +121,7 @@ export class TerminalService {
       this.destroy();
     }));
     terminal.subscriptions.push(
-      Observable.fromEvent(terminal.term, 'title')
+      fromEvent(terminal.term, 'title')
         .pipe(filter((x: string, i) => {
           if (terminal.ptyProcess.shell.shell.endsWith('zsh')) {
             return i % 2 === 0;
@@ -142,12 +136,12 @@ export class TerminalService {
         })
     );
     terminal.subscriptions.push(
-      Observable.fromEvent(terminal.term, 'key').subscribe((key: string) => {
+      fromEvent(terminal.term, 'key').subscribe((key: string) => {
         terminal.ptyProcess.write.next(key);
       })
     );
     terminal.subscriptions.push(
-      Observable.fromEvent(terminal.term, 'resize').subscribe((sizeData: any) => {
+      fromEvent(terminal.term, 'resize').subscribe((sizeData: any) => {
         terminal.ptyProcess.process.resize(sizeData.cols, sizeData.rows);
       })
     );
