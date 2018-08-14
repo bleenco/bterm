@@ -45,6 +45,10 @@ ipcMain.on('maximize', () => {
   }
 });
 ipcMain.on('close', (ev, id) => {
+  if (!currentWindow) {
+    return;
+  }
+
   currentWindow.close();
 });
 

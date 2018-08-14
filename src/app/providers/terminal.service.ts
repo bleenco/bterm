@@ -113,6 +113,7 @@ export class TerminalService {
 
     terminal.subscriptions.push(terminal.ptyProcess.onData.subscribe(data => {
       terminal.term.write(data);
+      (<any>terminal.term).fit();
     }));
     terminal.subscriptions.push(terminal.ptyProcess.onError.subscribe(data => {
       this.destroy();
@@ -149,6 +150,8 @@ export class TerminalService {
     this.currentIndex = i;
     this.events.emit({ type: 'focusTab', index: i });
     terminal.term.focus();
+    (<any>terminal.term).fit();
+    terminal.term.scrollToBottom();
   }
 
   focusCurrentTab(): void {
@@ -156,6 +159,7 @@ export class TerminalService {
     this.events.emit({ type: 'focusTab', index: this.currentIndex });
     terminal.term.focus();
     (<any>terminal.term).fit();
+    terminal.term.scrollToBottom();
   }
 
   destroy(i?: number): void {

@@ -124,7 +124,7 @@ export class ConfigService {
       fontSize: btermConfig.fontSize,
       borderColor: btermConfig.borderColor,
       colors: Object.assign({}, btermConfig.baseTheme === 'light' ? this.lightTheme : this.darkTheme, btermConfig.themeOverrides)
-    }
+    };
 
     this.configEvents.emit(parsedConfig);
   }
@@ -135,7 +135,7 @@ export class ConfigService {
       fontSize: 12,
       baseTheme: 'dark',
       themeOverrides: {},
-      borderColor: '#333333'
+      borderColor: '#222222'
     };
   }
 

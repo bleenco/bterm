@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
     this.config.configEvents.subscribe(config => {
       this.renderer.setStyle(this.config.body, 'color', config.colors.foreground);
       this.renderer.setStyle(this.config.body, 'background', config.colors.background);
+      this.renderer.setStyle(this.config.body, 'border-color', config.borderColor);
 
       this.terminal.terminals.forEach(terminal => {
         terminal.term.setOption('fontFamily', config.fontFamily);
