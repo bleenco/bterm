@@ -130,6 +130,7 @@ export class TerminalService {
     terminal.subscriptions.push(
       fromEvent(terminal.term, 'data').subscribe((key: string) => {
         terminal.ptyProcess.write.next(key);
+        (<any>terminal.term).fit();
       })
     );
     terminal.subscriptions.push(

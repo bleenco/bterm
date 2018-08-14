@@ -110,8 +110,8 @@ export class TerminalComponent implements OnInit, OnDestroy {
 
   setActiveTab(i: number): void {
     const elements = this.el.querySelectorAll('.terminal-instance');
-    [].forEach.call(elements, el => this.renderer.setStyle(el, 'display', 'none'));
-    this.renderer.setStyle(elements[i], 'display', 'block');
+    [].forEach.call(elements, el => this.renderer.setStyle(el, 'z-index', 0));
+    this.renderer.setStyle(elements[i], 'z-index', 10);
     (<any>this.terminalService.terminals[i].term).focus();
     (<any>this.terminalService.terminals[i].term).fit();
   }
