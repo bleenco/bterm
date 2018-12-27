@@ -44,6 +44,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
 
     this.subs.push(
       fromEvent(ipcRenderer, 'resize')
+        .pipe(debounce(() => timer(100)))
         .subscribe(() => {
           this.terminalService.terminals.forEach(terminal => {
             (<any>terminal.term).fit();
