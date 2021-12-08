@@ -1,8 +1,9 @@
+# bterm — :warning: This project is no longer maintained. :warning:
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/1796022/29961176-01c586d6-8eff-11e7-8ea0-77128fc7ebd0.png" width="200">
 </p>
 
-# bterm
 
 [![AbstruseCI](https://ci.bleenco.io/badge/2)](https://ci.bleenco.io/repo/2)
 
